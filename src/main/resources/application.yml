@@ -1,0 +1,7 @@
+spring:
+  application:
+    name:
+      PRI
+server:
+  port:
+    8081
