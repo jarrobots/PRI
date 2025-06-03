@@ -2,6 +2,18 @@ spring:
   application:
     name:
       PRI
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+  flyway:
+    locations: classpath:/db/migration
+    schemas: pri
+    baselineOnMigrate: true
+    enabled: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/java_db?currentSchema=pri
+    username: api
+    password: api
+    driver-class-name: org.postgresql.Driver
 server:
   port:
-    8081
+    8082
