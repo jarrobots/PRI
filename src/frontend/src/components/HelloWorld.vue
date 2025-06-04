@@ -11,7 +11,7 @@ export default {
     }
   },
   mounted() {
-    fetch("/vue/home/hello")
+    fetch("api/v1/1")
     .then((response) => response.text() )
     .then((data) => {
       this.msg = data;

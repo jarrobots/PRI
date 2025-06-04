@@ -18,13 +18,13 @@ public class ChapterController {
     private final ChapterService chapterService;
 
     @GetMapping("/")
-    public ResponseEntity<List<Chapters>> getAllEmployees(){
+    public ResponseEntity<List<Chapters>> getAllChapters(){
         return ResponseEntity.ok().body(chapterService.getAllChapters());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Chapters> getChapterById(@PathVariable Integer id)
+    public ResponseEntity<Integer> getChapterById(@PathVariable Integer id)
     {
-        return ResponseEntity.ok().body(chapterService.getChapterById(id));
+        return ResponseEntity.ok().body(chapterService.getChapterById(id).getId());
     }
 
     @PostMapping("/")
