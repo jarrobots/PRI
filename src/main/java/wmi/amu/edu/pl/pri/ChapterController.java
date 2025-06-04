@@ -22,9 +22,9 @@ public class ChapterController {
         return ResponseEntity.ok().body(chapterService.getAllChapters());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Integer> getChapterById(@PathVariable Integer id)
+    public ResponseEntity<String> getChapterById(@PathVariable Integer id)
     {
-        return ResponseEntity.ok().body(chapterService.getChapterById(id).getId());
+        return ResponseEntity.ok().body(chapterService.getChapterById(id).toString());
     }
 
     @PostMapping("/")
