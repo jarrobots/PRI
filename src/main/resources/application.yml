@@ -1,12 +1,11 @@
 spring:
   application:
-    name:
-      PRI
+    name: PRI
   jackson:
     property-naming-strategy: SNAKE_CASE
   flyway:
     locations: classpath:/db/migration
-    schemas: pri
+    schemas: employees
     baselineOnMigrate: true
     enabled: true
   datasource:
@@ -14,6 +13,19 @@ spring:
     username: api
     password: api
     driver-class-name: org.postgresql.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 10
+      idle-timeout: 30000
+      pool-name: HikariPool
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
 server:
   port:
     8082

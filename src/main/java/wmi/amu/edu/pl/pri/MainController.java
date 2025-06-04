@@ -1,15 +1,18 @@
 package wmi.amu.edu.pl.pri;
 
-import org.springframework.stereotype.Controller;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-//@Controller
+@RestController
+@RequestMapping("/vue/home")
 public class MainController {
- /*   @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("eventName", "FIFA 2018");
-        return "index";
+    @GetMapping("/hello")
+    public String hello() {
+
+        return "Hello";
     }
- */
+
 }
