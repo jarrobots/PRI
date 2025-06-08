@@ -16,8 +16,7 @@ export default {
     .then((data) => {
       this.msg = data;
     })
-  }
-  /*mounted() {
+
     fetch("api/v1/", {
       method: "POST",
       headers: {
@@ -34,16 +33,14 @@ export default {
         .then((data) => {
           this.msg = data;
         })
-  }*/
 
-  /*mounted() {
     fetch("api/v1/1", {
       method: "DELETE"})
         .then((response) => response.text())
         .then((data) => {
           this.msg = data;
         })
-  } */
+  }
 
 }
 </script>
