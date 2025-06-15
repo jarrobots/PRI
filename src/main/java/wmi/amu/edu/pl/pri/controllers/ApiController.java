@@ -1,6 +1,7 @@
 package wmi.amu.edu.pl.pri.controllers;
 
 import jakarta.persistence.EntityManager;
+import jdk.jfr.ContentType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -77,9 +78,9 @@ public class ApiController {
     @RequestMapping(method = GET, path = "/view/{id}")
     public ResponseEntity<List<ChapterFileModel>> getFiles(@PathVariable Integer id) {
         StudentModel student = studentService.getStudentById(id);
-         List<ChapterFileModel> list = chapterService.findChapterFileModelByStudent(student);
+        List<ChapterFileModel> list = chapterService.findChapterFileModelByStudent(student);
 
-         return ResponseEntity.ok().body(list);
+        return ResponseEntity.ok().body(list);
     }
 
 
@@ -120,6 +121,4 @@ public class ApiController {
         chapterService.deleteFileById(id);
         return ResponseEntity.ok().body("Deleted chapter successfully");
     }
-
-
 }

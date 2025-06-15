@@ -25,6 +25,4 @@ public class ChapterFileModel {
     private Date date;
     private Integer fileId;
     private String name;
-
-
 }
