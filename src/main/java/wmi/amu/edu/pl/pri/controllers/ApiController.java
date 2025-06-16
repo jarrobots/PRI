@@ -5,6 +5,7 @@ import jdk.jfr.ContentType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -67,12 +68,14 @@ public class ApiController {
         if(fileOptional.isPresent()){
             FileContentModel file = fileOptional.get();
             HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachement; filename=\"" + file.getFileName() + "\"");
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=\"%s\"", file.getFileName()));
+            headers.setContentType(MediaType.valueOf(file.getFileType()));
+            headers.setContentLength(file.getFileData().length);
             return ResponseEntity.ok()
                     .headers(headers)
                     .body(file.getFileData());
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @RequestMapping(method = GET, path = "/view/{id}")
@@ -83,33 +86,8 @@ public class ApiController {
         return ResponseEntity.ok().body(list);
     }
 
-    @GetMapping("/")
-    public ResponseEntity<List<ChapterFileModel>> getAllChapters(){
-        return ResponseEntity.ok().body(chapterService.getAllFiles());
-    }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<String> getChapterById(@PathVariable Integer id)
-    {
-        return ResponseEntity.ok().body(chapterService.getFileById(id).toString());
-    }
 
-    @PostMapping("/")
-    public ResponseEntity<Integer> saveChapter(@RequestBody ChapterFileModel chapters)
-    {
-        return ResponseEntity.ok().body(chapterService.saveFile(chapters));
-    }
 
-    @PutMapping("/")
-    public ResponseEntity<ChapterFileModel> updateChapter(@RequestBody ChapterFileModel chapters)
-    {
-        return ResponseEntity.ok().body(chapterService.updateFile(chapters));
-    }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteEmployeeById(@PathVariable Integer id)
-    {
-        chapterService.deleteFileById(id);
-        return ResponseEntity.ok().body("Deleted chapter successfully");
-    }
 }
