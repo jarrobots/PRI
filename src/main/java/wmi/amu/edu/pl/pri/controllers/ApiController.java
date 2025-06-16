@@ -83,20 +83,11 @@ public class ApiController {
         return ResponseEntity.ok().body(list);
     }
 
-
-    @GetMapping("/student")
-    public void setUser(){
-        StudentModel student = new StudentModel();
-        student.setFName("zzz");
-        student.setLName("ZZZ");
-        student.setEmail("zzz@st.amu.edu.pl");
-        studentService.saveStudent(student);
-    }
-
     @GetMapping("/")
     public ResponseEntity<List<ChapterFileModel>> getAllChapters(){
         return ResponseEntity.ok().body(chapterService.getAllFiles());
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<String> getChapterById(@PathVariable Integer id)
     {
