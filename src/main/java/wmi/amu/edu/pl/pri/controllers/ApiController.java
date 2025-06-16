@@ -49,7 +49,7 @@ public class ApiController {
             e.printStackTrace();
         }
         if(id != -1) {
-            chapter.setName(file.getName());
+            chapter.setName(file.getOriginalFilename());
             chapter.setFileId(id);
             chapter.setStudent(studentService.getStudentById(1));
             chapter.setDate(new Date());
