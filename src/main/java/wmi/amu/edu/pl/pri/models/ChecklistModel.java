@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "checklist")
 public class ChecklistModel {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -20,7 +21,7 @@ public class ChecklistModel {
     @JoinColumn(name = "student", referencedColumnName = "id")
     private StudentModel student;
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "checklist_question", referencedColumnName = "id")
+    @JoinColumn(name = "checklist", referencedColumnName = "id")
     private List<ChecklistQuestionModel> checklistQuestionModels;
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
