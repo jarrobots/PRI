@@ -1,0 +1,14 @@
+[
+  {
+    "question": "zzz",
+    "critical": true
+  },
+  {
+    "question": "xxx",
+    "critical": false
+  },
+  {
+    "question": "bbb",
+    "critical": true
+  }
+]

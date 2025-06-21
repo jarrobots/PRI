@@ -1,7 +1,5 @@
 package wmi.amu.edu.pl.pri.controllers;
 
-import jakarta.persistence.EntityManager;
-import jdk.jfr.ContentType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -10,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import wmi.amu.edu.pl.pri.models.ChapterFileModel;
+import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.FileContentModel;
 import wmi.amu.edu.pl.pri.models.StudentModel;
 import wmi.amu.edu.pl.pri.services.ChapterFileService;
@@ -18,7 +16,6 @@ import wmi.amu.edu.pl.pri.services.FileContentService;
 import wmi.amu.edu.pl.pri.services.StudentService;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +36,7 @@ public class ApiController {
     @RequestMapping(method=POST, path = "/files")
     public ResponseEntity<Integer> create(@RequestParam("file") MultipartFile file){
 
-        ChapterFileModel chapter = new ChapterFileModel();
+        ChapterVersionModel chapter = new ChapterVersionModel();
         int id = -1;
         try {
             Object obj = file.getBytes();
@@ -78,13 +75,13 @@ public class ApiController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @RequestMapping(method = GET, path = "/view/{id}")
-    public ResponseEntity<List<ChapterFileModel>> getFiles(@PathVariable Integer id) {
-        StudentModel student = studentService.getStudentById(id);
-        List<ChapterFileModel> list = chapterService.findChapterFileModelByStudent(student);
+    /*@RequestMapping(method = GET, path = "/view")
+    public ResponseEntity<List<ChapterVersionModel>> getFiles(@RequestParam(value="id") Integer studentId) {
+        StudentModel student = studentService.getStudentById(studentId);
+        List<ChapterVersionModel> list = chapterService.findChapterFileModelByStudent(student);
 
         return ResponseEntity.ok().body(list);
-    }
+    }*/
 
 
 

@@ -7,9 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import wmi.amu.edu.pl.pri.dto.ChapterVersionDto;
 import wmi.amu.edu.pl.pri.dto.ChapterVersionsDto;
-import wmi.amu.edu.pl.pri.models.ChapterFileModel;
-import wmi.amu.edu.pl.pri.models.StudentModel;
-import wmi.amu.edu.pl.pri.repositories.ChapterFileRepo;
+import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
+import wmi.amu.edu.pl.pri.repositories.ChapterVersionRepo;
 
 import java.util.Comparator;
 import java.util.List;
@@ -25,15 +24,15 @@ public class VersionService {
     private StudentService studentService;
 
     @Autowired
-    private ChapterFileRepo chapterFileRepo;
+    private ChapterVersionRepo chapterFileRepo;
 
     public ChapterVersionsDto getChapterVersionsByStudentId(Integer studentId) {
-        List<ChapterFileModel> list = chapterFileRepo.findByStudentId(studentId);
+        List<ChapterVersionModel> list = chapterFileRepo.findByStudentId(studentId);
 
         return mapToChapterVersionsDto(list);
     }
 
-    private ChapterVersionsDto mapToChapterVersionsDto(List<ChapterFileModel> chapterFileModels){
+    private ChapterVersionsDto mapToChapterVersionsDto(List<ChapterVersionModel> chapterFileModels){
         var dtos = chapterFileModels.stream()
                 .map(chapterFileModel -> {
                     return ChapterVersionDto.builder()
@@ -47,7 +46,7 @@ public class VersionService {
         return new ChapterVersionsDto(dtos);
     }
 
-    private String createLinkFrom(ChapterFileModel fileContent){
+    private String createLinkFrom(ChapterVersionModel fileContent){
         return "http://localhost:%s/api/v1/download/".formatted(currentPort) + fileContent.getFileId();
 
     }

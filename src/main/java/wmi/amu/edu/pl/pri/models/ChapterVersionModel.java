@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "chapter_file")
-public class ChapterFileModel {
+public class ChapterVersionModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

@@ -1,0 +1,67 @@
+package wmi.amu.edu.pl.pri.models;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Date;
+import java.util.List;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+public class ChecklistModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Integer id;
+    private boolean isPassed;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student", referencedColumnName = "id")
+    private StudentModel student;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "checklist_question", referencedColumnName = "id")
+    private List<ChecklistQuestionModel> checklistQuestionModels;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public boolean isPassed() {
+        return isPassed;
+    }
+
+    public void setPassed(boolean passed) {
+        isPassed = passed;
+    }
+
+    public StudentModel getStudent() {
+        return student;
+    }
+
+    public void setStudent(StudentModel student) {
+        this.student = student;
+    }
+
+    public List<ChecklistQuestionModel> getChecklistQuestionModels() {
+        return checklistQuestionModels;
+    }
+
+    public void setChecklistQuestionModels(List<ChecklistQuestionModel> checklistQuestionModels) {
+        this.checklistQuestionModels = checklistQuestionModels;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+}
