@@ -22,9 +22,4 @@ public class ChapterService {
                 .versions(versionService.getChapterVersionsByStudentId(studentId))
                 .build();
     }
-
-    public void setChapterlist(ChecklistDto dto){
-        checklistService.setChecklist(dto.getModels(),dto.getStudentId());
-
-    }
 }

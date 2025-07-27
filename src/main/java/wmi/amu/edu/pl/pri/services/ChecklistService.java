@@ -44,8 +44,11 @@ public class ChecklistService {
                 .isPassed(model.isPassed())
                 .build();
     }
+    public void setChapterlist(ChecklistDto dto){
+        this.setChecklistduo(dto.getModels(),dto.getStudentId());
+    }
 
-    public void setChecklist(List<ChecklistQuestionModel> models, Integer id){
+    private void setChecklistduo(List<ChecklistQuestionModel> models, Integer id){
        ChecklistModel model = getChecklistBysId(id);
        model.setDate(new Date());
        model.setChecklistQuestionModels(models);

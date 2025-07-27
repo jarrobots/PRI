@@ -26,20 +26,10 @@ public class ChapterController {
     private final ChapterService chapterService;
 
     @GetMapping("/view")
-    public ResponseEntity<ChapterDto> getVersionsByStudentId(
+    public ResponseEntity<ChapterVersionsDto> getVersionsByStudentId(
             @RequestParam(value="id") Integer studentId
     ){
-        return ResponseEntity.ok().body(chapterService.getChapter(studentId));
+        return ResponseEntity.ok().body(versionService.getChapterVersionsByStudentId(studentId));
         //return versionService.getChapterVersionsByStudentId(studentId);
     }
-
-    @RequestMapping(method=POST, path = "/view/note")
-    public Boolean saveQuestions(
-            @RequestParam("models") ChecklistDto dto
-    ){
-        chapterService.setChapterlist(dto);
-        return true;
-    }
-
-
 }
