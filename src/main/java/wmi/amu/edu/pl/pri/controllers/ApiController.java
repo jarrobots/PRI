@@ -34,7 +34,8 @@ public class ApiController {
     private final FileContentService fileService;
 
     @RequestMapping(method=POST, path = "/files")
-    public ResponseEntity<Integer> create(@RequestParam("file") MultipartFile file){
+    public ResponseEntity<Integer> create(@RequestParam("file") MultipartFile file,@RequestParam("ownerId") Integer ownerId, @RequestParam("uploaderId") Integer uploaderId
+    ) {
 
         ChapterVersionModel chapter = new ChapterVersionModel();
         int id = -1;
@@ -48,7 +49,8 @@ public class ApiController {
         if(id != -1) {
             chapter.setName(file.getOriginalFilename());
             chapter.setFileId(id);
-            chapter.setStudent(studentService.getStudentById(1));
+            chapter.setStudent(studentService.getStudentById(uploaderId));
+            chapter.setOwner(studentService.getStudentById(ownerId));
             chapter.setDate(new Date());
 
             return ResponseEntity.ok().body(chapterService.saveFile(chapter));
