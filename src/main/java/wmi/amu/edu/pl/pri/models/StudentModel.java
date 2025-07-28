@@ -17,5 +17,9 @@ public class StudentModel {
     private String fName;
     private String lName;
     private String email;
-    private Integer group_ID;
+
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private GroupModel group;
+
 }
