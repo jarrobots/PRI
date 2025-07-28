@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "chapter_file")
-public class ChapterFileModel {
+public class ChapterVersionModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -21,6 +21,9 @@ public class ChapterFileModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student", referencedColumnName = "id")
     private StudentModel student;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student", referencedColumnName = "id")
+    private StudentModel owner;
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     private Integer fileId;

@@ -4,11 +4,9 @@ package wmi.amu.edu.pl.pri.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import wmi.amu.edu.pl.pri.models.ChapterFileModel;
 import wmi.amu.edu.pl.pri.models.FileContentModel;
 import wmi.amu.edu.pl.pri.repositories.FileContentRepo;
 
-import java.io.IOException;
 import java.util.Optional;
 
 @Service
