@@ -30,7 +30,7 @@ public class ChapterModel {
 
     //tu ID tabeli student, w przyszlosci przechodzimy na user_data ze starego systemu
     @Column(name = "user_data_id")
-    private Long userDataId;
+    private Long student;
 
     @Column(name = "supervisor_comment")
     private String supervisorComment;

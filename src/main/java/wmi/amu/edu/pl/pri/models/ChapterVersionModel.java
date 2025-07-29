@@ -19,10 +19,10 @@ public class ChapterVersionModel {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student", referencedColumnName = "id")
+    @JoinColumn(name = "student", referencedColumnName = "id", insertable=false, updatable=false)
     private StudentModel student;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student", referencedColumnName = "id")
+    @JoinColumn(name = "student", referencedColumnName = "id", insertable=false, updatable=false)
     private StudentModel owner;
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;

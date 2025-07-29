@@ -3,6 +3,7 @@ package wmi.amu.edu.pl.pri.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import wmi.amu.edu.pl.pri.dto.StudentDto;
 import wmi.amu.edu.pl.pri.models.StudentModel;
 import wmi.amu.edu.pl.pri.repositories.StudentRepo;
 
@@ -15,8 +16,8 @@ import java.util.Optional;
 public class StudentService {
     private final StudentRepo repo;
 
-    public List<StudentModel> getAllStudents(){
-        return repo.findAll();
+    public List<StudentDto> getAllStudents(){
+        return repo.findAll().stream().map(StudentDto::mapFromEntity).toList();
     }
     public StudentModel getStudentById(Integer id){
         Optional<StudentModel> optionalFile = repo.findById(id);

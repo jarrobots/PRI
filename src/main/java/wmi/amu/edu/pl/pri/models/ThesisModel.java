@@ -32,6 +32,9 @@ public class ThesisModel {
     @Column(name = "supervisor_comment")
     private String supervisorComment;
 
+    @Column(name = "supervisor_user_data_id")
+    private Long supervisorUserDataId;
+
     @OneToMany(mappedBy = "thesis", cascade = CascadeType.ALL)
     private List<ChapterModel> chapters;
 

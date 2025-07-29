@@ -21,5 +21,4 @@ public class StudentModel {
     @ManyToOne
     @JoinColumn(name = "group_id")
     private GroupModel group;
-
 }
