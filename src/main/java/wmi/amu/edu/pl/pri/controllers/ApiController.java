@@ -33,49 +33,9 @@ public class ApiController {
     private final ChapterFileService chapterService;
     private final FileContentService fileService;
 
-    @RequestMapping(method=POST, path = "/files")
-    public ResponseEntity<Integer> create(@RequestParam("file") MultipartFile file,@RequestParam("ownerId") Integer ownerId, @RequestParam("uploaderId") Integer uploaderId
-    ) {
 
-        ChapterVersionModel chapter = new ChapterVersionModel();
-        int id = -1;
-        try {
-            Object obj = file.getBytes();
-            System.out.println(obj.getClass());
-            id = fileService.saveFile(file.getBytes(),file.getOriginalFilename(),file.getContentType());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if(id != -1) {
-            chapter.setName(file.getOriginalFilename());
-            chapter.setFileId(id);
-            chapter.setStudent(studentService.getStudentById(uploaderId));
-            chapter.setOwner(studentService.getStudentById(ownerId));
-            chapter.setDate(new Date());
 
-            return ResponseEntity.ok().body(chapterService.saveFile(chapter));
-        }
-        else{
-            return  ResponseEntity.badRequest().body(id);
-        }
-    }
 
-    @RequestMapping(method = GET, path = "/download/{id}")
-    public ResponseEntity<byte[]> getFile(@PathVariable Integer id) {
-        Optional<FileContentModel> fileOptional = fileService.getFileById(id);
-
-        if(fileOptional.isPresent()){
-            FileContentModel file = fileOptional.get();
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=\"%s\"", file.getFileName()));
-            headers.setContentType(MediaType.valueOf(file.getFileType()));
-            headers.setContentLength(file.getFileData().length);
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .body(file.getFileData());
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
 
     /*@RequestMapping(method = GET, path = "/view")
     public ResponseEntity<List<ChapterVersionModel>> getFiles(@RequestParam(value="id") Integer studentId) {

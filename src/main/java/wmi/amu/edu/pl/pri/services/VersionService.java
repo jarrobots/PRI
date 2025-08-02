@@ -26,8 +26,8 @@ public class VersionService {
     @Autowired
     private ChapterVersionRepo chapterFileRepo;
 
-    public ChapterVersionsDto getChapterVersionsByStudentId(Integer studentId) {
-        List<ChapterVersionModel> list = chapterFileRepo.findByStudentId(studentId);
+    public ChapterVersionsDto getChapterVersionsByOwnerId(Integer studentId) {
+        List<ChapterVersionModel> list = chapterFileRepo.findByOwnerId(studentId);
 
         return mapToChapterVersionsDto(list);
     }

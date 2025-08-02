@@ -2,18 +2,25 @@ package wmi.amu.edu.pl.pri.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import wmi.amu.edu.pl.pri.dto.ChapterDto;
 import wmi.amu.edu.pl.pri.dto.ChapterVersionsDto;
-import wmi.amu.edu.pl.pri.dto.ChecklistDto;
-import wmi.amu.edu.pl.pri.services.ChapterService;
+import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
+import wmi.amu.edu.pl.pri.models.FileContentModel;
+import wmi.amu.edu.pl.pri.services.ChapterFileService;
+import wmi.amu.edu.pl.pri.services.FileContentService;
+import wmi.amu.edu.pl.pri.services.StudentService;
 import wmi.amu.edu.pl.pri.services.VersionService;
 
+import java.io.IOException;
+import java.util.Date;
+import java.util.Optional;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
@@ -23,13 +30,57 @@ public class ChapterController {
 
     @Autowired
     private final VersionService versionService;
-    private final ChapterService chapterService;
+    private final FileContentService fileService;
+    private final StudentService studentService;
+    private final ChapterFileService chapterFileService;
 
     @GetMapping("/view")
     public ResponseEntity<ChapterVersionsDto> getVersionsByStudentId(
             @RequestParam(value="id") Integer studentId
     ){
-        return ResponseEntity.ok().body(versionService.getChapterVersionsByStudentId(studentId));
+        return ResponseEntity.ok().body(versionService.getChapterVersionsByOwnerId(studentId));
         //return versionService.getChapterVersionsByStudentId(studentId);
+    }
+    @RequestMapping(method=POST, path = "/files")
+    public ResponseEntity<Integer> create(@RequestParam("file") MultipartFile file, @RequestParam("ownerId") Integer ownerId, @RequestParam("uploaderId") Integer uploaderId
+    ) {
+
+        ChapterVersionModel chapter = new ChapterVersionModel();
+        int id = -1;
+        try {
+            Object obj = file.getBytes();
+            System.out.println(obj.getClass());
+            id = fileService.saveFile(file.getBytes(),file.getOriginalFilename(),file.getContentType());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(id != -1) {
+            chapter.setName(file.getOriginalFilename());
+            chapter.setFileId(id);
+            chapter.setStudent(studentService.getStudentById(uploaderId));
+            chapter.setOwner(studentService.getStudentById(ownerId));
+            chapter.setDate(new Date());
+
+            return ResponseEntity.ok().body(chapterFileService.saveFile(chapter));
+        }
+        else{
+            return  ResponseEntity.badRequest().body(id);
+        }
+    }
+    @RequestMapping(method = GET, path = "/download/{id}")
+    public ResponseEntity<byte[]> getFile(@PathVariable Integer id) {
+        Optional<FileContentModel> fileOptional = fileService.getFileById(id);
+
+        if(fileOptional.isPresent()){
+            FileContentModel file = fileOptional.get();
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=\"%s\"", file.getFileName()));
+            headers.setContentType(MediaType.valueOf(file.getFileType()));
+            headers.setContentLength(file.getFileData().length);
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(file.getFileData());
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }

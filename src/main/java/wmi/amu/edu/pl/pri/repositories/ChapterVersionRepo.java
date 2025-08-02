@@ -12,7 +12,7 @@ import java.util.List;
 public interface ChapterVersionRepo extends JpaRepository<ChapterVersionModel, Integer> {
     List<ChapterVersionModel> findChapterFileModelByStudent(StudentModel student);
 
-    @Query("SELECT c FROM ChapterVersionModel c WHERE c.student.id = :studentId")
-    List<ChapterVersionModel> findByStudentId(@Param("studentId") Integer studentId);
+    @Query("SELECT c FROM ChapterVersionModel c WHERE c.owner.id = :studentId")
+    List<ChapterVersionModel> findByOwnerId(@Param("studentId") Integer studentId);
 
 }
