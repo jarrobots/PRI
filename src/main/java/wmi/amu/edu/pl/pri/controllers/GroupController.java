@@ -29,6 +29,7 @@ public class GroupController {
 
         return groupService.getGroupById(studentId);
     }
+
     @GetMapping("/view/groups")
     public GroupsDto getGroups(
             @RequestParam(value="id") Integer supervisorId
@@ -36,6 +37,7 @@ public class GroupController {
 
         return groupService.getAll(supervisorId);
     }
+
 
 
 }
