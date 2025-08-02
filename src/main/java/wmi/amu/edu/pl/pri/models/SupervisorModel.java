@@ -1,15 +1,16 @@
 package wmi.amu.edu.pl.pri.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-
+@Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-@Entity
-@Table(name = "student")
-public class StudentModel {
+@Table(name = "supervisor")
+public class SupervisorModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -17,9 +18,5 @@ public class StudentModel {
     private String fName;
     private String lName;
     private String email;
-
-    @ManyToOne
-    @JoinColumn(name = "group_id")
-    private GroupModel group;
 
 }
