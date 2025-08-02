@@ -5,16 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Builder
-public class ChapterVersionDto {
-
-    private Date uploadTime;
-    private String link;
-    private String fileName;
-    private Integer uploaderId;
+public class GroupsDto {
+    private List<GroupDto> dtos;
 }

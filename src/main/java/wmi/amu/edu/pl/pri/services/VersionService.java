@@ -38,6 +38,7 @@ public class VersionService {
                     return ChapterVersionDto.builder()
                             .link(createLinkFrom(chapterFileModel))
                             .uploaderId(chapterFileModel.getStudent().getId())
+                            .fileName(chapterFileModel.getName())
                             .uploadTime(chapterFileModel.getDate())
                             .build();
                 })
