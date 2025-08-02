@@ -22,7 +22,7 @@ public class ChapterVersionModel {
     @JoinColumn(name = "student", referencedColumnName = "id")
     private StudentModel student;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student", referencedColumnName = "id")
+    @JoinColumn(name = "owner", referencedColumnName = "id")
     private StudentModel owner;
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
