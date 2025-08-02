@@ -10,6 +10,8 @@ import wmi.amu.edu.pl.pri.dto.ChapterVersionsDto;
 import wmi.amu.edu.pl.pri.models.GroupModel;
 import wmi.amu.edu.pl.pri.services.GroupService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
@@ -19,11 +21,18 @@ public class GroupController {
     private final GroupService groupService;
 
     @GetMapping("/view/group")
-    public GroupModel getVersionsByStudentId(
+    public GroupModel getGrupusByStudentId(
             @RequestParam(value="studentId") Integer studentId
     ){
 
         return groupService.getGroupById(studentId);
+    }
+    @GetMapping("/view/groups")
+    public List<GroupModel> getGroups(
+            @RequestParam(value="id") Integer supervisorId
+    ){
+
+        return groupService.getAll(supervisorId);
     }
 
 

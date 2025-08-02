@@ -26,4 +26,8 @@ public class GroupModel {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "thesis_id", unique = true)
     private ThesisModel thesis;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "supervisor", referencedColumnName = "id")
+    private SupervisorModel supervisor;
 }
