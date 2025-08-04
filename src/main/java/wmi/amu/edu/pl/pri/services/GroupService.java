@@ -30,7 +30,6 @@ public class GroupService {
                     .id(groupModel.getId())
                     .name(groupModel.getName())
                     .supervisor(groupModel.getSupervisor())
-                    .students(groupModel.getStudents())
                     .thesis(groupModel.getThesis())
                     .build();
         }).toList();
@@ -41,7 +40,6 @@ public class GroupService {
         GroupDto dto = new GroupDto();
         dto.setId(groupModel.getId());
         dto.setName(groupModel.getName());
-        dto.setStudents(groupModel.getStudents());
         dto.setSupervisor(groupModel.getSupervisor());
         dto.setThesis(groupModel.getThesis());
         return dto;

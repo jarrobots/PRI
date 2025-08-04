@@ -20,9 +20,6 @@ public class GroupModel {
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy = "group")
-    private List<StudentModel> students = new ArrayList<>();
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "thesis_id", unique = true)
     private ThesisModel thesis;
