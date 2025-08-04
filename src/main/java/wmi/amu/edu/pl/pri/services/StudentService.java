@@ -17,7 +17,6 @@ import java.util.Optional;
 @Slf4j
 public class StudentService {
     private final StudentRepo repo;
-    private final GroupRepo gRepo;
 
     public List<StudentModel> getAllStudents(){
         return repo.findAll();
@@ -31,8 +30,7 @@ public class StudentService {
         return null;
     }
     public List<StudentModel> getStudentsByGroupId(Integer id){
-        GroupModel model = gRepo.findGroupModelById(id);
-        return repo.findStudentModelByGroup(model);
+        return repo.findStudentModelByGroupId(id);
 
     }
     public StudentModel saveStudent (StudentModel student){
