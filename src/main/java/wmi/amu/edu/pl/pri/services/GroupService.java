@@ -24,6 +24,10 @@ public class GroupService {
         List<GroupModel> models = groupRepo.getAllBySupervisorId(id);
         return mapToGroupsDto(models);
     }
+    public GroupsDto findAll(){
+        List<GroupModel> models = groupRepo.findAll();
+        return mapToGroupsDto(models);
+    }
     private GroupsDto mapToGroupsDto(List<GroupModel> groupModels){
         var dtos = groupModels.stream().map(groupModel -> {
             return GroupDto.builder()

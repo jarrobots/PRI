@@ -37,6 +37,12 @@ public class GroupController {
 
         return groupService.getAll(supervisorId);
     }
+    @GetMapping("/view/groups/all")
+    public GroupsDto getAll(
+    ){
+
+        return groupService.findAll();
+    }
 
 
 
