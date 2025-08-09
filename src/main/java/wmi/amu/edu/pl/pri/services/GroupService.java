@@ -6,9 +6,11 @@ import org.springframework.stereotype.Service;
 import wmi.amu.edu.pl.pri.dto.GroupDto;
 import wmi.amu.edu.pl.pri.dto.GroupsDto;
 import wmi.amu.edu.pl.pri.models.GroupModel;
+import wmi.amu.edu.pl.pri.models.pri.SupervisorModel;
 import wmi.amu.edu.pl.pri.repositories.GroupRepo;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +35,7 @@ public class GroupService {
             return GroupDto.builder()
                     .id(groupModel.getId())
                     .name(groupModel.getName())
-                    .supervisor(groupModel.getSupervisor().toSupervisorModelDto())
+                    .supervisor(Optional.ofNullable(groupModel.getSupervisor()).map(SupervisorModel::toSupervisorModelDto).orElse(null))
                     .thesis(groupModel.getThesis())
                     .build();
         }).toList();
@@ -44,7 +46,7 @@ public class GroupService {
         GroupDto dto = new GroupDto();
         dto.setId(groupModel.getId());
         dto.setName(groupModel.getName());
-        dto.setSupervisor(groupModel.getSupervisor().toSupervisorModelDto());
+        dto.setSupervisor(Optional.ofNullable(groupModel.getSupervisor()).map(SupervisorModel::toSupervisorModelDto).orElse(null));
         dto.setThesis(groupModel.getThesis());
         return dto;
     }

@@ -32,7 +32,7 @@ public class ChecklistService {
                 e.printStackTrace();
             }
         }
-        return mapToChecklistDto(optional.get());
+        return optional.map(this::mapToChecklistDto).orElse(null);
     }
 
     public ChecklistDto mapToChecklistDto(ChecklistModel model){
