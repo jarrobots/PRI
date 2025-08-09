@@ -12,7 +12,7 @@ import wmi.amu.edu.pl.pri.dto.modeldto.SupervisorModelDto;
 @NoArgsConstructor
 @AllArgsConstructor
 @Immutable
-@Subselect("SELECT id FROM supervisor")
+@Subselect("SELECT id, user_data_id FROM supervisor")
 @Table(name = "supervisor")
 @Entity
 public class SupervisorModel {

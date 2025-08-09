@@ -1,7 +1,10 @@
 package wmi.amu.edu.pl.pri.models.pri;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Subselect;
 import wmi.amu.edu.pl.pri.dto.modeldto.StudentModelDto;
@@ -35,7 +38,7 @@ public class StudentModel {
                 .email(userData.getEmail())
                 .fName(userData.getFirstName())
                 .lName(userData.getLastName())
-                .projectId(project.getId())
+                .projectId(project != null ? project.getId() : null)
                 .build();
     }
 }
