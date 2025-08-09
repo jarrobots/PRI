@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import wmi.amu.edu.pl.pri.JSONChecklistObj;
-import wmi.amu.edu.pl.pri.dto.ChapterVersionsDto;
 import wmi.amu.edu.pl.pri.dto.ChecklistDto;
 import wmi.amu.edu.pl.pri.models.ChecklistModel;
 import wmi.amu.edu.pl.pri.models.ChecklistQuestionModel;
@@ -22,8 +21,8 @@ public class ChecklistService {
     private final ChecklistRepo repo;
     private final StudentService studentService;
 
-    public ChecklistDto getChecklistByStudentId(Integer id){
-        Optional<ChecklistModel> optional = repo.findByStudentId(id);
+    public ChecklistDto getChecklistByStudentUserDataId(Long id){
+        Optional<ChecklistModel> optional = repo.findByStudentUserDataId(id);
         if(optional.isEmpty()){
             try {
                 ChecklistModel model = generateChecklistFromJson(id);
@@ -38,27 +37,27 @@ public class ChecklistService {
 
     public ChecklistDto mapToChecklistDto(ChecklistModel model){
         return ChecklistDto.builder()
-                .studentId(model.getId())
+                .studentUserDataId(model.getStudent().getUserData().getId())  //studentId(model.getId()) - Jarek, słuchaj, takie coś tu było, wskazuje na to ze do pola ID studenta przypiusuje Id checklisty, nie wiem czy intecjonalnie, jesli tak to popraw z powrotem. Jak dla mnie na logike powinno byc id usera/studenta, wiec tak zrobie.
                 .uploadTime(model.getDate())
                 .models(model.getChecklistQuestionModels())
                 .isPassed(model.isPassed())
                 .build();
     }
     public void setChapterlist(ChecklistDto dto){
-        this.setChecklistduo(dto.getModels(),dto.getStudentId());
+        this.setChecklistduo(dto.getModels(),dto.getStudentUserDataId());
     }
 
-    private void setChecklistduo(List<ChecklistQuestionModel> models, Integer id){
+    private void setChecklistduo(List<ChecklistQuestionModel> models, Long id){
        ChecklistModel model = getChecklistBysId(id);
        model.setDate(new Date());
        model.setChecklistQuestionModels(models);
-       model.setStudent(studentService.getStudentById(id));
+       model.setStudent(studentService.getStudentByUserDataId(id));
        model.setPassed(checkIfPassed(model.getChecklistQuestionModels()));
        repo.save(model);
     }
 
-    private ChecklistModel getChecklistBysId(Integer id){
-        Optional<ChecklistModel> optional = repo.findByStudentId(id);
+    private ChecklistModel getChecklistBysId(Long id){
+        Optional<ChecklistModel> optional = repo.findByStudentUserDataId(id);
         return optional.get();
     }
 
@@ -67,7 +66,7 @@ public class ChecklistService {
                 .noneMatch(q -> q.isCritical() && q.getPoints() == 0);
 
     }
-    private ChecklistModel generateChecklistFromJson(int id) throws IOException {
+    private ChecklistModel generateChecklistFromJson(long id) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         File jsonFile = new File("questions.json");
         List<JSONChecklistObj> questions = mapper.readValue(
@@ -87,7 +86,7 @@ public class ChecklistService {
 
         model.setPassed(false);
         model.setChecklistQuestionModels(list);
-        model.setStudent(studentService.getStudentById(id));
+        model.setStudent(studentService.getStudentByUserDataId(id));
         model.setDate(new Date());
 
         return model;

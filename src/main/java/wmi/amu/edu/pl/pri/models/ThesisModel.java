@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "thesis")
+@Table(name = "thm_thesis")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

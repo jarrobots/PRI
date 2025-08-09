@@ -24,8 +24,8 @@ public class ChecklistController {
     }
     @RequestMapping( path = "/view/note")
     public ResponseEntity<ChecklistDto> getQuestions(
-            @RequestParam(value="id") Integer id
+            @RequestParam(value="id") Long userDataId
     ){
-        return ResponseEntity.ok().body(checklistService.getChecklistByStudentId(id));
+        return ResponseEntity.ok().body(checklistService.getChecklistByStudentUserDataId(userDataId));
     }
 }

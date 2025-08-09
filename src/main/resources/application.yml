@@ -12,7 +12,7 @@ spring:
     baselineOnMigrate: true
     enabled: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/java_db?currentSchema=pri
+    url: jdbc:postgresql://localhost:5432/java_db?currentSchema=test25
     username: api
     password: api
     driver-class-name: org.postgresql.Driver
@@ -29,6 +29,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql=true:
+        default_schema: test25
     defer-datasource-initialization: true
 logging:
   level:

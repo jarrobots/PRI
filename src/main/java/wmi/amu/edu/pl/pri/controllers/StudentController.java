@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import wmi.amu.edu.pl.pri.dto.GroupsDto;
-import wmi.amu.edu.pl.pri.models.StudentModel;
+import wmi.amu.edu.pl.pri.dto.modeldto.StudentModelDto;
 import wmi.amu.edu.pl.pri.services.StudentService;
 
 import java.util.List;
@@ -21,12 +20,12 @@ public class StudentController {
     private final StudentService studentService;
 
     @GetMapping("/students")
-    public List<StudentModel> getStudents(
+    public List<StudentModelDto> getStudents(
     ) {
-        return studentService.getAllStudents();
+        return studentService.findAllStudents();
     }
     @GetMapping("/view/groups/students")
-    public List<StudentModel> getStudentsByGroup(@RequestParam(value="id") Integer groupId){
-        return  studentService.getStudentsByGroupId(groupId);
+    public List<StudentModelDto> getStudentsByGroup(@RequestParam(value="id") Long projectId){
+        return studentService.findStudentsByProjectId(projectId);
     }
 }

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
-import wmi.amu.edu.pl.pri.models.StudentModel;
+import wmi.amu.edu.pl.pri.models.pri.StudentModel;
 import wmi.amu.edu.pl.pri.repositories.ChapterVersionRepo;
 
 import java.util.List;

@@ -42,7 +42,7 @@ public class ChapterController {
         //return versionService.getChapterVersionsByStudentId(studentId);
     }
     @RequestMapping(method=POST, path = "/files")
-    public ResponseEntity<Integer> create(@RequestParam("file") MultipartFile file, @RequestParam("ownerId") Integer ownerId, @RequestParam("uploaderId") Integer uploaderId
+    public ResponseEntity<Integer> create(@RequestParam("file") MultipartFile file, @RequestParam("ownerId") Long ownerId, @RequestParam("uploaderId") Long uploaderId
     ) {
 
         ChapterVersionModel chapter = new ChapterVersionModel();
@@ -57,8 +57,8 @@ public class ChapterController {
         if(id != -1) {
             chapter.setName(file.getOriginalFilename());
             chapter.setFileId(id);
-            chapter.setStudent(studentService.getStudentById(uploaderId));
-            chapter.setOwner(studentService.getStudentById(ownerId));
+            chapter.setStudent(studentService.getStudentByUserDataId(uploaderId));
+            chapter.setOwner(studentService.getStudentByUserDataId(ownerId));
             chapter.setDate(new Date());
 
             return ResponseEntity.ok().body(chapterFileService.saveFile(chapter));

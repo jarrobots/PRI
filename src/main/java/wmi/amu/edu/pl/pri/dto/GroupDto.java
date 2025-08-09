@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import wmi.amu.edu.pl.pri.models.StudentModel;
-import wmi.amu.edu.pl.pri.models.SupervisorModel;
+import wmi.amu.edu.pl.pri.dto.modeldto.StudentModelDto;
+import wmi.amu.edu.pl.pri.dto.modeldto.SupervisorModelDto;
 import wmi.amu.edu.pl.pri.models.ThesisModel;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.List;
 public class GroupDto {
     private Long id;
     private String name;
-    private SupervisorModel supervisor;
-    private List<StudentModel> students = new ArrayList<>();
+    private SupervisorModelDto supervisor;
+    private List<StudentModelDto> students = new ArrayList<>();
     private ThesisModel thesis;
 }

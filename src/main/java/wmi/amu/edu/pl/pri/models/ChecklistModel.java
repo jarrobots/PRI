@@ -2,8 +2,8 @@ package wmi.amu.edu.pl.pri.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
+import wmi.amu.edu.pl.pri.models.pri.StudentModel;
 
 import java.util.Date;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "checklist")
+@Table(name = "thm_checklist")
 public class ChecklistModel {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

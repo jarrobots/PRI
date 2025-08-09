@@ -1,16 +1,18 @@
 package wmi.amu.edu.pl.pri.repositories;
 
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import wmi.amu.edu.pl.pri.models.GroupModel;
-import wmi.amu.edu.pl.pri.models.StudentModel;
+import wmi.amu.edu.pl.pri.models.pri.StudentModel;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface StudentRepo extends JpaRepository<StudentModel, Integer> {
+public interface StudentRepo extends JpaRepository<StudentModel, Long> {
 
-    @Query("SELECT c FROM StudentModel c WHERE c.group.id = :groupId")
-    List<StudentModel> findStudentModelByGroupId(@Param("groupId") Integer groupId);
+    @Query("SELECT s FROM StudentModel s WHERE s.userData.id = :userDataId")
+    Optional<StudentModel> findByUserDataId(Long userDataId);
+
+    @Query("SELECT c FROM StudentModel c WHERE c.project.id = :projectId")
+    List<StudentModel> findStudentModelByProjectId(@Param("projectId") Long projectId);
 }
