@@ -11,7 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "thm_chapter_file")
+@Table(name = "thm_chapter_version")
 public class ChapterVersionModel {
 
     @Id
