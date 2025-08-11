@@ -30,7 +30,7 @@ public class ChecklistController {
     public ResponseEntity<ChecklistDto> getQuestions(
             @RequestParam(value="id") Integer id
     ){
-        return ResponseEntity.ok().body(checklistService.getChecklistByStudentId(id));
+        return ResponseEntity.ok().body(checklistService.getChecklistByChapterId(id));
     }
 
 }

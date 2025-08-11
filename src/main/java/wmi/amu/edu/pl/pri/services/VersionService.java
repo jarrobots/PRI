@@ -12,6 +12,8 @@ import wmi.amu.edu.pl.pri.repositories.ChapterVersionRepo;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -44,6 +46,10 @@ public class VersionService {
                 .sorted(Comparator.comparing(ChapterVersionDto::getUploadTime))
                 .toList();
         return new ChapterVersionsDto(dtos);
+    }
+    public ChapterVersionModel getChapterVersionModelById(Integer id){
+        Optional<ChapterVersionModel> optional = chapterFileRepo.findById(id);
+        return optional.get();
     }
 
     private String createLinkFrom(ChapterVersionModel fileContent){

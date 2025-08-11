@@ -16,10 +16,10 @@ public class ChapterService {
     VersionService versionService;
     ChecklistService checklistService;
 
-    public ChapterDto getChapter(int studentId){
+    public ChapterDto getChapter(int versionId){
         return ChapterDto.builder()
-                .checklist(checklistService.getChecklistByStudentId(studentId))
-                .versions(versionService.getChapterVersionsByStudentId(studentId))
+                .checklist(checklistService.getChecklistByChapterId(versionId))
+                .versions(versionService.getChapterVersionsByStudentId(versionId))
                 .build();
     }
 }

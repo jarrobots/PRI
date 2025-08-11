@@ -22,10 +22,10 @@ import java.util.*;
 @Slf4j
 public class ChecklistService {
     private final ChecklistRepo repo;
-    private final StudentService studentService;
+    private final VersionService versionService;
 
-    public ChecklistDto getChecklistByStudentId(Integer id){
-        Optional<ChecklistModel> optional = repo.findByStudentId(id);
+    public ChecklistDto getChecklistByChapterId(Integer id){
+        Optional<ChecklistModel> optional = repo.findByChapterId(id);
         if(optional.isEmpty()){
             try {
                 ChecklistModel model = generateChecklistFromJson(id);
@@ -40,27 +40,27 @@ public class ChecklistService {
 
     public ChecklistDto mapToChecklistDto(ChecklistModel model){
         return ChecklistDto.builder()
-                .studentId(model.getId())
+                .versionId(model.getChapterVersion().getId())
                 .uploadTime(model.getDate())
                 .models(model.getChecklistQuestionModels())
                 .isPassed(model.isPassed())
                 .build();
     }
     public void setChapterlist(ChecklistDto dto){
-        this.setChecklistduo(dto.getModels(),dto.getStudentId());
+        this.setChecklistduo(dto.getModels(),dto.getVersionId());
     }
 
     private void setChecklistduo(List<ChecklistQuestionModel> models, Integer id){
        ChecklistModel model = getChecklistBysId(id);
        model.setDate(new Date());
        model.setChecklistQuestionModels(models);
-       model.setStudent(studentService.getStudentById(id));
+       model.setChapterVersion(versionService.getChapterVersionModelById(id));
        model.setPassed(checkIfPassed(model.getChecklistQuestionModels()));
        repo.save(model);
     }
 
     private ChecklistModel getChecklistBysId(Integer id){
-        Optional<ChecklistModel> optional = repo.findByStudentId(id);
+        Optional<ChecklistModel> optional = repo.findByChapterId(id);
         return optional.get();
     }
 
@@ -94,7 +94,7 @@ public class ChecklistService {
 
             model.setPassed(false);
             model.setChecklistQuestionModels(list);
-            model.setStudent(studentService.getStudentById(id));
+            model.setChapterVersion(versionService.getChapterVersionModelById(id));
             model.setDate(new Date());
 
             return model;
