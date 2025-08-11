@@ -12,7 +12,9 @@ import wmi.amu.edu.pl.pri.models.ChecklistQuestionModel;
 import wmi.amu.edu.pl.pri.repositories.ChecklistRepo;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 @Service
@@ -69,29 +71,36 @@ public class ChecklistService {
     }
     private ChecklistModel generateChecklistFromJson(int id) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        File jsonFile = new File("questions.json");
-        List<JSONChecklistObj> questions = mapper.readValue(
-                jsonFile,
-                mapper.getTypeFactory().constructCollectionType(List.class, JSONChecklistObj.class)
-        );
-        ChecklistModel model = new ChecklistModel();
 
-        List<ChecklistQuestionModel> list = new ArrayList<>();
-        for(JSONChecklistObj o : questions){
-            ChecklistQuestionModel question = new ChecklistQuestionModel();
-            question.setQuestion(o.getQuestion());
-            question.setCritical(o.isCritical());
-            question.setPoints(-1);
-            list.add(question);
+        // Load questions.json from classpath:
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream("questions.json")) {
+            if (is == null) {
+                throw new FileNotFoundException("questions.json not found in resources!");
+            }
+            List<JSONChecklistObj> questions = mapper.readValue(
+                    is,
+                    mapper.getTypeFactory().constructCollectionType(List.class, JSONChecklistObj.class)
+            );
+
+            ChecklistModel model = new ChecklistModel();
+            List<ChecklistQuestionModel> list = new ArrayList<>();
+            for (JSONChecklistObj o : questions) {
+                ChecklistQuestionModel question = new ChecklistQuestionModel();
+                question.setQuestion(o.getQuestion());
+                question.setCritical(o.isCritical());
+                question.setPoints(-1);
+                list.add(question);
+            }
+
+            model.setPassed(false);
+            model.setChecklistQuestionModels(list);
+            model.setStudent(studentService.getStudentById(id));
+            model.setDate(new Date());
+
+            return model;
         }
-
-        model.setPassed(false);
-        model.setChecklistQuestionModels(list);
-        model.setStudent(studentService.getStudentById(id));
-        model.setDate(new Date());
-
-        return model;
     }
+
 
 
 }
