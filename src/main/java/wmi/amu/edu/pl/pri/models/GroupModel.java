@@ -4,15 +4,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
+import wmi.amu.edu.pl.pri.models.pri.SupervisorModel;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "group_table")
+@Table(name = "thm_group_table")
 public class GroupModel {
 
     @Id

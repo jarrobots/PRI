@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "checklist_question")
+@Table(name = "thm_checklist_question")
 public class ChecklistQuestionModel {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -17,7 +17,5 @@ public class ChecklistQuestionModel {
     private String question;
     private Integer points;
     private boolean isCritical;
-
-
 
 }

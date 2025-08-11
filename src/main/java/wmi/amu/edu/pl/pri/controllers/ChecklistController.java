@@ -1,6 +1,7 @@
 package wmi.amu.edu.pl.pri.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,7 +15,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class ChecklistController {
-    ChecklistService checklistService;
+    @Autowired
+    private ChecklistService checklistService;
     @RequestMapping(method=POST, path = "/post/note")
     public Boolean saveQuestions(
             @RequestParam(value="checklistDto") ChecklistDto dto
@@ -24,8 +26,8 @@ public class ChecklistController {
     }
     @RequestMapping( path = "/view/note")
     public ResponseEntity<ChecklistDto> getQuestions(
-            @RequestParam(value="id") Integer id
+            @RequestParam(value="id") Long userDataId
     ){
-        return ResponseEntity.ok().body(checklistService.getChecklistByStudentId(id));
+        return ResponseEntity.ok().body(checklistService.getChecklistByStudentUserDataId(userDataId));
     }
 }

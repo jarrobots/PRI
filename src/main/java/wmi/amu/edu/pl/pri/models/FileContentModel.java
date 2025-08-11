@@ -2,16 +2,19 @@ package wmi.amu.edu.pl.pri.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 
 import java.sql.Types;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
-@Table(name = "file_content")
+@Table(name = "thm_file_content")
 public class FileContentModel {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -24,32 +27,4 @@ public class FileContentModel {
     @Column(name = "file_data", columnDefinition = "bytea")
     @JdbcTypeCode(Types.BINARY)
     private byte[] fileData;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public String getFileType() {
-        return fileType;
-    }
-
-    public void setFileType(String fileType) {
-        this.fileType = fileType;
-    }
-
-    public byte[] getFileData() {
-        return fileData;
-    }
-
-    public void setFileData(byte[] fileData) {
-        this.fileData = fileData;
-    }
 }

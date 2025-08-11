@@ -16,5 +16,5 @@ public class ChapterVersionDto {
     private Date uploadTime;
     private String link;
     private String fileName;
-    private Integer uploaderId;
+    private Long uploaderId;
 }
