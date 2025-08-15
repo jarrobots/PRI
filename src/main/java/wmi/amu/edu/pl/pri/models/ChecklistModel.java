@@ -18,8 +18,8 @@ public class ChecklistModel {
     private Integer id;
     private boolean isPassed;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student", referencedColumnName = "id")
-    private StudentModel student;
+    @JoinColumn(name = "chapter_file", referencedColumnName = "id")
+    private ChapterVersionModel chapterVersion;
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "checklist", referencedColumnName = "id")
     private List<ChecklistQuestionModel> checklistQuestionModels;
@@ -42,12 +42,12 @@ public class ChecklistModel {
         isPassed = passed;
     }
 
-    public StudentModel getStudent() {
-        return student;
+    public ChapterVersionModel getChapterVersion() {
+        return chapterVersion;
     }
 
-    public void setStudent(StudentModel student) {
-        this.student = student;
+    public void setChapterVersion( ChapterVersionModel chapterVersion){
+        this.chapterVersion = chapterVersion;
     }
 
     public List<ChecklistQuestionModel> getChecklistQuestionModels() {
