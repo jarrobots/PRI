@@ -5,9 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import wmi.amu.edu.pl.pri.dto.GroupDto;
 import wmi.amu.edu.pl.pri.dto.GroupsDto;
-import wmi.amu.edu.pl.pri.models.GroupModel;
+import wmi.amu.edu.pl.pri.models.pri.ProjectModel;
+import wmi.amu.edu.pl.pri.models.pri.StudentModel;
 import wmi.amu.edu.pl.pri.models.pri.SupervisorModel;
 import wmi.amu.edu.pl.pri.repositories.GroupRepo;
+import wmi.amu.edu.pl.pri.repositories.ProjectRepo;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,36 +20,48 @@ import java.util.Optional;
 public class GroupService {
     private final GroupRepo groupRepo;
 
-    public GroupDto getGroupById(Integer id){
-       GroupModel model = groupRepo.findGroupModelById(id);
+    private final ProjectRepo projectRepo;
+
+    public GroupDto getGroupById(Long id){
+       ProjectModel model = projectRepo.findById(id).get();
        return mapToGroupDto(model);
     }
-    public GroupsDto getAll(Integer id){
-        List<GroupModel> models = groupRepo.getAllBySupervisorId(id);
+
+    public GroupsDto getGetGroupsBySupervisorId(Long id){
+        List<ProjectModel> models = projectRepo.getAllBySupervisorId(id);
         return mapToGroupsDto(models);
     }
     public GroupsDto findAll(){
-        List<GroupModel> models = groupRepo.findAll();
+        List<ProjectModel> models = projectRepo.findAll();
         return mapToGroupsDto(models);
     }
-    private GroupsDto mapToGroupsDto(List<GroupModel> groupModels){
-        var dtos = groupModels.stream().map(groupModel -> {
-            return GroupDto.builder()
-                    .id(groupModel.getId())
-                    .name(groupModel.getName())
-                    .supervisor(Optional.ofNullable(groupModel.getSupervisor()).map(SupervisorModel::toSupervisorModelDto).orElse(null))
-                    .thesis(groupModel.getThesis())
-                    .build();
-        }).toList();
+
+    private GroupsDto mapToGroupsDto(List<ProjectModel> groupModels){
+        var dtos = groupModels.stream()
+                .map(this::mapProjectModelToGroupDto)
+                .toList();
         return new GroupsDto(dtos);
     }
-
-    private GroupDto mapToGroupDto(GroupModel groupModel){
+    private GroupDto mapToGroupDto(ProjectModel groupModel){
         GroupDto dto = new GroupDto();
         dto.setId(groupModel.getId());
         dto.setName(groupModel.getName());
         dto.setSupervisor(Optional.ofNullable(groupModel.getSupervisor()).map(SupervisorModel::toSupervisorModelDto).orElse(null));
-        dto.setThesis(groupModel.getThesis());
+        dto.setThesisId(groupModel.getThesis().getId());
         return dto;
+    }
+
+    private GroupDto mapProjectModelToGroupDto(ProjectModel projectModel){
+        return GroupDto.builder()
+                .projectId(projectModel.getId())
+                .students(projectModel.getStudents().stream().map(StudentModel::toStudentModelDto).toList())
+                .thesisId(projectModel.getThesis().getId())
+                .supervisor(projectModel.getSupervisor().toSupervisorModelDto())
+                .name(createGroupNameFromProjectName(projectModel.getName()))
+                .build();
+    }
+
+    private String createGroupNameFromProjectName(String projectName){
+        return "Grupa projektu \"" + projectName + "\"";
     }
 }
