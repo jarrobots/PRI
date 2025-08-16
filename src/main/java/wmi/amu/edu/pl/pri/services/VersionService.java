@@ -47,6 +47,13 @@ public class VersionService {
         return new ChapterVersionsDto(dtos);
     }
 
+    public Integer saveFile (ChapterVersionModel chapters){
+        ChapterVersionModel savedChapters = chapterFileRepo.save(chapters);
+
+        System.out.println("File with id:"+chapters.getId()+" saved successfully" );
+        return savedChapters.getId();
+    }
+
     private String createLinkFrom(ChapterVersionModel fileContent){
         return "http://localhost:%s/api/v1/download/".formatted(currentPort) + fileContent.getFileId();
 
