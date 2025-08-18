@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import wmi.amu.edu.pl.pri.dto.modeldto.StudentModelDto;
 import wmi.amu.edu.pl.pri.dto.modeldto.SupervisorModelDto;
-import wmi.amu.edu.pl.pri.models.ThesisModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,5 +19,6 @@ public class GroupDto {
     private String name;
     private SupervisorModelDto supervisor;
     private List<StudentModelDto> students = new ArrayList<>();
-    private ThesisModel thesis;
+    private Long thesisId;
+    private Long projectId;
 }

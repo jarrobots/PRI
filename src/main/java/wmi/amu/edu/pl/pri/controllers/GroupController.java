@@ -20,7 +20,7 @@ public class GroupController {
 
     @GetMapping("/view/group")
     public GroupDto getGroupByStudentId(
-            @RequestParam(value="studentId") Integer studentId
+            @RequestParam(value="studentId") Long studentId
     ){
 
         return groupService.getGroupById(studentId);
@@ -28,18 +28,16 @@ public class GroupController {
 
     @GetMapping("/view/groups")
     public GroupsDto getGroups(
-            @RequestParam(value="id") Integer supervisorId
+            @RequestParam(value="id") Long supervisorId
     ){
-
-        return groupService.getAll(supervisorId);
+        return groupService.getGetGroupsBySupervisorId(supervisorId);
     }
+
     @GetMapping("/view/groups/all")
     public GroupsDto getAll(
     ){
 
         return groupService.findAll();
     }
-
-
 
 }

@@ -1,7 +1,11 @@
 package wmi.amu.edu.pl.pri.models;
 
-import lombok.*;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import wmi.amu.edu.pl.pri.models.pri.ProjectModel;
+
 import java.util.List;
 
 @Entity
@@ -37,5 +41,9 @@ public class ThesisModel {
 
     @OneToOne(mappedBy = "thesis")
     private GroupModel group;
+
+    @OneToOne(mappedBy = "thesis")
+    private ProjectModel project;
+
 }
 
