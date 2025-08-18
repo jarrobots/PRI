@@ -47,7 +47,7 @@ public class GroupService {
         dto.setId(groupModel.getId());
         dto.setName(groupModel.getName());
         dto.setSupervisor(Optional.ofNullable(groupModel.getSupervisor()).map(SupervisorModel::toSupervisorModelDto).orElse(null));
-        dto.setThesisId(groupModel.getThesis().getId());
+        dto.setThesisId(groupModel.getThesis()==null? null : groupModel.getThesis().getId());
         return dto;
     }
 
@@ -55,7 +55,7 @@ public class GroupService {
         return GroupDto.builder()
                 .projectId(projectModel.getId())
                 .students(projectModel.getStudents().stream().map(StudentModel::toStudentModelDto).toList())
-                .thesisId(projectModel.getThesis().getId())
+                .thesisId(projectModel.getThesis()==null ? null : projectModel.getThesis().getId())
                 .supervisor(projectModel.getSupervisor().toSupervisorModelDto())
                 .name(createGroupNameFromProjectName(projectModel.getName()))
                 .build();
