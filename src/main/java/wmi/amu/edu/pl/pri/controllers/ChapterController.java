@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 import wmi.amu.edu.pl.pri.dto.ChapterVersionsDto;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.FileContentModel;
-import wmi.amu.edu.pl.pri.services.ChapterFileService;
 import wmi.amu.edu.pl.pri.services.FileContentService;
 import wmi.amu.edu.pl.pri.services.StudentService;
 import wmi.amu.edu.pl.pri.services.VersionService;
@@ -32,7 +31,6 @@ public class ChapterController {
     private final VersionService versionService;
     private final FileContentService fileService;
     private final StudentService studentService;
-    private final ChapterFileService chapterFileService;
 
     @GetMapping("/view")
     public ResponseEntity<ChapterVersionsDto> getVersionsByStudentId(
@@ -61,7 +59,7 @@ public class ChapterController {
             chapter.setOwner(studentService.getStudentByUserDataId(ownerId));
             chapter.setDate(new Date());
 
-            return ResponseEntity.ok().body(chapterFileService.saveFile(chapter));
+            return ResponseEntity.ok().body(versionService.saveFile(chapter));
         }
         else{
             return  ResponseEntity.badRequest().body(id);
