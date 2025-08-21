@@ -17,15 +17,22 @@ public class ChecklistModel {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
     private boolean isPassed;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "version", referencedColumnName = "id")
     private ChapterVersionModel versionModel;
+
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "checklist", referencedColumnName = "id")
     private List<ChecklistQuestionModel> checklistQuestionModels;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
+
+
+
 
     public Long getId() {
         return id;

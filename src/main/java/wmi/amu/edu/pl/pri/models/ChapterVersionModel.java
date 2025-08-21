@@ -18,11 +18,15 @@ public class ChapterVersionModel {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uploader", referencedColumnName = "id", insertable=false, updatable=false)
     private UserDataModel uploader;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
+
     private Long fileId;
+
     private String name;
 }
