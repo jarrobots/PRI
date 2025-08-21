@@ -3,6 +3,7 @@ package wmi.amu.edu.pl.pri.models;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import wmi.amu.edu.pl.pri.dto.ChecklistDto;
 import wmi.amu.edu.pl.pri.models.pri.StudentModel;
 
 import java.util.Date;
@@ -64,5 +65,14 @@ public class ChecklistModel {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public ChecklistDto toChecklistDto(){
+        return ChecklistDto.builder()
+                .versionId(versionModel.getId())
+                .uploadTime(date)
+                .models(checklistQuestionModels)
+                .isPassed(isPassed)
+                .build();
     }
 }

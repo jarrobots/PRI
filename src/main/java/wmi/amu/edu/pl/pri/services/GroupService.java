@@ -13,6 +13,7 @@ import wmi.amu.edu.pl.pri.repositories.ProjectRepo;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class GroupService {
 
     private GroupsDto mapToGroupsDto(List<ProjectModel> groupModels){
         var dtos = groupModels.stream()
-                .map(this::mapProjectModelToGroupDto)
+                .map(ProjectModel::toGroupDto)
                 .toList();
         return new GroupsDto(dtos);
     }
@@ -51,7 +52,7 @@ public class GroupService {
         return dto;
     }
 
-    private GroupDto mapProjectModelToGroupDto(ProjectModel projectModel){
+   /*private GroupDto mapProjectModelToGroupDto(ProjectModel projectModel){
         return GroupDto.builder()
                 .projectId(projectModel.getId())
                 .students(projectModel.getStudents().stream().map(StudentModel::toStudentModelDto).toList())
@@ -64,4 +65,6 @@ public class GroupService {
     private String createGroupNameFromProjectName(String projectName){
         return "Grupa projektu \"" + projectName + "\"";
     }
+
+    */
 }

@@ -30,22 +30,13 @@ public class ChecklistService {
         if(optional.isEmpty()){
             try {
                 ChecklistModel model = generateChecklistFromJson(id);
-                return mapToChecklistDto(model);
+                return model.toChecklistDto();
             }
             catch (IOException e){
                 e.printStackTrace();
             }
         }
-        return optional.map(this::mapToChecklistDto).orElse(null);
-    }
-
-    public ChecklistDto mapToChecklistDto(ChecklistModel model){
-        return ChecklistDto.builder()
-                .versionId(model.getVersionModel().getId())
-                .uploadTime(model.getDate())
-                .models(model.getChecklistQuestionModels())
-                .isPassed(model.isPassed())
-                .build();
+        return optional.get().toChecklistDto();
     }
     public void setChapterlist(ChecklistDto dto){
         this.setChecklistdto(dto.getModels(),dto.getVersionId());
