@@ -10,11 +10,9 @@ import java.util.Optional;
 
 public interface ChecklistRepo extends JpaRepository<ChecklistModel, Integer> {
 
-    @Query("SELECT c FROM ChecklistModel c WHERE c.student.id = :studentId")
-    Optional<ChecklistModel> findByStudentId(@Param("studentId") Integer studentId);
 
-    @Query("SELECT c FROM ChecklistModel c WHERE c.student.id = :studentId")
-    Optional<ChecklistModel> findByStudentUserDataId(@Param("studentId") Long studentId);
+    @Query("SELECT c FROM ChecklistModel c WHERE c.versionModel.id = :versionId")
+    Optional<ChecklistModel> findByVersionId(@Param("versionId") Long id);
 
 }
 

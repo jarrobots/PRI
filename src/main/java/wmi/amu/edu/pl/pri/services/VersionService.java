@@ -12,6 +12,8 @@ import wmi.amu.edu.pl.pri.repositories.ChapterVersionRepo;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -25,6 +27,10 @@ public class VersionService {
 
     @Autowired
     private ChapterVersionRepo chapterFileRepo;
+
+    public ChapterVersionModel getChapterVersionById(Integer id){
+        return chapterFileRepo.findById(id).get();
+    }
 
     public ChapterVersionsDto getChapterVersionsByOwnerId(Integer studentId) {
         List<ChapterVersionModel> list = chapterFileRepo.findByOwnerId(studentId);
