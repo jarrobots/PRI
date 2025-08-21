@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import wmi.amu.edu.pl.pri.models.FileContentModel;
 
 
-public interface FileContentRepo extends JpaRepository<FileContentModel, Integer> {
+public interface FileContentRepo extends JpaRepository<FileContentModel, Long> {
 }

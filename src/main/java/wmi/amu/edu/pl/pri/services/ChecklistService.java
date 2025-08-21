@@ -29,9 +29,7 @@ public class ChecklistService {
         Optional<ChecklistModel> optional = repo.findByVersionId(id);
         if(optional.isEmpty()){
             try {
-                long uId = id;
-                int userId = (int) uId;
-                ChecklistModel model = generateChecklistFromJson(userId);
+                ChecklistModel model = generateChecklistFromJson(id);
                 return mapToChecklistDto(model);
             }
             catch (IOException e){
@@ -70,7 +68,7 @@ public class ChecklistService {
                 .noneMatch(q -> q.isCritical() && q.getPoints() == 0);
 
     }
-    private ChecklistModel generateChecklistFromJson(Integer id) throws IOException {
+    private ChecklistModel generateChecklistFromJson(Long id) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         try (InputStream is = getClass().getClassLoader().getResourceAsStream("questions.json")) {
             if (is == null) {

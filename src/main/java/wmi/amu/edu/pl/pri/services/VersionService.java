@@ -28,11 +28,11 @@ public class VersionService {
     @Autowired
     private ChapterVersionRepo chapterFileRepo;
 
-    public ChapterVersionModel getChapterVersionById(Integer id){
+    public ChapterVersionModel getChapterVersionById(Long id){
         return chapterFileRepo.findById(id).get();
     }
 
-    public ChapterVersionsDto getChapterVersionsByOwnerId(Integer studentId) {
+    public ChapterVersionsDto getChapterVersionsByOwnerId(Long studentId) {
         List<ChapterVersionModel> list = chapterFileRepo.findByOwnerId(studentId);
 
         return mapToChapterVersionsDto(list);
@@ -43,7 +43,7 @@ public class VersionService {
                 .map(chapterFileModel -> {
                     return ChapterVersionDto.builder()
                             .link(createLinkFrom(chapterFileModel))
-                            .uploaderId(chapterFileModel.getStudent().getId())
+                            .uploaderId(chapterFileModel.getUploader().getId())
                             .fileName(chapterFileModel.getName())
                             .uploadTime(chapterFileModel.getDate())
                             .build();

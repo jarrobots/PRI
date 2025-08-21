@@ -3,6 +3,8 @@ package wmi.amu.edu.pl.pri.models;
 import lombok.*;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "thm_chapter")
 @Data
@@ -28,9 +30,15 @@ public class ChapterModel {
     @Column(name = "approval_status")
     private String approvalStatus;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "versions", referencedColumnName = "id")
+    private List<ChapterVersionModel> versionModels;
+
     //tu ID tabeli student, w przyszlosci przechodzimy na user_data ze starego systemu
     @Column(name = "user_data_id")
     private Long userDataId;
+
+
 
     @Column(name = "supervisor_comment")
     private String supervisorComment;

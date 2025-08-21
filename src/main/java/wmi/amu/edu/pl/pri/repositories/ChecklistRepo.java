@@ -8,7 +8,7 @@ import wmi.amu.edu.pl.pri.models.ChecklistModel;
 import java.util.Optional;
 
 
-public interface ChecklistRepo extends JpaRepository<ChecklistModel, Integer> {
+public interface ChecklistRepo extends JpaRepository<ChecklistModel,Long> {
 
 
     @Query("SELECT c FROM ChecklistModel c WHERE c.versionModel.id = :versionId")

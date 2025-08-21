@@ -5,7 +5,7 @@ import wmi.amu.edu.pl.pri.models.GroupModel;
 
 import java.util.List;
 
-public interface GroupRepo extends JpaRepository<GroupModel, Integer> {
+public interface GroupRepo extends JpaRepository<GroupModel, Long> {
 
     List<GroupModel> getAllBySupervisorId(Integer id);
 

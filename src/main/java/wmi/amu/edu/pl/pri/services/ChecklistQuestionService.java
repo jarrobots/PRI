@@ -14,7 +14,7 @@ import java.util.Optional;
 @Slf4j
 public class ChecklistQuestionService {
     private final ChecklistQuestionRepo repo;
-    public Optional<ChecklistQuestionModel> getFileById(Integer id){
+    public Optional<ChecklistQuestionModel> getFileById(Long id){
         return repo.findById(id);
     }
     public void saveQuestion(ChecklistQuestionModel model){

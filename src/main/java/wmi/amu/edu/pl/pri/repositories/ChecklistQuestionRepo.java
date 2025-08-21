@@ -7,6 +7,6 @@ import wmi.amu.edu.pl.pri.models.ChecklistQuestionModel;
 
 import java.util.List;
 
-public interface ChecklistQuestionRepo extends JpaRepository<ChecklistQuestionModel, Integer> {
+public interface ChecklistQuestionRepo extends JpaRepository<ChecklistQuestionModel, Long> {
 
 }
