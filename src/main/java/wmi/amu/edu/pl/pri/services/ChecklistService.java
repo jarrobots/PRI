@@ -53,16 +53,15 @@ public class ChecklistService {
         this.setChecklistdto(dto.getModels(),dto.getVersionId());
     }
 
-    private void setChecklistdto(List<ChecklistQuestionModel> models, Integer id){
+    private void setChecklistdto(List<ChecklistQuestionModel> models, Long id){
        ChecklistModel model = getChecklistBysId(id);
        model.setDate(new Date());
        model.setChecklistQuestionModels(models);
        repo.save(model);
     }
 
-    private ChecklistModel getChecklistBysId(Integer id){
-        long userId =  id;
-        Optional<ChecklistModel> optional = repo.findByVersionId(userId);
+    private ChecklistModel getChecklistBysId(Long id){
+        Optional<ChecklistModel> optional = repo.findByVersionId(id);
         return optional.get();
     }
 
@@ -73,8 +72,6 @@ public class ChecklistService {
     }
     private ChecklistModel generateChecklistFromJson(Integer id) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-
-        // Load questions.json from classpath:
         try (InputStream is = getClass().getClassLoader().getResourceAsStream("questions.json")) {
             if (is == null) {
                 throw new FileNotFoundException("questions.json not found in resources!");

@@ -40,11 +40,11 @@ public class ChapterController {
         //return versionService.getChapterVersionsByStudentId(studentId);
     }
     @RequestMapping(method=POST, path = "/files")
-    public ResponseEntity<Integer> create(@RequestParam("file") MultipartFile file, @RequestParam("ownerId") Long ownerId, @RequestParam("uploaderId") Long uploaderId
+    public ResponseEntity<Long> create(@RequestParam("file") MultipartFile file, @RequestParam("ownerId") Long ownerId, @RequestParam("uploaderId") Long uploaderId
     ) {
 
         ChapterVersionModel chapter = new ChapterVersionModel();
-        int id = -1;
+        long id = -1;
         try {
             Object obj = file.getBytes();
             System.out.println(obj.getClass());

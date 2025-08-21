@@ -53,7 +53,7 @@ public class VersionService {
         return new ChapterVersionsDto(dtos);
     }
 
-    public Integer saveFile (ChapterVersionModel chapters){
+    public Long saveFile (ChapterVersionModel chapters){
         ChapterVersionModel savedChapters = chapterFileRepo.save(chapters);
 
         System.out.println("File with id:"+chapters.getId()+" saved successfully" );

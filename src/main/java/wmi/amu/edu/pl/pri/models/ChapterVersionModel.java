@@ -16,7 +16,7 @@ public class ChapterVersionModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
+    private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student", referencedColumnName = "id", insertable=false, updatable=false)
     private StudentModel student;
@@ -25,6 +25,6 @@ public class ChapterVersionModel {
     private StudentModel owner;
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
-    private Integer fileId;
+    private Long fileId;
     private String name;
 }

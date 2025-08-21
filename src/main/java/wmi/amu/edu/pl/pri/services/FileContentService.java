@@ -17,7 +17,7 @@ public class FileContentService {
     public Optional<FileContentModel> getFileById(Integer id){
         return repo.findById(id);
     }
-    public Integer saveFile (byte[] data, String fileName, String fileType){
+    public Long saveFile (byte[] data, String fileName, String fileType){
         FileContentModel model = new FileContentModel();
         model.setFileData(data);
         model.setFileName(fileName);

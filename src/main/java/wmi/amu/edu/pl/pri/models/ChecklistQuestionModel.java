@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class ChecklistQuestionModel {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
+    private Long id;
     private String question;
     private Integer points;
     private boolean isCritical;

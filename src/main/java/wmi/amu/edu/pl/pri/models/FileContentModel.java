@@ -18,7 +18,7 @@ import java.sql.Types;
 public class FileContentModel {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
+    private Long id;
     @Column(name = "file_name")
     private String fileName;
     @Column(name = "file_type")

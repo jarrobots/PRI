@@ -15,7 +15,7 @@ import java.util.List;
 public class ChecklistModel {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
+    private Long id;
     private boolean isPassed;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "version", referencedColumnName = "id")
@@ -26,11 +26,11 @@ public class ChecklistModel {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
