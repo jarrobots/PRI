@@ -2,6 +2,7 @@ package wmi.amu.edu.pl.pri.models;
 
 import lombok.*;
 import jakarta.persistence.*;
+import wmi.amu.edu.pl.pri.dto.ChapterCoreDto;
 
 @Entity
 @Table(name = "thm_chapter")
@@ -25,6 +26,7 @@ public class ChapterModel {
     @Column(name = "description_en")
     private String descriptionEn;
 
+    //informacja o tym czy rozdzial zostal zaakceptowany podczas formulowania pracy
     @Column(name = "approval_status")
     private String approvalStatus;
 
@@ -38,4 +40,18 @@ public class ChapterModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "thesis_id", referencedColumnName = "id", insertable = false, updatable = false)
     private ThesisModel thesis;
+
+    public ChapterCoreDto toDto() {
+        return ChapterCoreDto.builder()
+                .id(this.id)
+                .title(this.title)
+                .titleEn(this.titleEn)
+                .description(this.description)
+                .descriptionEn(this.descriptionEn)
+                .approvalStatus(this.approvalStatus)
+                .userDataId(this.userDataId)
+                .supervisorComment(this.supervisorComment)
+                .thesisId(this.thesis != null ? this.thesis.getId() : null)
+                .build();
+    }
 }

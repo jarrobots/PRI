@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Data
-public class ThesisDto {
+public class ThesisCompleteDto {
     private Long id;
     private String title;
     private String titleEn;
@@ -19,7 +19,6 @@ public class ThesisDto {
     private String descriptionEn;
     private String approvalStatus;
     private String supervisorComment;
-    private List<ChapterDto> chapters;
-    private Long groupId;
+    private List<ChapterCoreDto> chapters;
     private Long projectId;
 }
