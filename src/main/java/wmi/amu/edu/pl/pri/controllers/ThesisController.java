@@ -8,13 +8,13 @@ import wmi.amu.edu.pl.pri.dto.ThesisCoreDto;
 import wmi.amu.edu.pl.pri.services.ThesisService;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/thesis")
 @RequiredArgsConstructor
 public class ThesisController {
 
     private final ThesisService thesisService;
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<ThesisCompleteDto> getThesisById(@PathVariable Long id) {
         ThesisCompleteDto thesis = thesisService.findById(id);
         if (thesis == null)
@@ -23,7 +23,7 @@ public class ThesisController {
             return ResponseEntity.ok(thesis);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("{id}")
     public ResponseEntity<ThesisCompleteDto> updateThesis(@PathVariable Long id, @RequestBody ThesisCoreDto thesisCompleteDto) {
         ThesisCompleteDto updatedThesis = thesisService.update(id, thesisCompleteDto);
 

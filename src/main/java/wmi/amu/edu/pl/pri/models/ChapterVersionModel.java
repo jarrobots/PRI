@@ -25,6 +25,12 @@ public class ChapterVersionModel {
     private StudentModel owner;
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chapter_id", referencedColumnName = "id")
+    private ChapterModel chapter;
+
+    //plik na razie zostawiamy bez relacji zdefiniowanej przez Hibernate
     private Long fileId;
     private String name;
 }
