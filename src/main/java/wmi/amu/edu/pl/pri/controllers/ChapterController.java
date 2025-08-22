@@ -15,6 +15,7 @@ import wmi.amu.edu.pl.pri.models.FileContentModel;
 import wmi.amu.edu.pl.pri.services.ChapterService;
 import wmi.amu.edu.pl.pri.services.FileContentService;
 import wmi.amu.edu.pl.pri.services.StudentService;
+import wmi.amu.edu.pl.pri.services.UserDataService;
 import wmi.amu.edu.pl.pri.services.VersionService;
 
 import java.io.IOException;
@@ -32,13 +33,13 @@ public class ChapterController {
     @Autowired
     private final VersionService versionService;
     private final FileContentService fileService;
-    private final StudentService studentService;
+    private final UserDataService userDataService;
     @Autowired
     private final ChapterService chapterService;
 
     @GetMapping("/view")
     public ResponseEntity<ChapterVersionsDto> getVersionsByStudentId(
-            @RequestParam(value="id") Integer studentId
+            @RequestParam(value="id") Long studentId
     ){
         return ResponseEntity.ok().body(versionService.getChapterVersionsByOwnerId(studentId));
         //return versionService.getChapterVersionsByStudentId(studentId);
@@ -59,8 +60,7 @@ public class ChapterController {
         if(id != -1) {
             chapter.setName(file.getOriginalFilename());
             chapter.setFileId(id);
-            chapter.setStudent(studentService.getStudentByUserDataId(uploaderId));
-            chapter.setOwner(studentService.getStudentByUserDataId(ownerId));
+            chapter.setUploader(userDataService.getUserData(uploaderId));
             chapter.setDate(new Date());
 
             return ResponseEntity.ok().body(versionService.saveFile(chapter));
@@ -70,7 +70,7 @@ public class ChapterController {
         }
     }
     @RequestMapping(method = GET, path = "/download/{id}")
-    public ResponseEntity<byte[]> getFile(@PathVariable Integer id) {
+    public ResponseEntity<byte[]> getFile(@PathVariable Long id) {
         Optional<FileContentModel> fileOptional = fileService.getFileById(id);
 
         if(fileOptional.isPresent()){

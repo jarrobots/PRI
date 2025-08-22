@@ -8,9 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Subselect;
+import wmi.amu.edu.pl.pri.dto.modeldto.UserDataDto;
 
 
-@Getter
+    @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -30,5 +31,11 @@ public class UserDataModel {
 
     private String lastName;
 
+    public UserDataDto toUserDataDto(){
+        return UserDataDto.builder()
+                .id(id)
+                .fName(firstName)
+                .lName(lastName).build();
+    }
 
 }

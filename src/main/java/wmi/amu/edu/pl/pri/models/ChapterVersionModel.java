@@ -3,6 +3,7 @@ package wmi.amu.edu.pl.pri.models;
 import jakarta.persistence.*;
 import lombok.*;
 import wmi.amu.edu.pl.pri.models.pri.StudentModel;
+import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 
 
 import java.util.Date;
@@ -17,12 +18,11 @@ public class ChapterVersionModel {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student", referencedColumnName = "id", insertable=false, updatable=false)
-    private StudentModel student;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner", referencedColumnName = "id")
-    private StudentModel owner;
+    @JoinColumn(name = "uploader", referencedColumnName = "id", insertable=false, updatable=false)
+    private UserDataModel uploader;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
@@ -31,6 +31,8 @@ public class ChapterVersionModel {
     private ChapterModel chapter;
 
     //plik na razie zostawiamy bez relacji zdefiniowanej przez Hibernate
+
     private Long fileId;
+
     private String name;
 }

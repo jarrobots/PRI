@@ -14,7 +14,7 @@ import java.util.Optional;
 @Slf4j
 public class FileContentService {
     private final FileContentRepo repo;
-    public Optional<FileContentModel> getFileById(Integer id){
+    public Optional<FileContentModel> getFileById(Long id){
         return repo.findById(id);
     }
     public Long saveFile (byte[] data, String fileName, String fileType){

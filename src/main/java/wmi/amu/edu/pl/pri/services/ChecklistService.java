@@ -29,25 +29,14 @@ public class ChecklistService {
         Optional<ChecklistModel> optional = repo.findByVersionId(id);
         if(optional.isEmpty()){
             try {
-                long uId = id;
-                int userId = (int) uId;
-                ChecklistModel model = generateChecklistFromJson(userId);
-                return mapToChecklistDto(model);
+                ChecklistModel model = generateChecklistFromJson(id);
+                return model.toChecklistDto();
             }
             catch (IOException e){
                 e.printStackTrace();
             }
         }
-        return optional.map(this::mapToChecklistDto).orElse(null);
-    }
-
-    public ChecklistDto mapToChecklistDto(ChecklistModel model){
-        return ChecklistDto.builder()
-                .versionId(model.getVersionModel().getId())
-                .uploadTime(model.getDate())
-                .models(model.getChecklistQuestionModels())
-                .isPassed(model.isPassed())
-                .build();
+        return optional.get().toChecklistDto();
     }
     public void setChapterlist(ChecklistDto dto){
         this.setChecklistdto(dto.getModels(),dto.getVersionId());
@@ -70,7 +59,7 @@ public class ChecklistService {
                 .noneMatch(q -> q.isCritical() && q.getPoints() == 0);
 
     }
-    private ChecklistModel generateChecklistFromJson(Integer id) throws IOException {
+    private ChecklistModel generateChecklistFromJson(Long id) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         try (InputStream is = getClass().getClassLoader().getResourceAsStream("questions.json")) {
             if (is == null) {

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Subselect;
+import wmi.amu.edu.pl.pri.dto.GroupDto;
+import wmi.amu.edu.pl.pri.dto.GroupsDto;
 import wmi.amu.edu.pl.pri.models.ThesisModel;
 
 import java.util.List;
@@ -35,5 +37,13 @@ public class ProjectModel {
     @JoinColumn(name = "id", referencedColumnName = "project_id")
     private ThesisModel thesis;
 
-
+    public GroupDto toGroupDto(){
+        return GroupDto.builder()
+                .projectId(id)
+                .students(students.stream().map(StudentModel::toStudentModelDto).toList())
+                .thesisId(thesis==null ? null : thesis.getId())
+                .supervisor(supervisor.toSupervisorModelDto())
+                .name(String.format("Grupa projektu \"%s\"",name))
+                .build();
+    }
 }
