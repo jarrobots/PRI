@@ -32,6 +32,7 @@ public class ChapterController {
     private final VersionService versionService;
     private final FileContentService fileService;
     private final UserDataService userDataService;
+    private final StudentService studentService;
 
     @GetMapping("/view")
     public ResponseEntity<ChapterVersionsDto> getVersionsByStudentId(
@@ -57,6 +58,7 @@ public class ChapterController {
             chapter.setName(file.getOriginalFilename());
             chapter.setFileId(id);
             chapter.setUploader(userDataService.getUserData(uploaderId));
+            chapter.setOwner(studentService.getStudentById(ownerId));
             chapter.setDate(new Date());
 
             return ResponseEntity.ok().body(versionService.saveFile(chapter));

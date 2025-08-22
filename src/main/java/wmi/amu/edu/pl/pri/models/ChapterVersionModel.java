@@ -23,6 +23,10 @@ public class ChapterVersionModel {
     @JoinColumn(name = "uploader", referencedColumnName = "id", insertable=false, updatable=false)
     private UserDataModel uploader;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner", referencedColumnName = "id")
+    private StudentModel owner;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
