@@ -32,4 +32,10 @@ public class ThesisController {
         else
             return ResponseEntity.ok(updatedThesis);
     }
+
+    @PostMapping("{id}/approve")
+    public ResponseEntity<ThesisCompleteDto> approveChapter(@PathVariable Long id){
+        var approvedThesis = thesisService.confirm(id);
+        return ResponseEntity.ok(approvedThesis);
+    }
 }
