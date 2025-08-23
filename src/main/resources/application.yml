@@ -39,3 +39,5 @@ logging:
 server:
   port:
     8082
+thesis-module:
+  generate-theses-and-chapters-on-startup: false

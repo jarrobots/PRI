@@ -2,6 +2,8 @@ package wmi.amu.edu.pl.pri;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,7 @@ import wmi.amu.edu.pl.pri.repositories.ChapterRepo;
 import wmi.amu.edu.pl.pri.repositories.ProjectRepo;
 import wmi.amu.edu.pl.pri.repositories.ThesisRepo;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ThesisInitializer implements ApplicationRunner {
@@ -21,9 +24,19 @@ public class ThesisInitializer implements ApplicationRunner {
     private final ThesisRepo thesisRepo;
     private final ChapterRepo chapterRepo;
 
+    @Value("${thesis-module.generate-theses-and-chapters-on-startup:false}")
+    private boolean generateThesesAndChaptersOnStartup;
+
     @Override
     @Transactional
     public void run(ApplicationArguments args) throws Exception {
+
+        if (!generateThesesAndChaptersOnStartup) {
+            log.info("Gneration of theses and chapters skipped, following the app configuration");
+            return;
+        }
+
+        log.info("Attempt to generate theses and chapters");
         projectRepo.findAll().forEach(project -> {
             if (doesTheProjectHaveNotHaveItsThesisYet(project)) {
                 ThesisModel thesis = new ThesisModel();
