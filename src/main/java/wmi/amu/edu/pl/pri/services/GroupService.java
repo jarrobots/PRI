@@ -6,14 +6,12 @@ import org.springframework.stereotype.Service;
 import wmi.amu.edu.pl.pri.dto.GroupDto;
 import wmi.amu.edu.pl.pri.dto.GroupsDto;
 import wmi.amu.edu.pl.pri.models.pri.ProjectModel;
-import wmi.amu.edu.pl.pri.models.pri.StudentModel;
 import wmi.amu.edu.pl.pri.models.pri.SupervisorModel;
 import wmi.amu.edu.pl.pri.repositories.GroupRepo;
 import wmi.amu.edu.pl.pri.repositories.ProjectRepo;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
@@ -43,12 +41,13 @@ public class GroupService {
                 .toList();
         return new GroupsDto(dtos);
     }
-    private GroupDto mapToGroupDto(ProjectModel groupModel){
+    private GroupDto mapToGroupDto(ProjectModel projectModel){
         GroupDto dto = new GroupDto();
-        dto.setId(groupModel.getId());
-        dto.setName(groupModel.getName());
-        dto.setSupervisor(Optional.ofNullable(groupModel.getSupervisor()).map(SupervisorModel::toSupervisorModelDto).orElse(null));
-        dto.setThesisId(groupModel.getThesis()==null? null : groupModel.getThesis().getId());
+        dto.setId(projectModel.getId()); //do usuniecia potem
+        dto.setProjectId(projectModel.getId());
+        dto.setName(projectModel.getName());
+        dto.setSupervisor(Optional.ofNullable(projectModel.getSupervisor()).map(SupervisorModel::toSupervisorModelDto).orElse(null));
+        dto.setThesisId(projectModel.getThesis()==null? null : projectModel.getThesis().getId());
         return dto;
     }
 

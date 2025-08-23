@@ -8,9 +8,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import wmi.amu.edu.pl.pri.dto.ChapterCoreDto;
 import wmi.amu.edu.pl.pri.dto.ChapterVersionsDto;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.FileContentModel;
+import wmi.amu.edu.pl.pri.services.ChapterService;
 import wmi.amu.edu.pl.pri.services.FileContentService;
 import wmi.amu.edu.pl.pri.services.StudentService;
 import wmi.amu.edu.pl.pri.services.UserDataService;
@@ -33,6 +35,8 @@ public class ChapterController {
     private final FileContentService fileService;
     private final UserDataService userDataService;
     private final StudentService studentService;
+    @Autowired
+    private final ChapterService chapterService;
 
     @GetMapping("/view")
     public ResponseEntity<ChapterVersionsDto> getVersionsByStudentId(
@@ -83,4 +87,23 @@ public class ChapterController {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
+    @GetMapping("chapter/{id}")
+    public ResponseEntity<ChapterCoreDto> getChapterById(@PathVariable Long id) {
+        ChapterCoreDto chapter = chapterService.findById(id); // Throws 404 if not found
+        return ResponseEntity.ok(chapter);
+    }
+
+    @PatchMapping("chapter/{id}")
+    public ResponseEntity<ChapterCoreDto> updateChapter(@PathVariable Long id, @RequestBody ChapterCoreDto chapterDto) {
+        ChapterCoreDto updatedChapter = chapterService.update(id, chapterDto);
+        return ResponseEntity.ok(updatedChapter);
+    }
+
+    @PostMapping("chapter/{id}/confirm")
+    public ResponseEntity<ChapterCoreDto> approveChapter(@PathVariable Long id){
+        var approvedChapter = chapterService.confirm(id);
+        return ResponseEntity.ok(approvedChapter);
+    }
 }
+
