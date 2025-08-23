@@ -11,7 +11,7 @@ import org.hibernate.annotations.Subselect;
 import wmi.amu.edu.pl.pri.dto.modeldto.UserDataDto;
 
 
-    @Getter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

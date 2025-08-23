@@ -1,7 +1,6 @@
 package wmi.amu.edu.pl.pri.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,5 +10,5 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class GroupsDto {
-    private List<GroupDto> dtos;
+    private List<GroupDto> groups;
 }
