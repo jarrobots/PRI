@@ -14,7 +14,6 @@ import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.FileContentModel;
 import wmi.amu.edu.pl.pri.services.ChapterService;
 import wmi.amu.edu.pl.pri.services.FileContentService;
-import wmi.amu.edu.pl.pri.services.StudentService;
 import wmi.amu.edu.pl.pri.services.UserDataService;
 import wmi.amu.edu.pl.pri.services.VersionService;
 

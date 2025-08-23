@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface ThesisRepo extends JpaRepository<ThesisModel, Long> {
 
+    Optional<ThesisModel> findById(Long id);
 
-    Optional<ThesisModel> findById(Long aLong);
+    boolean existsByProjectId(Long projectId);
 }

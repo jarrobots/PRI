@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import wmi.amu.edu.pl.pri.dto.ChapterCoreDto;
-
-import java.util.List;
+import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class ChapterModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title")
     private String title;
 
     @Column(name = "title_en")
@@ -40,17 +39,15 @@ public class ChapterModel {
     @JoinColumn(name = "versions", referencedColumnName = "id")
     private List<ChapterVersionModel> versionModels;
 
-    //tu ID tabeli student, w przyszlosci przechodzimy na user_data ze starego systemu
-    @Column(name = "user_data_id")
-    private Long userDataId;
-
-
+    @OneToOne
+    @JoinColumn(name = "owner_user_data_id", referencedColumnName = "id", nullable = false, unique = true)
+    private UserDataModel owner;
 
     @Column(name = "supervisor_comment")
     private String supervisorComment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "thesis_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "thesis_id", referencedColumnName = "id")
     private ThesisModel thesis;
 
     @OneToMany(fetch = FetchType.EAGER)
@@ -64,7 +61,7 @@ public class ChapterModel {
                 .description(this.description)
                 .descriptionEn(this.descriptionEn)
                 .approvalStatus(this.approvalStatus)
-                .userDataId(this.userDataId)
+                .userDataId(this.owner.getId()) // later change name in dto and on frontend
                 .supervisorComment(this.supervisorComment)
                 .thesisId(this.thesis != null ? this.thesis.getId() : null)
                 .build();
