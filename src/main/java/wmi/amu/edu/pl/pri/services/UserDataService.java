@@ -13,12 +13,8 @@ import wmi.amu.edu.pl.pri.repositories.UserDataRepo;
 public class UserDataService {
     private final UserDataRepo userRepo;
 
-    public UserDataDto getUserDataDto(Long id){
-        return userRepo.findById(id).get().toUserDataDto();
-    }
-
     public UserDataModel getUserData(Long id){
-        return userRepo.findById(id).get();
+        return userRepo.getUserDataModelById(id).get();
     }
 
 }
