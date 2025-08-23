@@ -1,4 +1,4 @@
-package wmi.amu.edu.pl.pri.congifuration;
+package wmi.amu.edu.pl.pri.configuration;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -16,6 +16,4 @@ public class SwaggerConfiguration {
                         .description("")
                 );
     }
-
-
 }
