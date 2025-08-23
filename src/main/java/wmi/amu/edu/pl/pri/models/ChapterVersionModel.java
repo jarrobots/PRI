@@ -33,4 +33,13 @@ public class ChapterVersionModel {
     private Long fileId;
 
     private String name;
+
+    public Long getUploaderId(){
+        if(uploader == null){
+            return (long) -1;
+        }
+        else{
+            return uploader.getId();
+        }
+    }
 }
