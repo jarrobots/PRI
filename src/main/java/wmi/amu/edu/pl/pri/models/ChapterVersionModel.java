@@ -2,6 +2,7 @@ package wmi.amu.edu.pl.pri.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.catalina.User;
 import wmi.amu.edu.pl.pri.models.pri.StudentModel;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 
@@ -41,12 +42,17 @@ public class ChapterVersionModel {
 
     private String name;
 
-    public Long getUploaderId(){
+
+    public UserDataModel getUploader(){
         if(uploader == null){
-            return (long) -1;
+            uploader = new UserDataModel();
+            uploader.setId((long) -1);
+            uploader.setIndexNumber("");
+            uploader.setEmail("");
+            uploader.setFirstName("");
+            uploader.setLastName("");
         }
-        else{
-            return uploader.getId();
-        }
+        return uploader;
+
     }
 }

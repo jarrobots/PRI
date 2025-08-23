@@ -17,4 +17,7 @@ public class ChapterVersionDto {
     private String link;
     private String fileName;
     private Long uploaderId;
+    private String uploaderFName;
+    private String uploaderLName;
+
 }
