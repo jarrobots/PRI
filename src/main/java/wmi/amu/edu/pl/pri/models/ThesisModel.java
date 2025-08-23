@@ -63,12 +63,11 @@ public class ThesisModel {
     }
 
     public void applyDataFrom(ThesisCoreDto coreDto) {
-            this.id = coreDto.getId();
-            this.title = coreDto.getTitle();
-            this.titleEn = coreDto.getTitleEn();
-            this.description = coreDto.getDescription();
-            this.descriptionEn = coreDto.getDescriptionEn();
-            this.supervisorComment = coreDto.getSupervisorComment();
+            setTitle(coreDto.getTitle());
+            setTitleEn(coreDto.getTitleEn());
+            setDescription(coreDto.getDescription());
+            setDescriptionEn(coreDto.getDescriptionEn());
+            setSupervisorComment(coreDto.getSupervisorComment());
         }
 }
 
