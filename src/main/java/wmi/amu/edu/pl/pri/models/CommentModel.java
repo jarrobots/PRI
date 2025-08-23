@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import wmi.amu.edu.pl.pri.dto.CommentDto;
+import wmi.amu.edu.pl.pri.dto.modeldto.UserDataDto;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 
 @NoArgsConstructor
@@ -32,9 +33,20 @@ public class CommentModel {
     public CommentDto toCommentDto(){
         return CommentDto.builder()
                 .id(id)
-                .uploader(uploader.toUserDataDto())
+                .uploader(getUploader())
                 .text(text)
                 .versionId(versionModel.getId())
                 .build();
+    }
+    private UserDataDto getUploader(){
+        if(uploader == null){
+            uploader = new UserDataModel();
+            uploader.setId((long) -1);
+            uploader.setEmail("");
+            uploader.setFirstName("");
+            uploader.setLastName("");
+            uploader.setIndexNumber("");
+        }
+        return uploader.toUserDataDto();
     }
 }
