@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Subselect;
 import wmi.amu.edu.pl.pri.dto.GroupDto;
-import wmi.amu.edu.pl.pri.dto.GroupsDto;
 import wmi.amu.edu.pl.pri.models.ThesisModel;
 
 import java.util.List;
@@ -33,8 +32,7 @@ public class ProjectModel {
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private List<StudentModel> students;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", referencedColumnName = "project_id")
+    @OneToOne(mappedBy = "project", fetch = FetchType.LAZY, optional = false)
     private ThesisModel thesis;
 
     public GroupDto toGroupDto(){

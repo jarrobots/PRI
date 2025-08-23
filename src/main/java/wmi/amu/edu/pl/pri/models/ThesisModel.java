@@ -42,9 +42,9 @@ public class ThesisModel {
     @OneToMany(mappedBy = "thesis", cascade = CascadeType.ALL)
     private List<ChapterModel> chapters;
 
-    @OneToOne(mappedBy = "thesis")
+    @OneToOne
+    @JoinColumn(name = "project_id", referencedColumnName = "id", nullable = false, unique = true)
     private ProjectModel project;
-
 
     public ThesisCompleteDto toCompleteDto(){
         return ThesisCompleteDto.builder()
