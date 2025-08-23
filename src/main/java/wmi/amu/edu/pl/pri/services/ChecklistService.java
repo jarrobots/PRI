@@ -43,15 +43,18 @@ public class ChecklistService {
     }
 
     private void setChecklistdto(List<ChecklistQuestionModel> models, Long id){
-       ChecklistModel model = getChecklistBysId(id);
-       model.setDate(new Date());
-       model.setChecklistQuestionModels(models);
-       repo.save(model);
+       Optional<ChecklistModel> optional = getChecklistById(id);
+       if(optional.isPresent()) {
+           ChecklistModel model = optional.get();
+           model.setDate(new Date());
+           model.setChecklistQuestionModels(models);
+           repo.save(model);
+       }
     }
 
-    private ChecklistModel getChecklistBysId(Long id){
-        Optional<ChecklistModel> optional = repo.findByVersionId(id);
-        return optional.get();
+    private Optional<ChecklistModel> getChecklistById(Long id){
+        return repo.findByVersionId(id);
+
     }
 
     private boolean checkIfPassed(List<ChecklistQuestionModel> list){
