@@ -76,7 +76,7 @@ public class ChecklistService {
                 ChecklistQuestionModel question = new ChecklistQuestionModel();
                 question.setQuestion(o.getQuestion());
                 question.setCritical(o.isCritical());
-                question.setPoints(-1);
+                question.setPoints(0);
                 list.add(question);
             }
 
