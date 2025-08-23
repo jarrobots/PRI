@@ -2,10 +2,8 @@ package wmi.amu.edu.pl.pri.models;
 
 import jakarta.persistence.*;
 import lombok.*;
-import wmi.amu.edu.pl.pri.dto.ChapterVersionDto;
 import wmi.amu.edu.pl.pri.models.pri.StudentModel;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
-
 
 import java.util.Date;
 
@@ -23,7 +21,7 @@ public class ChapterVersionModel {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uploader", referencedColumnName = "id", insertable=false, updatable=false)
+    @JoinColumn(name = "uploader", referencedColumnName = "id")
     private UserDataModel uploader;
 
     @ManyToOne(fetch = FetchType.LAZY)
