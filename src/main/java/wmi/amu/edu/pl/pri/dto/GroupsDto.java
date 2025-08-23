@@ -10,5 +10,5 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class GroupsDto {
-    private List<GroupDto> groups;
+    private List<GroupDto> dtos;
 }
