@@ -22,6 +22,11 @@ public class ThesisService {
         return thesisRepo.findById(id).map(ThesisModel::toCompleteDto).orElse(null);
     }
 
+    public ThesisCompleteDto findByProjectId(Long id) {
+
+        return thesisRepo.findByProjectId(id).map(ThesisModel::toCompleteDto).orElse(null);
+    }
+
     public ThesisCompleteDto update(Long id, ThesisCoreDto dto) {
 
         Optional<ThesisModel> model = thesisRepo.findById(id);

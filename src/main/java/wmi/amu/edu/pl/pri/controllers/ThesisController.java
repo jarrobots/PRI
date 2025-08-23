@@ -23,6 +23,15 @@ public class ThesisController {
             return ResponseEntity.ok(thesis);
     }
 
+    @GetMapping("/byProjectId/{id}")
+    public ResponseEntity<ThesisCompleteDto> getThesisByProjectId(@PathVariable Long id) {
+        ThesisCompleteDto thesis = thesisService.findByProjectId(id);
+        if (thesis == null)
+            return ResponseEntity.notFound().build();
+        else
+            return ResponseEntity.ok(thesis);
+    }
+
     @PatchMapping("{id}")
     public ResponseEntity<ThesisCompleteDto> updateThesis(@PathVariable Long id, @RequestBody ThesisCoreDto thesisCompleteDto) {
         ThesisCompleteDto updatedThesis = thesisService.update(id, thesisCompleteDto);
