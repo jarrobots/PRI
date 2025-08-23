@@ -39,5 +39,13 @@ logging:
 server:
   port:
     8082
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    url: /v3/api-docs
 thesis-module:
   generate-theses-and-chapters-on-startup: false

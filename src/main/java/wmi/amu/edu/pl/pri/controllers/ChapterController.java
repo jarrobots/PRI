@@ -14,6 +14,7 @@ import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.FileContentModel;
 import wmi.amu.edu.pl.pri.services.ChapterService;
 import wmi.amu.edu.pl.pri.services.FileContentService;
+import wmi.amu.edu.pl.pri.services.StudentService;
 import wmi.amu.edu.pl.pri.services.UserDataService;
 import wmi.amu.edu.pl.pri.services.VersionService;
 
@@ -33,6 +34,7 @@ public class ChapterController {
     private final VersionService versionService;
     private final FileContentService fileService;
     private final UserDataService userDataService;
+    private final StudentService studentService;
     @Autowired
     private final ChapterService chapterService;
 
@@ -60,6 +62,7 @@ public class ChapterController {
             chapter.setName(file.getOriginalFilename());
             chapter.setFileId(id);
             chapter.setUploader(userDataService.getUserData(uploaderId));
+            chapter.setOwner(studentService.getStudentById(ownerId));
             chapter.setDate(new Date());
 
             return ResponseEntity.ok().body(versionService.saveFile(chapter));
