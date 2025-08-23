@@ -12,7 +12,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
-@Data
 @Entity
 @Table(name = "thm_chapter_version")
 public class ChapterVersionModel {

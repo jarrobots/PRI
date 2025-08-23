@@ -24,6 +24,7 @@ import java.util.Optional;
 public class ChecklistService {
     private final ChecklistRepo repo;
     private final VersionService versionService;
+    private final ChecklistQuestionService questionService;
 
     public ChecklistDto getChecklistByVersionId(Long id){
         Optional<ChecklistModel> optional = repo.findByVersionId(id);
@@ -81,12 +82,14 @@ public class ChecklistService {
                 question.setCritical(o.isCritical());
                 question.setPoints(0);
                 list.add(question);
+                list.forEach(questionService::saveQuestion);
             }
 
             model.setPassed(false);
             model.setChecklistQuestionModels(list);
             model.setVersionModel(versionService.getChapterVersionById(id));
             model.setDate(new Date());
+            repo.save(model);
 
             return model;
         }

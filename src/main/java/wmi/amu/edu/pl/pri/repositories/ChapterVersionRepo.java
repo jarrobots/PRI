@@ -16,4 +16,7 @@ public interface ChapterVersionRepo extends JpaRepository<ChapterVersionModel, L
     @Query("SELECT c FROM ChapterVersionModel c WHERE c.owner.id = :ownerId")
     List<ChapterVersionModel> findByOwnerId(@Param("ownerId") Long ownerId);
 
+    @Query("SELECT c FROM ChapterVersionModel c WHERE c.id = :id")
+    ChapterVersionModel getChapterVersionModelById(@Param("id") Long id);
+
 }
