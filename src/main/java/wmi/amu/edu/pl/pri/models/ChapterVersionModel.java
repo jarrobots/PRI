@@ -20,7 +20,7 @@ public class ChapterVersionModel {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uploader", referencedColumnName = "id", insertable=false, updatable=false)
+    @JoinColumn(name = "uploader", referencedColumnName = "id")
     private UserDataModel uploader;
 
     @ManyToOne(fetch = FetchType.LAZY)
