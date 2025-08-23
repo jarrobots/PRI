@@ -43,7 +43,7 @@ public class VersionService {
                 .map(chapterFileModel -> {
                     return ChapterVersionDto.builder()
                             .link(createLinkFrom(chapterFileModel))
-                            .uploaderId(chapterFileModel.getUploader().getId())
+                            .uploaderId(chapterFileModel.getUploaderId())
                             .fileName(chapterFileModel.getName())
                             .uploadTime(chapterFileModel.getDate())
                             .build();
