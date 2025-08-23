@@ -18,7 +18,7 @@ public class UserDataService {
     }
 
     public UserDataModel getUserData(Long id){
-        return userRepo.findById(id).get();
+        return userRepo.getUserDataModelById(id).get();
     }
 
 }
