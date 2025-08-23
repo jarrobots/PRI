@@ -14,6 +14,7 @@ import java.util.List;
 @Data
 @Builder
 public class ChecklistDto {
+    private Long id;
     private Date uploadTime;
     private boolean isPassed;
     private Long versionId;

@@ -2,7 +2,9 @@ package wmi.amu.edu.pl.pri.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import wmi.amu.edu.pl.pri.dto.ChecklistDto;
 import wmi.amu.edu.pl.pri.models.pri.StudentModel;
 
@@ -11,6 +13,8 @@ import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "thm_checklist")
 public class ChecklistModel {
@@ -32,50 +36,9 @@ public class ChecklistModel {
     private Date date;
 
 
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public boolean isPassed() {
-        return isPassed;
-    }
-
-    public void setPassed(boolean passed) {
-        isPassed = passed;
-    }
-
-    public ChapterVersionModel getVersionModel() {
-        return versionModel;
-    }
-
-    public void setVersionModel(ChapterVersionModel versionModel) {
-        this.versionModel = versionModel;
-    }
-
-    public List<ChecklistQuestionModel> getChecklistQuestionModels() {
-        return checklistQuestionModels;
-    }
-
-    public void setChecklistQuestionModels(List<ChecklistQuestionModel> checklistQuestionModels) {
-        this.checklistQuestionModels = checklistQuestionModels;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     public ChecklistDto toChecklistDto(){
         return ChecklistDto.builder()
+                .id(id)
                 .versionId(versionModel.getId())
                 .uploadTime(date)
                 .models(checklistQuestionModels)

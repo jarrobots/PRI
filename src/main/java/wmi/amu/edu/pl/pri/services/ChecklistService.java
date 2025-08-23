@@ -39,14 +39,11 @@ public class ChecklistService {
         return optional.get().toChecklistDto();
     }
     public void setChapterlist(ChecklistDto dto){
-        this.setChecklistdto(dto.getModels(),dto.getVersionId());
-    }
-
-    private void setChecklistdto(List<ChecklistQuestionModel> models, Long id){
-       ChecklistModel model = getChecklistBysId(id);
-       model.setDate(new Date());
-       model.setChecklistQuestionModels(models);
-       repo.save(model);
+        ChecklistModel model = getChecklistBysId(dto.getId());
+        model.setDate(new Date());
+        model.setChecklistQuestionModels(dto.getModels());
+        model.setVersionModel(versionService.getChapterVersionById(dto.getVersionId()));
+        repo.save(model);
     }
 
     private ChecklistModel getChecklistBysId(Long id){
