@@ -38,8 +38,6 @@ public class ChapterModel {
     @Column(name = "user_data_id")
     private Long userDataId;
 
-
-
     @Column(name = "supervisor_comment")
     private String supervisorComment;
 

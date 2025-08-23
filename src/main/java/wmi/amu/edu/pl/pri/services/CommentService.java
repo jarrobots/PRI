@@ -27,7 +27,7 @@ public class CommentService {
     }
     public Long addComment(CommentDto dto){
         CommentModel model = new CommentModel();
-        model.setUploader(userService.getUserData(dto.getUploader().getId()));
+        model.setUploader(userService.getUserData(dto.getUploaderId()));
         model.setText(dto.getText());
         model.setVersionModel(versionService.getChapterVersionById(dto.getVersionId()));
         return repo.save(model).getId();

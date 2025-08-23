@@ -31,11 +31,14 @@ public class CommentModel {
     private String text;
 
     public CommentDto toCommentDto(){
+        UserDataDto model = getUploader();
         return CommentDto.builder()
                 .id(id)
-                .uploader(getUploader())
+                .uploaderId(model.getId())
                 .text(text)
                 .versionId(versionModel.getId())
+                .fName(model.getFName())
+                .lName(model.getLName())
                 .build();
     }
     private UserDataDto getUploader(){

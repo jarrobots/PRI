@@ -40,14 +40,12 @@ public class VersionService {
 
     private ChapterVersionsDto mapToChapterVersionsDto(List<ChapterVersionModel> chapterFileModels){
         var dtos = chapterFileModels.stream()
-                .map(chapterFileModel -> {
-                    return ChapterVersionDto.builder()
-                            .link(createLinkFrom(chapterFileModel))
-                            .uploaderId(chapterFileModel.getUploaderId())
-                            .fileName(chapterFileModel.getName())
-                            .uploadTime(chapterFileModel.getDate())
-                            .build();
-                })
+                .map(chapterFileModel -> ChapterVersionDto.builder()
+                        .link(createLinkFrom(chapterFileModel))
+                        .uploaderId(chapterFileModel.getUploaderId())
+                        .fileName(chapterFileModel.getName())
+                        .uploadTime(chapterFileModel.getDate())
+                        .build())
                 .sorted(Comparator.comparing(ChapterVersionDto::getUploadTime))
                 .toList();
         return new ChapterVersionsDto(dtos);
