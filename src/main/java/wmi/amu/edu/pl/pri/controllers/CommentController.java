@@ -26,4 +26,9 @@ public class CommentController {
     public ResponseEntity<Long> addComment(@RequestBody CommentDto dto){
         return ResponseEntity.ok().body(service.addComment(dto));
     }
+
+    @GetMapping("/view/comment")
+    public ResponseEntity<Boolean> delComment(@RequestParam(value="id") Long id){
+        return ResponseEntity.ok().body(service.deleteComment(id));
+    }
 }

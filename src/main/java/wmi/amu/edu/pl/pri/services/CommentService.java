@@ -32,4 +32,9 @@ public class CommentService {
         model.setVersionModel(versionService.getChapterVersionById(dto.getVersionId()));
         return repo.save(model).getId();
     }
+
+    public Boolean deleteComment(Long id){
+        repo.delete(repo.getReferenceById(id));
+        return true;
+    }
 }
