@@ -1,5 +1,7 @@
 package wmi.amu.edu.pl.pri.services;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -8,9 +10,11 @@ import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.repositories.ChapterRepo;
 
 @Service
+@RequiredArgsConstructor
 public class ChapterService {
 
-    ChapterRepo chapterRepo;
+    @Autowired
+    private ChapterRepo chapterRepo;
 
     public ChapterCoreDto findById(Long id) {
         ChapterModel chapter = chapterRepo.findById(id)

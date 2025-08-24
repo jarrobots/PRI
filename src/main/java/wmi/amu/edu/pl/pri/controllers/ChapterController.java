@@ -12,14 +12,11 @@ import wmi.amu.edu.pl.pri.dto.ChapterCoreDto;
 import wmi.amu.edu.pl.pri.dto.ChapterVersionsDto;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.FileContentModel;
-import wmi.amu.edu.pl.pri.services.ChapterService;
-import wmi.amu.edu.pl.pri.services.FileContentService;
-import wmi.amu.edu.pl.pri.services.StudentService;
-import wmi.amu.edu.pl.pri.services.UserDataService;
-import wmi.amu.edu.pl.pri.services.VersionService;
+import wmi.amu.edu.pl.pri.services.*;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -37,6 +34,8 @@ public class ChapterController {
     private final StudentService studentService;
     @Autowired
     private final ChapterService chapterService;
+    @Autowired
+    private final ThesisService thesisService;
 
     @GetMapping("/view")
     public ResponseEntity<ChapterVersionsDto> getVersionsByStudentId(
@@ -104,6 +103,18 @@ public class ChapterController {
     public ResponseEntity<ChapterCoreDto> approveChapter(@PathVariable Long id){
         var approvedChapter = chapterService.confirm(id);
         return ResponseEntity.ok(approvedChapter);
+    }
+
+    @GetMapping("/chapter/{projectId}/all")
+    public ResponseEntity<List<ChapterCoreDto>> getChaptersByProjectId(@PathVariable Long projectId){
+
+        var chapters = thesisService.findByProjectId(projectId).getChapters();
+
+        if (chapters == null)
+            return ResponseEntity.notFound().build();
+        else
+            return ResponseEntity.ok(chapters);
+
     }
 }
 
