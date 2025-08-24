@@ -12,7 +12,6 @@ import wmi.amu.edu.pl.pri.dto.ChapterCoreDto;
 import wmi.amu.edu.pl.pri.dto.ChapterVersionsDto;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.FileContentModel;
-import wmi.amu.edu.pl.pri.models.pri.StudentModel;
 import wmi.amu.edu.pl.pri.services.*;
 
 import java.io.IOException;
@@ -59,13 +58,13 @@ public class ChapterController {
             e.printStackTrace();
         }
         if(id != -1) {
-            StudentModel owner = studentService.getStudentById(ownerId);
+            var owner = userDataService.getUserData(ownerId);
 
             chapter.setName(file.getOriginalFilename());
             chapter.setFileId(id);
             chapter.setUploader(userDataService.getUserData(uploaderId));
             chapter.setOwner(owner);
-            chapter.setChapter(chapterService.findChapterByOwnerUserData(owner.getUserData()));
+            chapter.setChapter(chapterService.findChapterByOwnerUserData(owner));
             chapter.setDate(new Date());
 
             return ResponseEntity.ok().body(versionService.saveFile(chapter));

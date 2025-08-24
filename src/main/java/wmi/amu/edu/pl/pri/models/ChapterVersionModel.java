@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import wmi.amu.edu.pl.pri.models.pri.StudentModel;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 
 import java.util.Date;
@@ -28,7 +27,7 @@ public class ChapterVersionModel {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner", referencedColumnName = "id")
-    private StudentModel owner;
+    private UserDataModel owner;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;

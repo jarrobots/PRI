@@ -1,9 +1,7 @@
 package wmi.amu.edu.pl.pri.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import wmi.amu.edu.pl.pri.dto.ThesisCompleteDto;
 import wmi.amu.edu.pl.pri.dto.ThesisCoreDto;
 import wmi.amu.edu.pl.pri.models.pri.ProjectModel;
@@ -14,7 +12,8 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "thm_thesis")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ThesisModel {
