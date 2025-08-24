@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import wmi.amu.edu.pl.pri.JSONChecklistObj;
 import wmi.amu.edu.pl.pri.dto.ChecklistDto;
+import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.ChecklistModel;
 import wmi.amu.edu.pl.pri.models.ChecklistQuestionModel;
 import wmi.amu.edu.pl.pri.repositories.ChecklistRepo;
@@ -82,12 +83,15 @@ public class ChecklistService {
                 question.setCritical(o.isCritical());
                 question.setPoints(0);
                 list.add(question);
-                list.forEach(questionService::saveQuestion);
+                questionService.saveQuestion(question);
             }
-
             model.setPassed(false);
             model.setChecklistQuestionModels(list);
-            model.setVersionModel(versionService.getChapterVersionById(id));
+            ChapterVersionModel version = versionService.getChapterVersionById(id);
+            if (version == null) {
+                throw new IllegalArgumentException("ChapterVersion not found for id: " + id);
+            }
+            model.setVersionModel(version);
             model.setDate(new Date());
             repo.save(model);
 
