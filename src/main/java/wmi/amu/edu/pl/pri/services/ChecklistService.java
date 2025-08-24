@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import wmi.amu.edu.pl.pri.JSONChecklistObj;
 import wmi.amu.edu.pl.pri.dto.ChecklistDto;
+import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.ChecklistModel;
 import wmi.amu.edu.pl.pri.models.ChecklistQuestionModel;
 import wmi.amu.edu.pl.pri.repositories.ChecklistRepo;
@@ -24,6 +25,7 @@ import java.util.Optional;
 public class ChecklistService {
     private final ChecklistRepo repo;
     private final VersionService versionService;
+    private final ChecklistQuestionService questionService;
 
     public ChecklistDto getChecklistByVersionId(Long id){
         Optional<ChecklistModel> optional = repo.findByVersionId(id);
@@ -38,17 +40,24 @@ public class ChecklistService {
         }
         return optional.get().toChecklistDto();
     }
-    public void setChapterlist(ChecklistDto dto){
-        ChecklistModel model = getChecklistBysId(dto.getId());
-        model.setDate(new Date());
-        model.setChecklistQuestionModels(dto.getModels());
-        model.setVersionModel(versionService.getChapterVersionById(dto.getVersionId()));
-        repo.save(model);
+
+    public void setChecklist(ChecklistDto dto){
+       Optional<ChecklistModel> optional = findChecklistByVersionId(dto.getVersionId());
+       if(optional.isPresent()) {
+           ChecklistModel model = optional.get();
+           model.setDate(new Date());
+           model.setPassed(dto.isPassed());
+           model.setChecklistQuestionModels(dto.getModels());
+           for(ChecklistQuestionModel question : model.getChecklistQuestionModels()){
+               questionService.saveQuestion(question);
+           }
+           repo.save(model);
+       }
     }
 
-    private ChecklistModel getChecklistBysId(Long id){
-        Optional<ChecklistModel> optional = repo.findByVersionId(id);
-        return optional.get();
+    private Optional<ChecklistModel> findChecklistByVersionId(Long id){
+        return repo.findByVersionId(id);
+
     }
 
     private boolean checkIfPassed(List<ChecklistQuestionModel> list){
@@ -73,14 +82,19 @@ public class ChecklistService {
                 ChecklistQuestionModel question = new ChecklistQuestionModel();
                 question.setQuestion(o.getQuestion());
                 question.setCritical(o.isCritical());
-                question.setPoints(-1);
+                question.setPoints(0);
                 list.add(question);
+                questionService.saveQuestion(question);
             }
-
             model.setPassed(false);
             model.setChecklistQuestionModels(list);
-            model.setVersionModel(versionService.getChapterVersionById(id));
+            ChapterVersionModel version = versionService.getChapterVersionById(id);
+            if (version == null) {
+                throw new IllegalArgumentException("ChapterVersion not found for id: " + id);
+            }
+            model.setVersionModel(version);
             model.setDate(new Date());
+            repo.save(model);
 
             return model;
         }

@@ -35,10 +35,8 @@ public class ChecklistModel {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
-
     public ChecklistDto toChecklistDto(){
         return ChecklistDto.builder()
-                .id(id)
                 .versionId(versionModel.getId())
                 .uploadTime(date)
                 .models(checklistQuestionModels)

@@ -13,8 +13,12 @@ import java.util.Date;
 @Builder
 public class ChapterVersionDto {
 
+    private Long id;
     private Date uploadTime;
     private String link;
     private String fileName;
     private Long uploaderId;
+    private String uploaderFName;
+    private String uploaderLName;
+
 }

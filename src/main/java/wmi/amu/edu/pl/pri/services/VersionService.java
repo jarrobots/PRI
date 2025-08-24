@@ -29,7 +29,7 @@ public class VersionService {
     private ChapterVersionRepo chapterFileRepo;
 
     public ChapterVersionModel getChapterVersionById(Long id){
-        return chapterFileRepo.findById(id).get();
+        return chapterFileRepo.getChapterVersionModelById(id);
     }
 
     public ChapterVersionsDto getChapterVersionsByOwnerId(Long studentId) {
@@ -41,11 +41,15 @@ public class VersionService {
     private ChapterVersionsDto mapToChapterVersionsDto(List<ChapterVersionModel> chapterFileModels){
         var dtos = chapterFileModels.stream()
                 .map(chapterFileModel -> ChapterVersionDto.builder()
-                        .link(createLinkFrom(chapterFileModel))
-                        .uploaderId(chapterFileModel.getUploaderId())
-                        .fileName(chapterFileModel.getName())
-                        .uploadTime(chapterFileModel.getDate())
-                        .build())
+                            .id(chapterFileModel.getId())
+                            .link(createLinkFrom(chapterFileModel))
+                            .uploaderId(chapterFileModel.getUploader().getId())
+                            .uploaderFName(chapterFileModel.getUploader().getFirstName())
+                            .uploaderLName(chapterFileModel.getUploader().getLastName())
+                            .fileName(chapterFileModel.getName())
+                            .uploadTime(chapterFileModel.getDate())
+                            .build()
+                )
                 .sorted(Comparator.comparing(ChapterVersionDto::getUploadTime))
                 .toList();
         return new ChapterVersionsDto(dtos);

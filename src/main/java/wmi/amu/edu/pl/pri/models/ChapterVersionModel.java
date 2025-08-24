@@ -2,15 +2,16 @@ package wmi.amu.edu.pl.pri.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.catalina.User;
 import wmi.amu.edu.pl.pri.models.pri.StudentModel;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
-
 
 import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "thm_chapter_version")
 public class ChapterVersionModel {
@@ -30,16 +31,27 @@ public class ChapterVersionModel {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chapter_id", referencedColumnName = "id")
+    private ChapterModel chapter;
+
+    //plik na razie zostawiamy bez relacji zdefiniowanej przez Hibernate
+
     private Long fileId;
 
     private String name;
 
-    public Long getUploaderId(){
+
+    public UserDataModel getUploader(){
         if(uploader == null){
-            return (long) -1;
+            uploader = new UserDataModel();
+            uploader.setId((long) -1);
+            uploader.setIndexNumber("");
+            uploader.setEmail("");
+            uploader.setFirstName("");
+            uploader.setLastName("");
         }
-        else{
-            return uploader.getId();
-        }
+        return uploader;
+
     }
 }
