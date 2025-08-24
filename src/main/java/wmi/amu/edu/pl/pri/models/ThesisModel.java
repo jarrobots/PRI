@@ -8,6 +8,7 @@ import wmi.amu.edu.pl.pri.dto.ThesisCompleteDto;
 import wmi.amu.edu.pl.pri.dto.ThesisCoreDto;
 import wmi.amu.edu.pl.pri.models.pri.ProjectModel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,7 @@ public class ThesisModel {
     private String supervisorComment;
 
     @OneToMany(mappedBy = "thesis", cascade = CascadeType.ALL)
-    private List<ChapterModel> chapters;
+    private List<ChapterModel> chapters = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(name = "project_id", referencedColumnName = "id", nullable = false, unique = true)

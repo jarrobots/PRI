@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import wmi.amu.edu.pl.pri.dto.ChapterCoreDto;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -47,7 +48,7 @@ public class ChapterModel {
     private ThesisModel thesis;
 
     @OneToMany(fetch = FetchType.EAGER)
-    private List<ChapterVersionModel> versions;
+    private List<ChapterVersionModel> versions = new ArrayList<>();
 
     public ChapterCoreDto toDto() {
         return ChapterCoreDto.builder()

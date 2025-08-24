@@ -16,7 +16,7 @@ public class ThesisController {
 
     @GetMapping("{id}")
     public ResponseEntity<ThesisCompleteDto> getThesisById(@PathVariable Long id) {
-        ThesisCompleteDto thesis = thesisService.findById(id);
+        ThesisCompleteDto thesis = thesisService.getById(id);
         if (thesis == null)
             return ResponseEntity.notFound().build();
         else
