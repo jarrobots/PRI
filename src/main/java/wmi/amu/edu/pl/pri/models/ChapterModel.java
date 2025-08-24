@@ -35,10 +35,6 @@ public class ChapterModel {
     @Column(name = "approval_status")
     private String approvalStatus;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "versions", referencedColumnName = "id")
-    private List<ChapterVersionModel> versionModels;
-
     @OneToOne
     @JoinColumn(name = "owner_user_data_id", referencedColumnName = "id", nullable = false, unique = true)
     private UserDataModel owner;

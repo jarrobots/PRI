@@ -99,7 +99,7 @@ public class ChapterController {
         return ResponseEntity.ok(updatedChapter);
     }
 
-    @PostMapping("chapter/{id}/confirm")
+    @PostMapping("chapter/{id}/approve")
     public ResponseEntity<ChapterCoreDto> approveChapter(@PathVariable Long id){
         var approvedChapter = chapterService.confirm(id);
         return ResponseEntity.ok(approvedChapter);

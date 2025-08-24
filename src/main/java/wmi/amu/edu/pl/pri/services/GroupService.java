@@ -7,7 +7,6 @@ import wmi.amu.edu.pl.pri.dto.GroupDto;
 import wmi.amu.edu.pl.pri.dto.GroupsDto;
 import wmi.amu.edu.pl.pri.models.pri.ProjectModel;
 import wmi.amu.edu.pl.pri.models.pri.SupervisorModel;
-import wmi.amu.edu.pl.pri.repositories.GroupRepo;
 import wmi.amu.edu.pl.pri.repositories.ProjectRepo;
 
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class GroupService {
-    private final GroupRepo groupRepo;
 
     private final ProjectRepo projectRepo;
 

@@ -41,10 +41,12 @@ public class ThesisInitializer implements ApplicationRunner {
             if (doesTheProjectHaveNotHaveItsThesisYet(project)) {
                 ThesisModel thesis = new ThesisModel();
                 thesis.setProject(project);
+                thesis.setApprovalStatus("PENDING");
                 var updatedThesis = thesisRepo.save(thesis);
                 project.getStudents().forEach(student -> {
                     if (doesTheStudentHaveNoItsChapterYet(student)) {
                         ChapterModel chapter = new ChapterModel();
+                        chapter.setApprovalStatus("PENDING");
                         chapter.setOwner(student.getUserData());
                         chapter.setThesis(updatedThesis);
                         chapterRepo.save(chapter);
