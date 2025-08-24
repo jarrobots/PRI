@@ -21,11 +21,11 @@ public class CommentModel {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uploader", referencedColumnName = "id", insertable=false, updatable=false)
+    @JoinColumn(name = "uploader", referencedColumnName = "id")
     private UserDataModel uploader;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "version", referencedColumnName = "id", insertable=false, updatable=false)
+    @JoinColumn(name = "version", referencedColumnName = "id")
     private ChapterVersionModel versionModel;
 
     private String text;

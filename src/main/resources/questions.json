@@ -1,14 +1,14 @@
 [
   {
-    "question": "zzz",
+    "question": "Student nadał tytuł pracy",
     "critical": true
   },
   {
-    "question": "xxx",
+    "question": "Student napisał treść pracy",
     "critical": false
   },
   {
-    "question": "bbb",
+    "question": "Student napisał podsumowanie pracy",
     "critical": true
   }
 ]
