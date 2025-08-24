@@ -40,21 +40,22 @@ public class ChecklistService {
         }
         return optional.get().toChecklistDto();
     }
-    public void setChapterlist(ChecklistDto dto){
-        this.setChecklistdto(dto.getModels(),dto.getVersionId());
-    }
 
-    private void setChecklistdto(List<ChecklistQuestionModel> models, Long id){
-       Optional<ChecklistModel> optional = getChecklistById(id);
+    public void setChecklist(ChecklistDto dto){
+       Optional<ChecklistModel> optional = findChecklistByVersionId(dto.getVersionId());
        if(optional.isPresent()) {
            ChecklistModel model = optional.get();
            model.setDate(new Date());
-           model.setChecklistQuestionModels(models);
+           model.setPassed(dto.isPassed());
+           model.setChecklistQuestionModels(dto.getModels());
+           for(ChecklistQuestionModel question : model.getChecklistQuestionModels()){
+               questionService.saveQuestion(question);
+           }
            repo.save(model);
        }
     }
 
-    private Optional<ChecklistModel> getChecklistById(Long id){
+    private Optional<ChecklistModel> findChecklistByVersionId(Long id){
         return repo.findByVersionId(id);
 
     }
