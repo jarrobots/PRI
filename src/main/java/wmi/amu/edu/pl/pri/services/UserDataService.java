@@ -7,16 +7,17 @@ import wmi.amu.edu.pl.pri.dto.modeldto.UserDataDto;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 import wmi.amu.edu.pl.pri.repositories.UserDataRepo;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class UserDataService {
     private final UserDataRepo userRepo;
-
-    public UserDataDto getUserDataDto(Long id){
-        return userRepo.findById(id).get().toUserDataDto();
+    public List<UserDataDto> getUsers(){
+       return  userRepo.findAll().stream().map(UserDataModel::toUserDataDto).collect(Collectors.toList());
     }
-
     public UserDataModel getUserData(Long id){
         return userRepo.getUserDataModelById(id).get();
     }

@@ -22,7 +22,7 @@ public class ChecklistController {
     public Boolean saveQuestions(
             @RequestBody ChecklistDto dto
     ){
-        checklistService.setChapterlist(dto);
+        checklistService.setChecklist(dto);
         return true;
     }
     @RequestMapping( path = "/view/note")

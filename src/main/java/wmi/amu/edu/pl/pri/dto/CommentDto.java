@@ -4,19 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import wmi.amu.edu.pl.pri.models.ChecklistQuestionModel;
-
-import java.util.Date;
-import java.util.List;
+import wmi.amu.edu.pl.pri.dto.modeldto.UserDataDto;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-public class ChecklistDto {
+public class CommentDto {
     private Long id;
-    private Date uploadTime;
-    private boolean isPassed;
+    private String text;
+    private Long uploaderId;
+    private String fName;
+    private String lName;
     private Long versionId;
-    private List<ChecklistQuestionModel> models;
 }
