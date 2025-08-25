@@ -2,16 +2,19 @@ package wmi.amu.edu.pl.pri.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import wmi.amu.edu.pl.pri.dto.ChapterCoreDto;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "thm_chapter")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChapterModel {
@@ -46,8 +49,8 @@ public class ChapterModel {
     @JoinColumn(name = "thesis_id", referencedColumnName = "id")
     private ThesisModel thesis;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<ChapterVersionModel> versions;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "chapter")
+    private List<ChapterVersionModel> versions = new ArrayList<>();
 
     public ChapterCoreDto toDto() {
         return ChapterCoreDto.builder()

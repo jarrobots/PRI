@@ -58,10 +58,13 @@ public class ChapterController {
             e.printStackTrace();
         }
         if(id != -1) {
+            var owner = userDataService.getUserData(ownerId);
+
             chapter.setName(file.getOriginalFilename());
             chapter.setFileId(id);
             chapter.setUploader(userDataService.getUserData(uploaderId));
-            chapter.setOwner(studentService.getStudentById(ownerId));
+            chapter.setOwner(owner);
+            chapter.setChapter(chapterService.findChapterByOwnerUserData(owner));
             chapter.setDate(new Date());
 
             return ResponseEntity.ok().body(versionService.saveFile(chapter));

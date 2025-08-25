@@ -17,11 +17,14 @@ public class ThesisService {
 
     private final ThesisRepo thesisRepo;
 
-    public ThesisCompleteDto findById(Long id) {
+    public ThesisCompleteDto getById(Long id) {
 
-        return thesisRepo.findById(id).map(ThesisModel::toCompleteDto).orElse(null);
+        return findById(id).map(ThesisModel::toCompleteDto).orElse(null);
     }
 
+    public Optional<ThesisModel> findById(Long id){
+        return thesisRepo.findById(id);
+    }
     public ThesisCompleteDto findByProjectId(Long id) {
 
         return thesisRepo.findByProjectId(id).map(ThesisModel::toCompleteDto).orElse(null);

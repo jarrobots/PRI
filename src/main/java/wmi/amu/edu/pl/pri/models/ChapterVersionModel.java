@@ -1,9 +1,10 @@
 package wmi.amu.edu.pl.pri.models;
 
 import jakarta.persistence.*;
-import lombok.*;
-import org.apache.catalina.User;
-import wmi.amu.edu.pl.pri.models.pri.StudentModel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 
 import java.util.Date;
@@ -26,7 +27,7 @@ public class ChapterVersionModel {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner", referencedColumnName = "id")
-    private StudentModel owner;
+    private UserDataModel owner;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
@@ -40,6 +41,10 @@ public class ChapterVersionModel {
     private Long fileId;
 
     private String name;
+
+    public String getFormattedLink(String currentPort){
+        return "http://localhost:%s/api/v1/download/".formatted(currentPort) + getFileId();
+    }
 
 
     public UserDataModel getUploader(){

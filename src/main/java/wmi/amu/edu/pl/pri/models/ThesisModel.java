@@ -1,19 +1,19 @@
 package wmi.amu.edu.pl.pri.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import wmi.amu.edu.pl.pri.dto.ThesisCompleteDto;
 import wmi.amu.edu.pl.pri.dto.ThesisCoreDto;
 import wmi.amu.edu.pl.pri.models.pri.ProjectModel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "thm_thesis")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ThesisModel {
@@ -40,7 +40,7 @@ public class ThesisModel {
     private String supervisorComment;
 
     @OneToMany(mappedBy = "thesis", cascade = CascadeType.ALL)
-    private List<ChapterModel> chapters;
+    private List<ChapterModel> chapters = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(name = "project_id", referencedColumnName = "id", nullable = false, unique = true)
