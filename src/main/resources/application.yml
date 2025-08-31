@@ -21,6 +21,10 @@ spring:
       maximum-pool-size: 10
       idle-timeout: 30000
       pool-name: HikariPool
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
   jpa:
     show-sql: true
     hibernate:
