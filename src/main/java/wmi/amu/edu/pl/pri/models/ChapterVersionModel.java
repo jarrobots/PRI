@@ -34,7 +34,7 @@ public class ChapterVersionModel {
     @JoinColumn(name = "chapter_id", referencedColumnName = "id")
     private ChapterModel chapter;
 
-    @Column(nullable = true)
+    @Column(nullable = true, columnDefinition = "TEXT")
     private String link;
     //plik na razie zostawiamy bez relacji zdefiniowanej przez Hibernate
 
