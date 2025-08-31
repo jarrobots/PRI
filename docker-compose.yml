@@ -1,18 +1,6 @@
 version: '3.8'
 
 services:
-  db:
-    image: postgres:15-alpine
-    container_name: postgres-db
-    environment:
-      POSTGRES_DB: java_db
-      POSTGRES_USER: api
-      POSTGRES_PASSWORD: api
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-
   app:
     image: my-java-app        # Replace with your built Java app image name
     container_name: pri-app
@@ -22,11 +10,9 @@ services:
     ports:
       - "8082:8082"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/java_db?currentSchema=test25
-      SPRING_DATASOURCE_USERNAME: api
-      SPRING_DATASOURCE_PASSWORD: api
-    depends_on:
-      - db
+      url: ${DATABASE_URL}
+      username: ${DATABASE_USERNAME}
+      password: ${DATABASE_PASSWORD}
     volumes:
       - ./application.yml:/app/application.yml    # Optional if overriding config
 

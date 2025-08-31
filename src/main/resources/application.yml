@@ -1,4 +1,6 @@
 spring:
+  main:
+    web-application-type: servlet
   sql:
     init:
       mode: always
@@ -28,17 +30,19 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql=true:
+        format_sql: true        # Fix: use colon not = and no trailing colon
         default_schema: test25
     defer-datasource-initialization: true
+
 logging:
   level:
     org:
       hibernate:
-        SQL=DEBUG:
+        SQL: DEBUG             # Fix: colon allows correct parsing
+
 server:
-  port:
-    8082
+  port: 8082                 # Fix: simple key-value syntax
+
 springdoc:
   api-docs:
     enabled: true
@@ -47,5 +51,6 @@ springdoc:
     enabled: true
     path: /swagger-ui.html
     url: /v3/api-docs
+
 thesis-module:
   generate-theses-and-chapters-on-startup: false
