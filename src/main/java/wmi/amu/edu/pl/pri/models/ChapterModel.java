@@ -1,10 +1,7 @@
 package wmi.amu.edu.pl.pri.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import wmi.amu.edu.pl.pri.dto.ChapterCoreDto;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 

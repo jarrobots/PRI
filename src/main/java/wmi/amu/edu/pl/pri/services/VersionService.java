@@ -5,14 +5,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import wmi.amu.edu.pl.pri.dto.AddVersionWithLinkCommandDto;
 import wmi.amu.edu.pl.pri.dto.ChapterVersionDto;
 import wmi.amu.edu.pl.pri.dto.ChapterVersionsDto;
+import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.repositories.ChapterVersionRepo;
 
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,44 +28,64 @@ public class VersionService {
     private StudentService studentService;
 
     @Autowired
-    private ChapterVersionRepo chapterFileRepo;
+    private ChapterVersionRepo chapterVersionRepo;
 
-    public ChapterVersionModel getChapterVersionById(Long id){
-        return chapterFileRepo.getChapterVersionModelById(id);
+    @Autowired
+    private ChapterService chapterService;
+
+    @Autowired
+    private UserDataService userDataService;
+
+    public ChapterVersionModel getChapterVersionById(Long id) {
+        return chapterVersionRepo.getChapterVersionModelById(id);
     }
 
     public ChapterVersionsDto getChapterVersionsByOwnerId(Long studentId) {
-        List<ChapterVersionModel> list = chapterFileRepo.findByOwnerId(studentId);
+        List<ChapterVersionModel> list = chapterVersionRepo.findByOwnerId(studentId);
 
         return mapToChapterVersionsDto(list);
     }
 
-    private ChapterVersionsDto mapToChapterVersionsDto(List<ChapterVersionModel> chapterFileModels){
+    private ChapterVersionsDto mapToChapterVersionsDto(List<ChapterVersionModel> chapterFileModels) {
+
         var dtos = chapterFileModels.stream()
                 .map(chapterFileModel -> ChapterVersionDto.builder()
-                            .id(chapterFileModel.getId())
-                            .link(createLinkFrom(chapterFileModel))
-                            .uploaderId(chapterFileModel.getUploader().getId())
-                            .uploaderFName(chapterFileModel.getUploader().getFirstName())
-                            .uploaderLName(chapterFileModel.getUploader().getLastName())
-                            .fileName(chapterFileModel.getName())
-                            .uploadTime(chapterFileModel.getDate())
-                            .build()
+                        .id(chapterFileModel.getId())
+                        .link(chapterFileModel.getFormattedLink(currentPort))
+                        .uploaderId(chapterFileModel.getUploader().getId())
+                        .uploaderFName(chapterFileModel.getUploader().getFirstName())
+                        .uploaderLName(chapterFileModel.getUploader().getLastName())
+                        .fileName(chapterFileModel.getName())
+                        .uploadTime(chapterFileModel.getDate())
+                        .build()
                 )
                 .sorted(Comparator.comparing(ChapterVersionDto::getUploadTime))
                 .toList();
         return new ChapterVersionsDto(dtos);
     }
 
-    public Long saveFile (ChapterVersionModel chapters){
-        ChapterVersionModel savedChapters = chapterFileRepo.save(chapters);
+    public Long saveFile(ChapterVersionModel chapters) {
+        ChapterVersionModel savedChapters = chapterVersionRepo.save(chapters);
 
-        System.out.println("File with id:"+chapters.getId()+" saved successfully" );
+        System.out.println("File with id:" + chapters.getId() + " saved successfully");
         return savedChapters.getId();
     }
 
-    private String createLinkFrom(ChapterVersionModel fileContent){
-        return "http://localhost:%s/api/v1/download/".formatted(currentPort) + fileContent.getFileId();
+    public Long saveVersion(Long chapterId, AddVersionWithLinkCommandDto command) {
 
+        ChapterModel chapter = chapterService.getById(chapterId);
+
+        var chapterVersion = ChapterVersionModel.builder()
+                .chapter(chapter)
+                .owner(chapter.getOwner())
+                .uploader(userDataService.getUserData(command.getUploaderUserDataId()))
+                .date(new Date())
+                .chapter(chapter)
+                .link(command.getLink())
+                .build();
+        chapterVersionRepo.save(chapterVersion);
+
+        System.out.println("Version of chapter with id:" + chapterId + " saved successfully");
+        return chapterVersion.getId();
     }
 }
