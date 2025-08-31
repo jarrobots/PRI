@@ -11,4 +11,4 @@ COPY out/PRI.jar PRI.jar
 EXPOSE 8082
 
 # Command to run your JAR file
-ENTRYPOINT ["java", "-jar", "PRI.jar"]
+ENTRYPOINT ["java", "-jar", "PRI.jar", "--spring.main.web-application-type=servlet"]
