@@ -10,13 +10,9 @@ spring:
     property-naming-strategy: SNAKE_CASE
   flyway:
     locations: classpath:/db/migration
-    schemas: employees
     baselineOnMigrate: true
     enabled: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/java_db?currentSchema=test25
-    username: api
-    password: api
     driver-class-name: org.postgresql.Driver
     hikari:
       minimum-idle: 5
@@ -39,9 +35,6 @@ logging:
     org:
       hibernate:
         SQL: DEBUG             # Fix: colon allows correct parsing
-
-server:
-  port: 8082                 # Fix: simple key-value syntax
 
 springdoc:
   api-docs:
