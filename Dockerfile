@@ -1,5 +1,5 @@
 # Use OpenJDK 21 runtime base image
-FROM openjdk:21-jdk-alpine
+FROM openjdk:21-jdk
 
 # Set working directory inside the container
 WORKDIR /app

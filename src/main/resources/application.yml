@@ -32,6 +32,7 @@ spring:
 
 logging:
   level:
+    root: DEBUG
     org:
       hibernate:
         SQL: DEBUG             # Fix: colon allows correct parsing
