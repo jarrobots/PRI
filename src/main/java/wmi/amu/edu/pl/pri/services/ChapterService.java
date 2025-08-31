@@ -18,17 +18,25 @@ public class ChapterService {
     private ChapterRepo chapterRepo;
 
     public ChapterCoreDto findById(Long id) {
-        ChapterModel chapter = chapterRepo.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Chapter not found with ID: " + id));
-        return chapter.toDto();
+        return getById(id).toDto();
     }
+
+    public ChapterModel getById(Long id) {
+        return chapterRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Chapter not found with ID: " + id));
+    }
+
     public ChapterCoreDto update(Long id, ChapterCoreDto chapterDto) {
         ChapterModel chapter = chapterRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Chapter not found with ID: " + id));
 
-        chapter.applyDataFrom(chapterDto);
-        ChapterModel savedChapter = chapterRepo.save(chapter);
-        return savedChapter.toDto();
+        if (isApproved(chapter))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Attempt to modify APPROVED chapter with id %d, which is not allowed.".formatted(id));
+        else {
+            chapter.applyDataFrom(chapterDto);
+            ChapterModel savedChapter = chapterRepo.save(chapter);
+            return savedChapter.toDto();
+        }
     }
 
     public ChapterCoreDto confirm(Long id) {
@@ -37,6 +45,10 @@ public class ChapterService {
         chapter.setApprovalStatus("APPROVED");
         return chapterRepo.save(chapter).toDto();
 
+    }
+
+    private boolean isApproved(ChapterModel chapter) {
+        return chapter.getApprovalStatus().equals("APPROVED");
     }
 
     public ChapterModel findChapterByOwnerUserData(UserDataModel ownerUserData) {

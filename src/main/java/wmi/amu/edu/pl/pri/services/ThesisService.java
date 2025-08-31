@@ -36,9 +36,17 @@ public class ThesisService {
         if (model.isEmpty())
             return null;
         else {
-            model.ifPresent(m -> m.applyDataFrom(dto));
-            return thesisRepo.save(model.get()).toCompleteDto();
+            if (isApproved(model))
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Attempt to modify APPROVED thesis with id: %d, which is not allowed.".formatted(id));
+            else{
+                model.ifPresent(m -> m.applyDataFrom(dto));
+                return thesisRepo.save(model.get()).toCompleteDto();
+            }
         }
+    }
+
+    private boolean isApproved(Optional<ThesisModel> model) {
+        return model.get().getApprovalStatus().equals("APPROVED");
     }
 
     public ThesisCompleteDto confirm(Long id) {

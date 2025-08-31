@@ -1,5 +1,6 @@
 package wmi.amu.edu.pl.pri.controllers;
 
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -8,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import wmi.amu.edu.pl.pri.dto.AddVersionWithLinkCommandDto;
 import wmi.amu.edu.pl.pri.dto.ChapterCoreDto;
 import wmi.amu.edu.pl.pri.dto.ChapterVersionsDto;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
@@ -39,12 +41,13 @@ public class ChapterController {
 
     @GetMapping("/view")
     public ResponseEntity<ChapterVersionsDto> getVersionsByStudentId(
-            @RequestParam(value="id") Long studentId
-    ){
+            @RequestParam(value = "id") Long studentId
+    ) {
         return ResponseEntity.ok().body(versionService.getChapterVersionsByOwnerId(studentId));
         //return versionService.getChapterVersionsByStudentId(studentId);
     }
-    @RequestMapping(method=POST, path = "/files")
+
+    @RequestMapping(method = POST, path = "/files")
     public ResponseEntity<Long> create(@RequestParam("ownerId") Long ownerId, @RequestParam("uploaderId") Long uploaderId, @RequestBody MultipartFile file
     ) {
 
@@ -53,11 +56,11 @@ public class ChapterController {
         try {
             Object obj = file.getBytes();
             System.out.println(obj.getClass());
-            id = fileService.saveFile(file.getBytes(),file.getOriginalFilename(),file.getContentType());
+            id = fileService.saveFile(file.getBytes(), file.getOriginalFilename(), file.getContentType());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(id != -1) {
+        if (id != -1) {
             var owner = userDataService.getUserData(ownerId);
 
             chapter.setName(file.getOriginalFilename());
@@ -68,16 +71,23 @@ public class ChapterController {
             chapter.setDate(new Date());
 
             return ResponseEntity.ok().body(versionService.saveFile(chapter));
-        }
-        else{
-            return  ResponseEntity.badRequest().body(id);
+        } else {
+            return ResponseEntity.badRequest().body(id);
         }
     }
+
+    @RequestMapping(method = POST, path = "/chapter/{id}/addVersionWithLink")
+    public ResponseEntity<Long> addVersion(@PathParam("id") Long chapterId, @RequestBody AddVersionWithLinkCommandDto commandDto) {
+
+        return ResponseEntity.ok().body(versionService.saveVersion(chapterId, commandDto));
+    }
+
+
     @RequestMapping(method = GET, path = "/download/{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable Long id) {
         Optional<FileContentModel> fileOptional = fileService.getFileById(id);
 
-        if(fileOptional.isPresent()){
+        if (fileOptional.isPresent()) {
             FileContentModel file = fileOptional.get();
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=\"%s\"", file.getFileName()));
@@ -103,13 +113,13 @@ public class ChapterController {
     }
 
     @PostMapping("chapter/{id}/approve")
-    public ResponseEntity<ChapterCoreDto> approveChapter(@PathVariable Long id){
+    public ResponseEntity<ChapterCoreDto> approveChapter(@PathVariable Long id) {
         var approvedChapter = chapterService.confirm(id);
         return ResponseEntity.ok(approvedChapter);
     }
 
     @GetMapping("/chapter/{projectId}/all")
-    public ResponseEntity<List<ChapterCoreDto>> getChaptersByProjectId(@PathVariable Long projectId){
+    public ResponseEntity<List<ChapterCoreDto>> getChaptersByProjectId(@PathVariable Long projectId) {
 
         var chapters = thesisService.findByProjectId(projectId).getChapters();
 
