@@ -32,7 +32,10 @@ spring:
 
 logging:
   level:
-    root: DEBUG
+    root: INFO
+
+server:
+  port: 8082
 
 springdoc:
   api-docs:
