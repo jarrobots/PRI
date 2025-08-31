@@ -18,10 +18,14 @@ public class ChapterService {
     private ChapterRepo chapterRepo;
 
     public ChapterCoreDto findById(Long id) {
-        ChapterModel chapter = chapterRepo.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Chapter not found with ID: " + id));
-        return chapter.toDto();
+        return getById(id).toDto();
     }
+
+    public ChapterModel getById(Long id) {
+        return chapterRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Chapter not found with ID: " + id));
+    }
+
     public ChapterCoreDto update(Long id, ChapterCoreDto chapterDto) {
         ChapterModel chapter = chapterRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Chapter not found with ID: " + id));
@@ -46,6 +50,7 @@ public class ChapterService {
     private boolean isApproved(ChapterModel chapter) {
         return chapter.getApprovalStatus().equals("APPROVED");
     }
+
     public ChapterModel findChapterByOwnerUserData(UserDataModel ownerUserData) {
         return chapterRepo.findByOwnerId(ownerUserData.getId());
     }

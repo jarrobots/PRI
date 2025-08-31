@@ -1,10 +1,7 @@
 package wmi.amu.edu.pl.pri.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 
 import java.util.Date;
@@ -14,6 +11,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "thm_chapter_version")
 public class ChapterVersionModel {
 
@@ -36,6 +34,8 @@ public class ChapterVersionModel {
     @JoinColumn(name = "chapter_id", referencedColumnName = "id")
     private ChapterModel chapter;
 
+    @Column(nullable = true)
+    private String link;
     //plik na razie zostawiamy bez relacji zdefiniowanej przez Hibernate
 
     private Long fileId;
@@ -43,7 +43,10 @@ public class ChapterVersionModel {
     private String name;
 
     public String getFormattedLink(String currentPort){
-        return "http://localhost:%s/api/v1/download/".formatted(currentPort) + getFileId();
+        if (getLink() == null || getLink().equals("NO_LINK"))
+            return "http://localhost:%s/api/v1/download/".formatted(currentPort) + getFileId();
+        else
+            return getLink();
     }
 
 
