@@ -27,16 +27,16 @@ public class ThesisModel {
     @Column(name = "title_en")
     private String titleEn;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "text")
     private String description;
 
-    @Column(name = "description_en")
+    @Column(name = "description_en", columnDefinition = "text")
     private String descriptionEn;
 
     @Column(name = "approval_status")
     private String approvalStatus;
 
-    @Column(name = "supervisor_comment")
+    @Column(name = "supervisor_comment", columnDefinition = "text")
     private String supervisorComment;
 
     @OneToMany(mappedBy = "thesis", cascade = CascadeType.ALL)

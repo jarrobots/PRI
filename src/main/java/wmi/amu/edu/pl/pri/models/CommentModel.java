@@ -28,6 +28,7 @@ public class CommentModel {
     @JoinColumn(name = "version", referencedColumnName = "id")
     private ChapterVersionModel versionModel;
 
+    @Column(columnDefinition = "text")
     private String text;
 
     public CommentDto toCommentDto(){
