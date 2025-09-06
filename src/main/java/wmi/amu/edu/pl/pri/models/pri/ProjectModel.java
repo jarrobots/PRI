@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Subselect;
 import wmi.amu.edu.pl.pri.dto.GroupDto;
@@ -32,7 +33,8 @@ public class ProjectModel {
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private List<StudentModel> students;
 
-    @OneToOne(mappedBy = "project", fetch = FetchType.LAZY, optional = false)
+    @OneToOne(mappedBy = "project", fetch = FetchType.LAZY)
+    @Setter
     private ThesisModel thesis;
 
     public GroupDto toGroupDto(){

@@ -1,13 +1,20 @@
 package wmi.amu.edu.pl.pri.services;
 
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import wmi.amu.edu.pl.pri.dto.GroupDto;
 import wmi.amu.edu.pl.pri.dto.GroupsDto;
+import wmi.amu.edu.pl.pri.models.ChapterModel;
+import wmi.amu.edu.pl.pri.models.ThesisModel;
 import wmi.amu.edu.pl.pri.models.pri.ProjectModel;
+import wmi.amu.edu.pl.pri.models.pri.StudentModel;
 import wmi.amu.edu.pl.pri.models.pri.SupervisorModel;
+import wmi.amu.edu.pl.pri.repositories.ChapterRepo;
 import wmi.amu.edu.pl.pri.repositories.ProjectRepo;
+import wmi.amu.edu.pl.pri.repositories.ThesisRepo;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +25,8 @@ import java.util.Optional;
 public class GroupService {
 
     private final ProjectRepo projectRepo;
+    private final ThesisRepo thesisRepo;
+    private final ChapterRepo chapterRepo;
 
     public GroupDto getGroupById(Long id){
        ProjectModel model = projectRepo.findById(id).get();
@@ -49,19 +58,47 @@ public class GroupService {
         return dto;
     }
 
-   /*private GroupDto mapProjectModelToGroupDto(ProjectModel projectModel){
-        return GroupDto.builder()
-                .projectId(projectModel.getId())
-                .students(projectModel.getStudents().stream().map(StudentModel::toStudentModelDto).toList())
-                .thesisId(projectModel.getThesis()==null ? null : projectModel.getThesis().getId())
-                .supervisor(projectModel.getSupervisor().toSupervisorModelDto())
-                .name(createGroupNameFromProjectName(projectModel.getName()))
-                .build();
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void reloadGroups(Long supervisorUserDataId) {
+        log.info("Attempt to generate theses and chapters");
+
+        var thesesSupervisedByGivenUser = thesisRepo.findByProjectSupervisorUserDataId(supervisorUserDataId);
+
+        thesisRepo.deleteAll(thesesSupervisedByGivenUser);
+
+        for (ThesisModel thesis : thesesSupervisedByGivenUser) {
+            ProjectModel project = thesis.getProject();
+            if (project != null) {
+                project.setThesis(null);
+            }
+        }
+
+        projectRepo.findAll().forEach(project -> {
+
+            if (doesTheProjectHaveNotHaveItsThesisYet(project)) {
+                ThesisModel thesis = new ThesisModel();
+                thesis.setProject(project);
+                thesis.setApprovalStatus("PENDING");
+                var updatedThesis = thesisRepo.save(thesis);
+                project.getStudents().forEach(student -> {
+                    if (doesTheStudentHaveNoItsChapterYet(student)) {
+                        ChapterModel chapter = new ChapterModel();
+                        chapter.setApprovalStatus("PENDING");
+                        chapter.setOwner(student.getUserData());
+                        chapter.setThesis(updatedThesis);
+                        chapterRepo.save(chapter);
+                    }
+                });
+            }
+        });
     }
 
-    private String createGroupNameFromProjectName(String projectName){
-        return "Grupa projektu \"" + projectName + "\"";
+    private boolean doesTheStudentHaveNoItsChapterYet(StudentModel student) {
+        return !chapterRepo.existsByOwnerId(student.getUserData().getId());
     }
 
-    */
+    private boolean doesTheProjectHaveNotHaveItsThesisYet(ProjectModel project) {
+        return !thesisRepo.existsByProjectId(project.getId());
+    }
+
 }
