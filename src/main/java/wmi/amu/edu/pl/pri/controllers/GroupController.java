@@ -2,12 +2,11 @@ package wmi.amu.edu.pl.pri.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import wmi.amu.edu.pl.pri.dto.GroupDto;
 import wmi.amu.edu.pl.pri.dto.GroupsDto;
+import wmi.amu.edu.pl.pri.dto.ReloadGroupsCommandDto;
 import wmi.amu.edu.pl.pri.services.GroupService;
 
 @RestController
@@ -40,4 +39,14 @@ public class GroupController {
         return groupService.findAll();
     }
 
+    @PostMapping("/reloadGroups")
+    public ResponseEntity<?> reloadGroups(@RequestBody ReloadGroupsCommandDto request) {
+
+
+        // Call service to reload groups
+        groupService.reloadGroups(request.supervisordUserDataId());
+
+        // Return success response
+        return ResponseEntity.ok("Groups reloaded successfully");
+    }
 }
