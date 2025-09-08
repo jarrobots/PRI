@@ -13,8 +13,8 @@ spring:
     enabled: true
   datasource:
     url: jdbc:postgresql://localhost:5432/java_db?currentSchema=test25
-    username: api
-    password: api
+    username: pri
+    password: pri
     driver-class-name: org.postgresql.Driver
     hikari:
       minimum-idle: 5
@@ -38,9 +38,10 @@ spring:
     defer-datasource-initialization: true
 logging:
   level:
+    root: INFO
     org:
       hibernate:
-        SQL=DEBUG:
+        SQL: INFO
 server:
   port:
     8082
