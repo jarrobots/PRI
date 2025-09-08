@@ -42,11 +42,8 @@ public class GroupController {
     @PostMapping("/reloadGroups")
     public ResponseEntity<?> reloadGroups(@RequestBody ReloadGroupsCommandDto request) {
 
-
-        // Call service to reload groups
         groupService.reloadGroups(request.supervisordUserDataId());
 
-        // Return success response
         return ResponseEntity.ok("Groups reloaded successfully");
     }
 }
