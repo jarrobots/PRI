@@ -46,7 +46,7 @@ public class ChapterModel {
     @JoinColumn(name = "thesis_id", referencedColumnName = "id")
     private ThesisModel thesis;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "chapter")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "chapter", cascade = CascadeType.ALL)
     private List<ChapterVersionModel> versions = new ArrayList<>();
 
     public ChapterCoreDto toDto() {
