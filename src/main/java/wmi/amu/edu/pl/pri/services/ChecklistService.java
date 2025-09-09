@@ -5,19 +5,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import wmi.amu.edu.pl.pri.JSONChecklistObj;
+import wmi.amu.edu.pl.pri.domainobject.ChecklistTally;
 import wmi.amu.edu.pl.pri.dto.ChecklistDto;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.ChecklistModel;
 import wmi.amu.edu.pl.pri.models.ChecklistQuestionModel;
+import wmi.amu.edu.pl.pri.models.ThesisModel;
 import wmi.amu.edu.pl.pri.repositories.ChecklistRepo;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -27,44 +26,44 @@ public class ChecklistService {
     private final VersionService versionService;
     private final ChecklistQuestionService questionService;
 
-    public ChecklistDto getChecklistByVersionId(Long id){
+    public ChecklistDto getChecklistByVersionId(Long id) {
         Optional<ChecklistModel> optional = repo.findByVersionId(id);
-        if(optional.isEmpty()){
+        if (optional.isEmpty()) {
             try {
                 ChecklistModel model = generateChecklistFromJson(id);
                 return model.toChecklistDto();
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         return optional.get().toChecklistDto();
     }
 
-    public void setChecklist(ChecklistDto dto){
-       Optional<ChecklistModel> optional = findChecklistByVersionId(dto.getVersionId());
-       if(optional.isPresent()) {
-           ChecklistModel model = optional.get();
-           model.setDate(new Date());
-           model.setPassed(dto.isPassed());
-           model.setChecklistQuestionModels(dto.getModels());
-           for(ChecklistQuestionModel question : model.getChecklistQuestionModels()){
-               questionService.saveQuestion(question);
-           }
-           repo.save(model);
-       }
+    public void setChecklist(ChecklistDto dto) {
+        Optional<ChecklistModel> optional = findChecklistByVersionId(dto.getVersionId());
+        if (optional.isPresent()) {
+            ChecklistModel model = optional.get();
+            model.setDate(new Date());
+            model.setPassed(dto.isPassed());
+            model.setChecklistQuestionModels(dto.getModels());
+            for (ChecklistQuestionModel question : model.getChecklistQuestionModels()) {
+                questionService.saveQuestion(question);
+            }
+            repo.save(model);
+        }
     }
 
-    private Optional<ChecklistModel> findChecklistByVersionId(Long id){
+    private Optional<ChecklistModel> findChecklistByVersionId(Long id) {
         return repo.findByVersionId(id);
 
     }
 
-    private boolean checkIfPassed(List<ChecklistQuestionModel> list){
+    private boolean checkIfPassed(List<ChecklistQuestionModel> list) {
         return list.stream()
                 .noneMatch(q -> q.isCritical() && q.getPoints() == 0);
 
     }
+
     private ChecklistModel generateChecklistFromJson(Long id) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         try (InputStream is = getClass().getClassLoader().getResourceAsStream("questions.json")) {
@@ -99,5 +98,15 @@ public class ChecklistService {
             return model;
         }
 
+    }
+
+    public ChecklistTally getChecklistTallyByVersion(ChapterVersionModel chapterVersion /* albo id, jak wolisz */) {
+        //todo
+        return new ChecklistTally();
+    }
+
+    public List<ChecklistTally> getChecklistTalliesByThesis(ThesisModel thesisModel /* albo id, jak wolisz*/ ){
+        //todo najwygodniej by bylo, jakbys to zrobil
+        return Collections.emptyList();
     }
 }

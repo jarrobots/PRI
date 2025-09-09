@@ -69,5 +69,11 @@ public class ThesisModel {
             setDescriptionEn(coreDto.getDescriptionEn());
             setSupervisorComment(coreDto.getSupervisorComment());
         }
+
+    public List<ChapterVersionModel> summarizeVersionsAsFlatList() {
+        return chapters.stream()
+                .flatMap(chapterModel -> chapterModel.getVersions().stream())
+                .toList();
+    }
 }
 
