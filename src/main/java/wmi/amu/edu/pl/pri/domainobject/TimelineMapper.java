@@ -1,22 +1,26 @@
 package wmi.amu.edu.pl.pri.domainobject;
 
+import wmi.amu.edu.pl.pri.dto.TimelineChecklistTallyDto;
 import wmi.amu.edu.pl.pri.dto.view.timeline.*;
 import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.ThesisModel;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class TimelineMapper {
 
     private final ThesisModel thesisModel;
-    private final String currentPort ;
+    private final String currentPort;
+    private List<ChecklistTally> checklistTallies;
 
     public TimelineMapper(ThesisModel thesis, String currentPort) {
         this.thesisModel = thesis;
         this.currentPort = currentPort;
+        this.checklistTallies = new ArrayList<>();
     }
 
     public TimelineViewDto toTimeLineViewDto() {
@@ -77,8 +81,15 @@ public class TimelineMapper {
                 .id(version.getId())
                 .uploader(uploader)
                 .uploadDateTime(version.getDate())
-                .checklistTally("n/a") //not implemented yet todo
-                .supervisorComment("n/a") //not implemented yet todo or to remove
+                .checklistTally(checklistTallies.stream()
+                        .filter(tally -> tally.getChapterVersionId().equals(version.getId()))
+                        .findFirst()
+                        .map(ChecklistTally::toDto)
+                        .orElse(TimelineChecklistTallyDto.builder()
+                                .total(0)
+                                .resolved(0)
+                                .build()))
+                .supervisorComment("n/a")
                 .fileLink(fileLink)
                 .build();
     }
@@ -93,5 +104,9 @@ public class TimelineMapper {
                 .userDataFirstName(uploader.getFirstName())
                 .userDataLastName(uploader.getLastName())
                 .build();
+    }
+
+    public void addChecklistTally(ChecklistTally checklistTally){
+        checklistTallies.add(checklistTally);
     }
 }

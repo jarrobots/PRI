@@ -55,3 +55,4 @@ springdoc:
     url: /v3/api-docs
 thesis-module:
   generate-theses-and-chapters-on-startup: false
+  adress: localhost

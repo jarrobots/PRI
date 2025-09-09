@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import wmi.amu.edu.pl.pri.dto.TimelineChecklistTallyDto;
 
 import java.util.Date;
 
@@ -15,7 +16,7 @@ public class TimelineViewVersionDto {
     private Long id;
     private TimelineViewUploaderDto uploader;
     private Date uploadDateTime;
-    private String checklistTally;
+    private TimelineChecklistTallyDto checklistTally;
     private String supervisorComment;
     private String fileLink;
 }
