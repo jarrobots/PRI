@@ -12,7 +12,7 @@ spring:
     baselineOnMigrate: true
     enabled: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/java_db?currentSchema=test25
+    url: jdbc:postgresql://172.17.0.1:5432/java_db?currentSchema=test25
     username: api
     password: api
     driver-class-name: org.postgresql.Driver
@@ -45,6 +45,8 @@ logging:
 server:
   port:
     8082
+  address: s485942.projektstudencki.pl
+
 springdoc:
   api-docs:
     enabled: true
