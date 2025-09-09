@@ -44,7 +44,6 @@ logging:
         SQL: INFO
 server:
   port: 8082
-  address: s485942.projektstudencki.pl
 
 springdoc:
   api-docs:

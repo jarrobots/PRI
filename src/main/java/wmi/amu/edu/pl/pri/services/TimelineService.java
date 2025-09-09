@@ -19,7 +19,7 @@ public class TimelineService {
     @Value("${server.port}")
     private String currentPort;
 
-    @Value("${server.address:localhost}")
+    @Value("${server.address:s485942.projektstudencki.pl}")
     private String currentAddress;
 
     public TimelineViewDto getTimelineViewDto(Long thesisId){
