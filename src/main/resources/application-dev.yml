@@ -43,8 +43,7 @@ logging:
       hibernate:
         SQL: INFO
 server:
-  port:
-    8082
+  port: 8082
   address: s485942.projektstudencki.pl
 
 springdoc:
