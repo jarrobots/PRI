@@ -24,8 +24,8 @@ public class VersionService {
     @Value("${server.port}")
     private String currentPort;
 
-    @Value("$(server.address:150.254.78.132)")
-    private String currentAddress;
+    @Value("${spring.profiles.active:}")
+    private String activeProfile;
 
     @Autowired
     private StudentService studentService;
@@ -54,7 +54,7 @@ public class VersionService {
         var dtos = chapterFileModels.stream()
                 .map(chapterFileModel -> ChapterVersionDto.builder()
                         .id(chapterFileModel.getId())
-                        .link(chapterFileModel.getFormattedLink(currentPort, currentAddress))
+                        .link(chapterFileModel.getFormattedLink(currentPort, activeProfile))
                         .uploaderId(chapterFileModel.getUploader().getId())
                         .uploaderFName(chapterFileModel.getUploader().getFirstName())
                         .uploaderLName(chapterFileModel.getUploader().getLastName())

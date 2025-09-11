@@ -15,14 +15,14 @@ public class TimelineMapper {
 
     private final ThesisModel thesisModel;
     private final String currentPort;
-    private final String currentAddress;
+    private final String activeProfile;
     private List<ChecklistTally> checklistTallies;
 
-    public TimelineMapper(ThesisModel thesis, String currentPort, String currentAddress) {
+    public TimelineMapper(ThesisModel thesis, String currentPort, String activeProfile) {
         this.thesisModel = thesis;
         this.currentPort = currentPort;
         this.checklistTallies = new ArrayList<>();
-        this.currentAddress = currentAddress;
+        this.activeProfile = activeProfile;
 
     }
 
@@ -78,7 +78,7 @@ public class TimelineMapper {
     private TimelineViewVersionDto toTimelineViewVersionDto(ChapterVersionModel version) {
 
         TimelineViewUploaderDto uploader = toTimelineViewUploaderDto(version.getUploader());
-        String fileLink = version.getFormattedLink(currentPort, currentAddress);
+        String fileLink = version.getFormattedLink(currentPort, activeProfile);
 
         return TimelineViewVersionDto.builder()
                 .id(version.getId())

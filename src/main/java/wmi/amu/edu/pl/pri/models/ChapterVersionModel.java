@@ -44,12 +44,21 @@ public class ChapterVersionModel {
 
     private String name;
 
-    public String getFormattedLink(String port, String address){
-        if (getLink() == null || getLink().equals("NO_LINK"))
-            return "http://%s:%s/api/v1/download/".formatted(address,port) + getFileId();
-        else
+    public String getFormattedLink(String port, String activeProfile){
+        if (getLink() == null || getLink().equals("NO_LINK")){
+            String baseUrl;
+            if ("dev".equals(activeProfile)) {
+                baseUrl = "http://150.254.78.132:%s/api/v1/download/";
+            } else {
+                baseUrl = "http://localhost:%s/api/v1/download/";
+            }
+            return baseUrl.formatted(port) + getFileId();
+        }
+        else {
             return getLink();
+        }
     }
+
 
 
     public UserDataModel getUploader(){

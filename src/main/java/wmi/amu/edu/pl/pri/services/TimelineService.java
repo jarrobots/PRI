@@ -19,8 +19,9 @@ public class TimelineService {
     @Value("${server.port}")
     private String currentPort;
 
-    @Value("$(server.address:150.254.78.132)")
-    private String currentAddress;
+    @Value("${spring.profiles.active:}")
+    private String activeProfile;
+
 
 
     public TimelineViewDto getTimelineViewDto(Long thesisId){
@@ -28,7 +29,7 @@ public class TimelineService {
                 orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Thesis not found with ID: " + thesisId + ", so no data for timeline available"));
         var versionSummary = thesis.summarizeVersionsAsFlatList();
         // tutaj wydobądź z checklistService wszystkie tally
-        TimelineMapper timelineMapper = new TimelineMapper(thesis, currentPort, currentAddress);
+        TimelineMapper timelineMapper = new TimelineMapper(thesis, currentPort, activeProfile);
         return timelineMapper.toTimeLineViewDto();
     }
 

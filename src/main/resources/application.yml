@@ -45,7 +45,6 @@ logging:
 server:
   port:
     8082
-  address: localhost
 springdoc:
   api-docs:
     enabled: true
