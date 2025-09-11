@@ -24,9 +24,6 @@ public class VersionService {
     @Value("${server.port}")
     private String currentPort;
 
-    @Value("${server.address:s485942.projektstudencki.pl}")
-    private String currentAddress;
-
     @Autowired
     private StudentService studentService;
 
@@ -54,7 +51,7 @@ public class VersionService {
         var dtos = chapterFileModels.stream()
                 .map(chapterFileModel -> ChapterVersionDto.builder()
                         .id(chapterFileModel.getId())
-                        .link(chapterFileModel.getFormattedLink(currentPort, currentAddress))
+                        .link(chapterFileModel.getFormattedLink(currentPort))
                         .uploaderId(chapterFileModel.getUploader().getId())
                         .uploaderFName(chapterFileModel.getUploader().getFirstName())
                         .uploaderLName(chapterFileModel.getUploader().getLastName())

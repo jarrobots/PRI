@@ -19,15 +19,13 @@ public class TimelineService {
     @Value("${server.port}")
     private String currentPort;
 
-    @Value("${server.address:s485942.projektstudencki.pl}")
-    private String currentAddress;
 
     public TimelineViewDto getTimelineViewDto(Long thesisId){
         var thesis = thesisService.findById(thesisId).
                 orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Thesis not found with ID: " + thesisId + ", so no data for timeline available"));
         var versionSummary = thesis.summarizeVersionsAsFlatList();
         // tutaj wydobądź z checklistService wszystkie tally
-        TimelineMapper timelineMapper = new TimelineMapper(thesis, currentPort, currentAddress);
+        TimelineMapper timelineMapper = new TimelineMapper(thesis, currentPort);
         return timelineMapper.toTimeLineViewDto();
     }
 

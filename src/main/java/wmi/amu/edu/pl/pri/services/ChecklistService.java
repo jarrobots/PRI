@@ -7,10 +7,7 @@ import org.springframework.stereotype.Service;
 import wmi.amu.edu.pl.pri.JSONChecklistObj;
 import wmi.amu.edu.pl.pri.domainobject.ChecklistTally;
 import wmi.amu.edu.pl.pri.dto.ChecklistDto;
-import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
-import wmi.amu.edu.pl.pri.models.ChecklistModel;
-import wmi.amu.edu.pl.pri.models.ChecklistQuestionModel;
-import wmi.amu.edu.pl.pri.models.ThesisModel;
+import wmi.amu.edu.pl.pri.models.*;
 import wmi.amu.edu.pl.pri.repositories.ChecklistRepo;
 
 import java.io.FileNotFoundException;
@@ -100,13 +97,34 @@ public class ChecklistService {
 
     }
 
-    public ChecklistTally getChecklistTallyByVersion(ChapterVersionModel chapterVersion /* albo id, jak wolisz */) {
-        //todo
-        return new ChecklistTally();
+    private int getPoints(List<ChecklistQuestionModel> models){
+        int summary = 0;
+        for( ChecklistQuestionModel model : models){
+             summary = summary + model.getPoints();
+        }
+        return summary;
     }
 
-    public List<ChecklistTally> getChecklistTalliesByThesis(ThesisModel thesisModel /* albo id, jak wolisz*/ ){
-        //todo najwygodniej by bylo, jakbys to zrobil
-        return Collections.emptyList();
+    public ChecklistTally getChecklistTallyByVersion(ChapterVersionModel versionModel) {
+        ChecklistModel model = repo.findByVersionId(versionModel.getId()).get();
+        return new ChecklistTally(model.getId(), model.getChecklistQuestionModels().size(),getPoints(model.getChecklistQuestionModels()));
+
+    }
+
+    public List<ChecklistTally> getCheckListByChapter(ChapterModel chapterModel){
+        List<ChecklistTally> list = new ArrayList<>();
+        for(ChapterVersionModel model : chapterModel.getVersions()){
+            list.add(getChecklistTallyByVersion(model));
+        }
+        return list;
+    }
+
+    public List<ChecklistTally> getChecklistTalliesByThesis(ThesisModel thesisModel) {
+        List<ChecklistTally> list = new ArrayList<>();
+        for(ChapterModel model : thesisModel.getChapters()){
+            list.addAll(getCheckListByChapter(model));
+        }
+
+        return list;
     }
 }
