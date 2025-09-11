@@ -2,8 +2,6 @@ package wmi.amu.edu.pl.pri.models;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.cfg.Environment;
-import org.springframework.beans.factory.annotation.Autowired;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 
 import java.util.Date;
@@ -44,12 +42,21 @@ public class ChapterVersionModel {
 
     private String name;
 
-    public String getFormattedLink(String port){
-        if (getLink() == null || getLink().equals("NO_LINK"))
-            return "http://localhost:%s/api/v1/download/".formatted(port) + getFileId();
-        else
+    public String getFormattedLink(String port, String activeProfile){
+        if (getLink() == null || getLink().equals("NO_LINK")){
+            String baseUrl;
+            if ("dev".equals(activeProfile)) {
+                baseUrl = "http://150.254.78.134:%s/api/v1/download/";
+            } else {
+                baseUrl = "http://localhost:%s/api/v1/download/";
+            }
+            return baseUrl.formatted(port) + getFileId();
+        }
+        else {
             return getLink();
+        }
     }
+
 
 
     public UserDataModel getUploader(){
