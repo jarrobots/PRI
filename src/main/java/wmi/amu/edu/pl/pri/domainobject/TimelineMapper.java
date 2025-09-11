@@ -16,12 +16,20 @@ public class TimelineMapper {
     private final ThesisModel thesisModel;
     private final String currentPort;
     private final String activeProfile;
-    private List<ChecklistTally> checklistTallies;
+    private final List<ChecklistTally> checklistTallies;
 
     public TimelineMapper(ThesisModel thesis, String currentPort, String activeProfile) {
         this.thesisModel = thesis;
         this.currentPort = currentPort;
         this.checklistTallies = new ArrayList<>();
+        this.activeProfile = activeProfile;
+
+    }
+
+    public TimelineMapper(ThesisModel thesis, String currentPort, String activeProfile, List<ChecklistTally> tallies) {
+        this.thesisModel = thesis;
+        this.currentPort = currentPort;
+        this.checklistTallies = List.copyOf(tallies);
         this.activeProfile = activeProfile;
 
     }

@@ -2,8 +2,6 @@ package wmi.amu.edu.pl.pri.models;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.cfg.Environment;
-import org.springframework.beans.factory.annotation.Autowired;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 
 import java.util.Date;

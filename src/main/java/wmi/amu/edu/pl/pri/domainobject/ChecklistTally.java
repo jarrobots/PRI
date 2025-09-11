@@ -22,5 +22,4 @@ public class ChecklistTally {
                 .resolved(resolved)
                 .build();
     }
-
 }

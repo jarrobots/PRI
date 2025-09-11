@@ -16,6 +16,9 @@ public class TimelineService {
     @Autowired
     private ThesisService thesisService;
 
+    @Autowired
+    private ChecklistService checklistService;
+
     @Value("${server.port}")
     private String currentPort;
 
@@ -28,8 +31,8 @@ public class TimelineService {
         var thesis = thesisService.findById(thesisId).
                 orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Thesis not found with ID: " + thesisId + ", so no data for timeline available"));
         var versionSummary = thesis.summarizeVersionsAsFlatList();
-        // tutaj wydobądź z checklistService wszystkie tally
-        TimelineMapper timelineMapper = new TimelineMapper(thesis, currentPort, activeProfile);
+        var tallies = checklistService.getChecklistTalliesByThesis(thesis);
+        TimelineMapper timelineMapper = new TimelineMapper(thesis, currentPort, activeProfile, tallies);
         return timelineMapper.toTimeLineViewDto();
     }
 
