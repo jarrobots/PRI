@@ -44,9 +44,9 @@ public class ChapterVersionModel {
 
     private String name;
 
-    public String getFormattedLink(String port){
+    public String getFormattedLink(String port, String address){
         if (getLink() == null || getLink().equals("NO_LINK"))
-            return "http://localhost:%s/api/v1/download/".formatted(port) + getFileId();
+            return "http://%s:%s/api/v1/download/".formatted(address,port) + getFileId();
         else
             return getLink();
     }
