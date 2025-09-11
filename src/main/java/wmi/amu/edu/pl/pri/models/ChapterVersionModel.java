@@ -48,7 +48,7 @@ public class ChapterVersionModel {
         if (getLink() == null || getLink().equals("NO_LINK")){
             String baseUrl;
             if ("dev".equals(activeProfile)) {
-                baseUrl = "http://150.254.78.132:%s/api/v1/download/";
+                baseUrl = "http://150.254.78.134:%s/api/v1/download/";
             } else {
                 baseUrl = "http://localhost:%s/api/v1/download/";
             }
