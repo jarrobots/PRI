@@ -105,16 +105,15 @@ public class ChecklistService {
         return summary;
     }
 
-    public ChecklistTally getChecklistTallyByVersion(ChapterVersionModel versionModel) {
-        ChecklistModel model = repo.findByVersionId(versionModel.getId()).get();
-        return new ChecklistTally(model.getId(), model.getChecklistQuestionModels().size(),getPoints(model.getChecklistQuestionModels()));
-
+    public Optional<ChecklistTally> getChecklistTallyByVersion(ChapterVersionModel versionModel) {
+        return repo.findByVersionId(versionModel.getId()).map(
+                checklistModel-> new ChecklistTally(checklistModel.getVersionModel().getId(), checklistModel.getChecklistQuestionModels().size(), getPoints(checklistModel.getChecklistQuestionModels())));
     }
 
     public List<ChecklistTally> getCheckListByChapter(ChapterModel chapterModel){
         List<ChecklistTally> list = new ArrayList<>();
         for(ChapterVersionModel model : chapterModel.getVersions()){
-            list.add(getChecklistTallyByVersion(model));
+            getChecklistTallyByVersion(model).ifPresent(list::add);
         }
         return list;
     }
