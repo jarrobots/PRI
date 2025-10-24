@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  prib:
+    image: ghcr.io/jarrobots/pri_backup:latest
+    container_name: prib
+    ports:
+      - "8082:8082"
+    networks:
+      - my-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+
+  prif:
+    image: ghcr.io/jarrobots/pri_frontend:latest
+    container_name: prif
+    ports:
+      - "3000:3000"
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
