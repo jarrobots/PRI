@@ -10,6 +10,11 @@ import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 import wmi.amu.edu.pl.pri.repositories.ChapterRepo;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class ChapterService {
@@ -47,11 +52,31 @@ public class ChapterService {
 
     }
 
+    public List<ChapterModel> findChapterByOwnerList(List<UserDataModel> owners){
+        List<ChapterModel> output = new ArrayList<>();
+        Long owner = owners.getFirst().getId();
+        List<ChapterModel> chapters = chapterRepo.findByOwnerId(owner);
+
+        for(ChapterModel chapter : chapters){
+            if(compareLists(owners,chapter.getOwners())){
+               output.add(chapter);
+            }
+        }
+        return output;
+    }
+    private boolean compareLists(List<UserDataModel> list1, List<UserDataModel> list2) {
+        List<UserDataModel> diff1 = list1.stream()
+                .filter(e -> !list2.contains(e))
+                .toList();
+
+        List<UserDataModel> diff2 = list2.stream()
+                .filter(e -> !list1.contains(e))
+                .toList();
+        return (diff1.isEmpty() && diff2.isEmpty());
+    }
+
     private boolean isApproved(ChapterModel chapter) {
         return chapter.getApprovalStatus().equals("APPROVED");
     }
 
-    public ChapterModel findChapterByOwnerUserData(UserDataModel ownerUserData) {
-        return chapterRepo.findByOwnerId(ownerUserData.getId());
-    }
 }

@@ -11,9 +11,15 @@ import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.models.ThesisModel;
 import wmi.amu.edu.pl.pri.models.pri.ProjectModel;
 import wmi.amu.edu.pl.pri.models.pri.StudentModel;
+import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 import wmi.amu.edu.pl.pri.repositories.ChapterRepo;
 import wmi.amu.edu.pl.pri.repositories.ProjectRepo;
 import wmi.amu.edu.pl.pri.repositories.ThesisRepo;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -47,7 +53,7 @@ public class ThesisInitializer implements ApplicationRunner {
                     if (doesTheStudentHaveNoItsChapterYet(student)) {
                         ChapterModel chapter = new ChapterModel();
                         chapter.setApprovalStatus("PENDING");
-                        chapter.setOwner(student.getUserData());
+                        chapter.setOwners(Collections.singletonList(student.getUserData()));
                         chapter.setThesis(updatedThesis);
                         chapterRepo.save(chapter);
                     }
@@ -57,7 +63,7 @@ public class ThesisInitializer implements ApplicationRunner {
     }
 
     private boolean doesTheStudentHaveNoItsChapterYet(StudentModel student) {
-        return !chapterRepo.existsByOwnerId(student.getUserData().getId());
+        return !chapterRepo.existsByOwnersId(student.getUserData().getId());
     }
 
     private boolean doesTheProjectHaveNotHaveItsThesisYet(ProjectModel project) {

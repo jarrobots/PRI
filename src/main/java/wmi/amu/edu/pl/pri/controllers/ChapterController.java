@@ -14,9 +14,11 @@ import wmi.amu.edu.pl.pri.dto.ChapterCoreDto;
 import wmi.amu.edu.pl.pri.dto.ChapterVersionsDto;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.FileContentModel;
+import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 import wmi.amu.edu.pl.pri.services.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -48,9 +50,8 @@ public class ChapterController {
     }
 
     @RequestMapping(method = POST, path = "/files")
-    public ResponseEntity<Long> create(@RequestParam("ownerId") Long ownerId, @RequestParam("uploaderId") Long uploaderId, @RequestBody MultipartFile file
+    public ResponseEntity<Long> create(@RequestParam("ownerId") List<Long> ownerIds, @RequestParam("uploaderId") Long uploaderId, @RequestBody MultipartFile file
     ) {
-
         ChapterVersionModel chapter = new ChapterVersionModel();
         long id = -1;
         try {
@@ -61,13 +62,16 @@ public class ChapterController {
             e.printStackTrace();
         }
         if (id != -1) {
-            var owner = userDataService.getUserData(ownerId);
+            List<UserDataModel> owners = new ArrayList<>();
+            for( Long ownerId : ownerIds){
+                owners.add(userDataService.getUserData(ownerId));
+            }
 
             chapter.setName(file.getOriginalFilename());
             chapter.setFileId(id);
             chapter.setUploader(userDataService.getUserData(uploaderId));
-            chapter.setOwner(owner);
-            chapter.setChapter(chapterService.findChapterByOwnerUserData(owner));
+            chapter.setOwners(owners);
+            chapter.setChapters(chapterService.findChapterByOwnerList(owners));
             chapter.setDate(new Date());
 
             return ResponseEntity.ok().body(versionService.saveFile(chapter));
@@ -77,7 +81,7 @@ public class ChapterController {
     }
 
     @RequestMapping(method = POST, path = "/chapter/{id}/addVersionWithLink")
-    public ResponseEntity<Long> addVersion(@PathParam("id") Long chapterId, @RequestBody AddVersionWithLinkCommandDto commandDto) {
+    public ResponseEntity<Long> addVersion(@PathParam("id") List<Long> chapterId, @RequestBody AddVersionWithLinkCommandDto commandDto) {
 
         return ResponseEntity.ok().body(versionService.saveVersion(chapterId, commandDto));
     }

@@ -5,6 +5,7 @@ import lombok.*;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 
 import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,16 +24,24 @@ public class ChapterVersionModel {
     @JoinColumn(name = "uploader", referencedColumnName = "id")
     private UserDataModel uploader;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner", referencedColumnName = "id")
-    private UserDataModel owner;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "chapter_owners", // join table name
+            joinColumns = @JoinColumn(name = "chapter_id"),
+            inverseJoinColumns = @JoinColumn(name = "owner_id")
+    )
+    private List<UserDataModel> owners;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chapter_id", referencedColumnName = "id")
-    private ChapterModel chapter;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "chapter_version_chapter", // join table name (adjust as needed)
+            joinColumns = @JoinColumn(name = "chapter_version_id"), // FK to this entity
+            inverseJoinColumns = @JoinColumn(name = "chapter_id")   // FK to ChapterModel
+    )
+    private List<ChapterModel> chapters;
 
     @Column(nullable = true, columnDefinition = "TEXT")
     private String link;
@@ -56,8 +65,6 @@ public class ChapterVersionModel {
             return getLink();
         }
     }
-
-
 
     public UserDataModel getUploader(){
         if(uploader == null){

@@ -10,11 +10,10 @@ import wmi.amu.edu.pl.pri.dto.ChapterVersionDto;
 import wmi.amu.edu.pl.pri.dto.ChapterVersionsDto;
 import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
+import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 import wmi.amu.edu.pl.pri.repositories.ChapterVersionRepo;
 
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -74,16 +73,23 @@ public class VersionService {
         return savedChapters.getId();
     }
 
-    public Long saveVersion(Long chapterId, AddVersionWithLinkCommandDto command) {
+    public Long saveVersion(List<Long> chapterId, AddVersionWithLinkCommandDto command) {
+        ArrayList<ChapterModel> chapters = new ArrayList<>();
+        Queue<UserDataModel> owners = new LinkedList<>();
 
-        ChapterModel chapter = chapterService.getById(chapterId);
+        for(Long id : chapterId){
+            ChapterModel chapter = chapterService.getById(id);
+            chapters.add(chapter);
+            owners.addAll(chapter.getOwners());
+        }
+
+
 
         var chapterVersion = ChapterVersionModel.builder()
-                .chapter(chapter)
-                .owner(chapter.getOwner())
+                .chapters(chapters)
+                .owners(new ArrayList<>(owners))
                 .uploader(userDataService.getUserData(command.getUploaderUserDataId()))
                 .date(new Date())
-                .chapter(chapter)
                 .link(command.getLink())
                 .build();
         chapterVersionRepo.save(chapterVersion);
