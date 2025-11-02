@@ -24,14 +24,6 @@ public class ChapterVersionModel {
     @JoinColumn(name = "uploader", referencedColumnName = "id")
     private UserDataModel uploader;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "chapter_owners", // join table name
-            joinColumns = @JoinColumn(name = "chapter_id"),
-            inverseJoinColumns = @JoinColumn(name = "owner_id")
-    )
-    private List<UserDataModel> owners;
-
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
