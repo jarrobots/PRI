@@ -36,13 +36,9 @@ public class ChapterModel {
     @Column(name = "approval_status")
     private String approvalStatus;
 
-    @ManyToMany
-    @JoinTable(
-            name = "chapter_owner", // name of the join table
-            joinColumns = @JoinColumn(name = "chapter_id"), // foreign key column referencing ChapterModel
-            inverseJoinColumns = @JoinColumn(name = "user_id") // foreign key column referencing UserDataModel
-    )
-    private List<UserDataModel> owners;
+    @ManyToOne
+    @JoinColumn(name = "owner_user_data_id", referencedColumnName = "id", nullable = false)
+    private UserDataModel owner;
 
     @Column(name = "supervisor_comment")
     private String supervisorComment;
@@ -62,7 +58,7 @@ public class ChapterModel {
                 .description(this.description)
                 .descriptionEn(this.descriptionEn)
                 .approvalStatus(this.approvalStatus)
-                .userDataId(this.owners.stream().map(UserDataModel::getId).collect(Collectors.toList())) // later change name in dto and on frontend
+                .ownerId(this.owner.getId()) // later change name in dto and on frontend
                 .supervisorComment(this.supervisorComment)
                 .thesisId(this.thesis != null ? this.thesis.getId() : null)
                 .build();

@@ -10,7 +10,6 @@ import wmi.amu.edu.pl.pri.dto.ChapterVersionDto;
 import wmi.amu.edu.pl.pri.dto.ChapterVersionsDto;
 import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
-import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 import wmi.amu.edu.pl.pri.repositories.ChapterVersionRepo;
 
 import java.util.*;
@@ -26,8 +25,6 @@ public class VersionService {
     @Value("${spring.profiles.active:}")
     private String activeProfile;
 
-    @Autowired
-    private StudentService studentService;
 
     @Autowired
     private ChapterVersionRepo chapterVersionRepo;
@@ -42,10 +39,9 @@ public class VersionService {
         return chapterVersionRepo.getChapterVersionModelById(id);
     }
 
-    public ChapterVersionsDto getChapterVersionsByOwnerId(Long studentId) {
-        List<ChapterVersionModel> list = chapterVersionRepo.findByOwnerId(studentId);
-
-        return mapToChapterVersionsDto(list);
+    public ChapterVersionsDto getChapterVersionsByOwnerId(Long ownerId) {
+        ChapterModel chapterModel = chapterService.findChapterByOwnerId(ownerId);
+        return mapToChapterVersionsDto(chapterVersionRepo.getChapterVersionModelsByChapterId(chapterModel.getId()));
     }
 
     private ChapterVersionsDto mapToChapterVersionsDto(List<ChapterVersionModel> chapterFileModels) {
@@ -75,19 +71,9 @@ public class VersionService {
 
     public Long saveVersion(List<Long> chapterId, AddVersionWithLinkCommandDto command) {
         ArrayList<ChapterModel> chapters = new ArrayList<>();
-        Queue<UserDataModel> owners = new LinkedList<>();
-
-        for(Long id : chapterId){
-            ChapterModel chapter = chapterService.getById(id);
-            chapters.add(chapter);
-            owners.addAll(chapter.getOwners());
-        }
-
-
 
         var chapterVersion = ChapterVersionModel.builder()
                 .chapters(chapters)
-                .owners(new ArrayList<>(owners))
                 .uploader(userDataService.getUserData(command.getUploaderUserDataId()))
                 .date(new Date())
                 .link(command.getLink())

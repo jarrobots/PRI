@@ -18,7 +18,7 @@ public class ChapterCoreDto {
     private String description;
     private String descriptionEn;
     private String approvalStatus;
-    private List<Long> userDataId;
+    private Long ownerId;
     private String supervisorComment;
     private Long thesisId;
 }

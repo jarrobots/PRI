@@ -22,6 +22,7 @@ public class ChapterService {
     @Autowired
     private ChapterRepo chapterRepo;
 
+
     public ChapterCoreDto findById(Long id) {
         return getById(id).toDto();
     }
@@ -52,17 +53,8 @@ public class ChapterService {
 
     }
 
-    public List<ChapterModel> findChapterByOwnerList(List<UserDataModel> owners){
-        List<ChapterModel> output = new ArrayList<>();
-        Long owner = owners.getFirst().getId();
-        List<ChapterModel> chapters = chapterRepo.findByOwnerId(owner);
-
-        for(ChapterModel chapter : chapters){
-            if(compareLists(owners,chapter.getOwners())){
-               output.add(chapter);
-            }
-        }
-        return output;
+    public ChapterModel findChapterByOwnerId(Long owner){
+        return chapterRepo.findByOwnerId(owner);
     }
     private boolean compareLists(List<UserDataModel> list1, List<UserDataModel> list2) {
         List<UserDataModel> diff1 = list1.stream()
@@ -78,5 +70,6 @@ public class ChapterService {
     private boolean isApproved(ChapterModel chapter) {
         return chapter.getApprovalStatus().equals("APPROVED");
     }
+
 
 }

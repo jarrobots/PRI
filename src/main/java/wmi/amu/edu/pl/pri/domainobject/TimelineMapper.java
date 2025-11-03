@@ -57,7 +57,7 @@ public class TimelineMapper {
 
     private TimelineViewChapterDto toTimelineViewChapterDto(ChapterModel chapter) {
 
-        TimelineViewAuthorDto author = toTimelineViewAuthorDto(chapter.getOwners().getFirst()); //ZMIENIĆ
+        TimelineViewAuthorDto author = toTimelineViewAuthorDto(chapter.getOwner()); 
         List<TimelineViewVersionDto> versions = chapter.getVersions()
                 .stream()
                 .map(this::toTimelineViewVersionDto)

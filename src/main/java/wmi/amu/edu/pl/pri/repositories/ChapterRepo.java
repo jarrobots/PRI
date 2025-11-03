@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface ChapterRepo extends JpaRepository<ChapterModel, Long> {
 
-    boolean existsByOwnersId(Long ownersId);
+    boolean existsByOwnerId(Long ownersId);
 
 
-    @Query("SELECT c FROM ChapterModel c JOIN c.owners o WHERE o.id = :ownerId")
-    List<ChapterModel> findByOwnerId(Long id);
+    @Query("SELECT c FROM ChapterModel c WHERE c.id = :ownerId")
+    ChapterModel findByOwnerId(Long id);
 }

@@ -85,7 +85,7 @@ public class GroupService {
                     if (doesTheStudentHaveNoItsChapterYet(student)) {
                         ChapterModel chapter = new ChapterModel();
                         chapter.setApprovalStatus("PENDING");
-                        chapter.setOwners(Collections.singletonList(student.getUserData()));
+                        chapter.setOwner(student.getUserData());
                         chapter.setThesis(updatedThesis);
                         chapterRepo.save(chapter);
                     }
@@ -95,7 +95,7 @@ public class GroupService {
     }
 
     private boolean doesTheStudentHaveNoItsChapterYet(StudentModel student) {
-        return !chapterRepo.existsByOwnersId(student.getUserData().getId());
+        return !chapterRepo.existsByOwnerId(student.getUserData().getId());
     }
 
     private boolean doesTheProjectHaveNotHaveItsThesisYet(ProjectModel project) {

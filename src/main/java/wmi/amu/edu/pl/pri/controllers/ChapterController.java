@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import wmi.amu.edu.pl.pri.dto.AddVersionWithLinkCommandDto;
 import wmi.amu.edu.pl.pri.dto.ChapterCoreDto;
 import wmi.amu.edu.pl.pri.dto.ChapterVersionsDto;
+import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.FileContentModel;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -35,7 +37,6 @@ public class ChapterController {
     private final VersionService versionService;
     private final FileContentService fileService;
     private final UserDataService userDataService;
-    private final StudentService studentService;
     @Autowired
     private final ChapterService chapterService;
     @Autowired
@@ -46,12 +47,15 @@ public class ChapterController {
             @RequestParam(value = "id") Long studentId
     ) {
         return ResponseEntity.ok().body(versionService.getChapterVersionsByOwnerId(studentId));
-        //return versionService.getChapterVersionsByStudentId(studentId);
     }
 
     @RequestMapping(method = POST, path = "/files")
-    public ResponseEntity<Long> create(@RequestParam("ownerId") List<Long> ownerIds, @RequestParam("uploaderId") Long uploaderId, @RequestBody MultipartFile file
+    public ResponseEntity<Long> create(@RequestParam("ownerId") List<Long> ownerList, @RequestParam("uploaderId") Long uploaderId, @RequestBody MultipartFile file
     ) {
+        List<ChapterModel> userDataModelList = ownerList.stream()
+                .map(chapterService::findChapterByOwnerId)
+                .toList();
+
         ChapterVersionModel chapter = new ChapterVersionModel();
         long id = -1;
         try {
@@ -62,16 +66,11 @@ public class ChapterController {
             e.printStackTrace();
         }
         if (id != -1) {
-            List<UserDataModel> owners = new ArrayList<>();
-            for( Long ownerId : ownerIds){
-                owners.add(userDataService.getUserData(ownerId));
-            }
 
             chapter.setName(file.getOriginalFilename());
             chapter.setFileId(id);
             chapter.setUploader(userDataService.getUserData(uploaderId));
-            chapter.setOwners(owners);
-            chapter.setChapters(chapterService.findChapterByOwnerList(owners));
+            chapter.setChapters(userDataModelList);
             chapter.setDate(new Date());
 
             return ResponseEntity.ok().body(versionService.saveFile(chapter));
