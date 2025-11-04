@@ -16,7 +16,6 @@ import java.util.List;
 public class ChecklistDto {
     private Long id;
     private Date uploadTime;
-    private boolean isPassed;
     private Long chapterId;
     private Long versionId;
     private List<ChecklistQuestionModel> models;

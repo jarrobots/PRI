@@ -41,7 +41,6 @@ public class ChecklistService {
         if (optional.isPresent()) {
             ChecklistModel model = optional.get();
             model.setDate(new Date());
-            model.setPassed(dto.isPassed());
             model.setChecklistQuestionModels(dto.getModels());
             for (ChecklistQuestionModel question : model.getChecklistQuestionModels()) {
                 questionService.saveQuestion(question);
@@ -52,12 +51,6 @@ public class ChecklistService {
 
     private Optional<ChecklistModel> findChecklistByVersionId(Long id) {
         return repo.findByVersionId(id);
-
-    }
-
-    private boolean checkIfPassed(List<ChecklistQuestionModel> list) {
-        return list.stream()
-                .noneMatch(q -> q.isCritical() && q.getPoints() == 0);
 
     }
 
@@ -77,12 +70,10 @@ public class ChecklistService {
             for (JSONChecklistObj o : questions) {
                 ChecklistQuestionModel question = new ChecklistQuestionModel();
                 question.setQuestion(o.getQuestion());
-                question.setCritical(o.isCritical());
-                question.setPoints(0);
+                question.setPassed(false);
                 list.add(question);
                 questionService.saveQuestion(question);
             }
-            model.setPassed(false);
             model.setChecklistQuestionModels(list);
             ChapterVersionModel version = versionService.getChapterVersionById(id);
             if (version == null) {
@@ -97,17 +88,17 @@ public class ChecklistService {
 
     }
 
-    private int getPoints(List<ChecklistQuestionModel> models){
+    private int getPassed(List<ChecklistQuestionModel> models){
         int summary = 0;
         for( ChecklistQuestionModel model : models){
-             summary = summary + model.getPoints();
+            if(model.isPassed()) summary++;
         }
         return summary;
     }
 
     public Optional<ChecklistTally> getChecklistTallyByVersion(ChapterVersionModel versionModel) {
         return repo.findByVersionId(versionModel.getId()).map(
-                checklistModel-> new ChecklistTally(checklistModel.getVersionModel().getId(), checklistModel.getChecklistQuestionModels().size(), getPoints(checklistModel.getChecklistQuestionModels())));
+                checklistModel-> new ChecklistTally(checklistModel.getVersionModel().getId(), checklistModel.getChecklistQuestionModels().size(), getPassed(checklistModel.getChecklistQuestionModels())));
     }
 
     public List<ChecklistTally> getCheckListByChapter(ChapterModel chapterModel){

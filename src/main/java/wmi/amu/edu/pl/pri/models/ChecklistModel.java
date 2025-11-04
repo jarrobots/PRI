@@ -22,8 +22,6 @@ public class ChecklistModel {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    private boolean isPassed;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "version", referencedColumnName = "id")
     private ChapterVersionModel versionModel;
@@ -45,7 +43,6 @@ public class ChecklistModel {
                 .chapterId(chapterModel.getId())
                 .uploadTime(date)
                 .models(checklistQuestionModels)
-                .isPassed(isPassed)
                 .build();
     }
 }
