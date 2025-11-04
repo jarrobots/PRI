@@ -7,13 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import wmi.amu.edu.pl.pri.dto.ChapterCoreDto;
 import wmi.amu.edu.pl.pri.models.ChapterModel;
-import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 import wmi.amu.edu.pl.pri.repositories.ChapterRepo;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -55,16 +50,6 @@ public class ChapterService {
 
     public ChapterModel findChapterByOwnerId(Long owner){
         return chapterRepo.findByOwnerId(owner);
-    }
-    private boolean compareLists(List<UserDataModel> list1, List<UserDataModel> list2) {
-        List<UserDataModel> diff1 = list1.stream()
-                .filter(e -> !list2.contains(e))
-                .toList();
-
-        List<UserDataModel> diff2 = list2.stream()
-                .filter(e -> !list1.contains(e))
-                .toList();
-        return (diff1.isEmpty() && diff2.isEmpty());
     }
 
     private boolean isApproved(ChapterModel chapter) {

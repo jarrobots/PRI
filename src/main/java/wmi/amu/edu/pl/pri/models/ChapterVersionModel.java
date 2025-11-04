@@ -21,7 +21,7 @@ public class ChapterVersionModel {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uploader", referencedColumnName = "id")
+    @JoinColumn(name = "uploader", referencedColumnName = "id", nullable = false)
     private UserDataModel uploader;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -29,13 +29,13 @@ public class ChapterVersionModel {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "chapter_version_chapter", // join table name (adjust as needed)
-            joinColumns = @JoinColumn(name = "chapter_version_id"), // FK to this entity
-            inverseJoinColumns = @JoinColumn(name = "chapter_id")   // FK to ChapterModel
+            name = "thm_chapter_chapter_version",
+            joinColumns = @JoinColumn(name = "chapter_version_id"),
+            inverseJoinColumns = @JoinColumn(name = "chapter_id")
     )
     private List<ChapterModel> chapters;
 
-    @Column(nullable = true, columnDefinition = "TEXT")
+    @Column(columnDefinition = "text")
     private String link;
     //plik na razie zostawiamy bez relacji zdefiniowanej przez Hibernate
 

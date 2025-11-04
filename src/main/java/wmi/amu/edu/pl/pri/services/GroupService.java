@@ -16,7 +16,6 @@ import wmi.amu.edu.pl.pri.repositories.ChapterRepo;
 import wmi.amu.edu.pl.pri.repositories.ProjectRepo;
 import wmi.amu.edu.pl.pri.repositories.ThesisRepo;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 

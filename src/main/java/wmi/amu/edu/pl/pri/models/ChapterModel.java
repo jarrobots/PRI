@@ -32,11 +32,10 @@ public class ChapterModel {
     @Column(name = "description_en")
     private String descriptionEn;
 
-    //informacja o tym czy rozdzial zostal zaakceptowany podczas formulowania pracy
     @Column(name = "approval_status")
     private String approvalStatus;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "owner_user_data_id", referencedColumnName = "id", nullable = false)
     private UserDataModel owner;
 
@@ -44,7 +43,7 @@ public class ChapterModel {
     private String supervisorComment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "thesis_id", referencedColumnName = "id")
+    @JoinColumn(name = "thesis_id", referencedColumnName = "id", nullable = false)
     private ThesisModel thesis;
 
     @ManyToMany(mappedBy = "chapters")
