@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface StudentRepo extends JpaRepository<StudentModel, Long> {
 
     @Query("SELECT s FROM StudentModel s WHERE s.userData.id = :userDataId")
-    Optional<StudentModel> findByUserDataId(Long userDataId);
+    Optional<StudentModel> findByUserDataId(@Param("userDataId") Long userDataId);
 
     @Query("SELECT c FROM StudentModel c WHERE c.project.id = :projectId")
     List<StudentModel> findStudentModelByProjectId(@Param("projectId") Long projectId);
