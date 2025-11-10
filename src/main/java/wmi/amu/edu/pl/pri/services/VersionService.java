@@ -39,9 +39,8 @@ public class VersionService {
         return chapterVersionRepo.getChapterVersionModelById(id);
     }
 
-    public ChapterVersionsDto getChapterVersionsByOwnerId(Long ownerId) {
-        ChapterModel chapterModel = chapterService.findChapterByOwnerId(ownerId);
-        return mapToChapterVersionsDto(chapterVersionRepo.getChapterVersionModelsByChapterId(chapterModel.getId()));
+    public ChapterVersionsDto getChapterVersionByChapterId(Long chapterId) {
+        return mapToChapterVersionsDto(chapterVersionRepo.getChapterVersionModelsByChapterId(chapterId));
     }
 
     private ChapterVersionsDto mapToChapterVersionsDto(List<ChapterVersionModel> chapterFileModels) {

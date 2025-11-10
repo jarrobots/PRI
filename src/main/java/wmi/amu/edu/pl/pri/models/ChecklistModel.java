@@ -38,9 +38,13 @@ public class ChecklistModel {
     private Date date;
 
     public ChecklistDto toChecklistDto(){
+
+        Long versionId = (versionModel != null) ? versionModel.getId() : null;
+        Long chapterId = (chapterModel != null) ? chapterModel.getId() : null;
+
         return ChecklistDto.builder()
-                .versionId(versionModel.getId())
-                .chapterId(chapterModel.getId())
+                .versionId(versionId)
+                .chapterId(chapterId)
                 .uploadTime(date)
                 .models(checklistQuestionModels)
                 .build();

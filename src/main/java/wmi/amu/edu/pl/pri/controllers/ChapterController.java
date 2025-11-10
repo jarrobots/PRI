@@ -1,6 +1,5 @@
 package wmi.amu.edu.pl.pri.controllers;
 
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -15,15 +14,11 @@ import wmi.amu.edu.pl.pri.dto.ChapterVersionsDto;
 import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.FileContentModel;
-import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 import wmi.amu.edu.pl.pri.services.*;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -42,14 +37,14 @@ public class ChapterController {
     @Autowired
     private final ThesisService thesisService;
 
-    @GetMapping("/view")
+    @GetMapping("/view/version/byOwner/{id}")
     public ResponseEntity<ChapterVersionsDto> getVersionsByStudentId(
-            @RequestParam(value = "id") Long studentId
-    ) {
-        return ResponseEntity.ok().body(versionService.getChapterVersionsByOwnerId(studentId));
+            @PathVariable Long id) {
+        Long chapterId = chapterService.findChapterByOwnerId(id).getId();
+        return ResponseEntity.ok().body(versionService.getChapterVersionByChapterId(chapterId));
     }
 
-    @RequestMapping(method = POST, path = "/files")
+    @RequestMapping(method = POST, path = "/file")
     public ResponseEntity<Long> create(@RequestParam("ownerId") List<Long> ownerList, @RequestParam("uploaderId") Long uploaderId, @RequestBody MultipartFile file
     ) {
         List<ChapterModel> userDataModelList = ownerList.stream()
@@ -79,10 +74,10 @@ public class ChapterController {
         }
     }
 
-    @RequestMapping(method = POST, path = "/chapter/{id}/addVersionWithLink")
-    public ResponseEntity<Long> addVersion(@PathParam("id") List<Long> chapterId, @RequestBody AddVersionWithLinkCommandDto commandDto) {
+    @RequestMapping(method = POST, path = "/chapter/addVersionWithLink")
+    public ResponseEntity<Long> addVersion(@RequestParam("ids") List<Long> chapterIdList, @RequestBody AddVersionWithLinkCommandDto commandDto) {
 
-        return ResponseEntity.ok().body(versionService.saveVersion(chapterId, commandDto));
+        return ResponseEntity.ok().body(versionService.saveVersion(chapterIdList, commandDto));
     }
 
 

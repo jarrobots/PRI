@@ -16,9 +16,14 @@ public class CommentController {
     @Autowired
     private final CommentService service;
 
-    @GetMapping("/view/comment")
-    public ResponseEntity<CommentDto> getComments(@RequestParam(value="versionId") Long id){
-        return ResponseEntity.ok().body(service.getComment(id));
+    @GetMapping("/view/version/{id}/comment")
+    public ResponseEntity<CommentDto> getCommentByVersion(@PathVariable Long id){
+        return ResponseEntity.ok().body(service.getCommentByVersion(id));
+    }
+
+    @GetMapping("/view/chapter/{id}/comment")
+    public ResponseEntity<CommentDto> getCommentByChapter(@PathVariable Long id){
+        return ResponseEntity.ok().body(service.getCommentByChapter(id));
     }
 
     @RequestMapping(method=POST, path = "/post/comment")

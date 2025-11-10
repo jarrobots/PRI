@@ -19,11 +19,18 @@ public class CommentService {
     private final UserDataService userService;
     private final VersionService versionService;
 
-    public CommentDto getComment(Long id){
-        CommentModel model = repo.findCommentById(id);
+    public CommentDto getCommentByVersion(Long versionId){
+        CommentModel model = repo.findCommentByVersionId(versionId);
         return model.toCommentDto();
 
     }
+
+    public CommentDto getCommentByChapter(Long chapterId){
+        CommentModel model = repo.findCommentByChapterId(chapterId);
+        return model.toCommentDto();
+
+    }
+
     public Long addComment(CommentDto dto){
         CommentModel model = new CommentModel();
         model.setUploader(userService.getUserData(dto.getUploaderId()));

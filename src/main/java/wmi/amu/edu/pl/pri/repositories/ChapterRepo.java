@@ -13,6 +13,6 @@ public interface ChapterRepo extends JpaRepository<ChapterModel, Long> {
     boolean existsByOwnerId(Long ownersId);
 
 
-    @Query("SELECT c FROM ChapterModel c WHERE c.id = :ownerId")
+    @Query("SELECT c FROM ChapterModel c WHERE c.owner.id = :ownerId")
     ChapterModel findByOwnerId(@Param("ownerId") Long ownerId);
 }

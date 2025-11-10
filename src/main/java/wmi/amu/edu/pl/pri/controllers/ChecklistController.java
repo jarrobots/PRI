@@ -3,10 +3,7 @@ package wmi.amu.edu.pl.pri.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import wmi.amu.edu.pl.pri.dto.ChecklistDto;
 import wmi.amu.edu.pl.pri.services.ChecklistService;
 
@@ -18,6 +15,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class ChecklistController {
     @Autowired
     private ChecklistService checklistService;
+
     @RequestMapping(method=POST, path = "/post/note")
     public Boolean saveQuestions(
             @RequestBody ChecklistDto dto
@@ -25,10 +23,15 @@ public class ChecklistController {
         checklistService.setChecklist(dto);
         return true;
     }
-    @RequestMapping( path = "/view/note")
-    public ResponseEntity<ChecklistDto> getQuestions(
-            @RequestParam(value="id") Long id
-    ){
+    @RequestMapping( path = "/view/version/{id}/note")
+    public ResponseEntity<ChecklistDto> getQuestionsByVersion(@PathVariable Long id)
+    {
         return ResponseEntity.ok().body(checklistService.getChecklistByVersionId(id));
+    }
+
+    @RequestMapping( path = "/view/chapter/{id}/note")
+    public ResponseEntity<ChecklistDto> getQuestionsByChapter(@PathVariable Long id)
+    {
+        return ResponseEntity.ok().body(checklistService.getChecklistByChapterId(id));
     }
 }

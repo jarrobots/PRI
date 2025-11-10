@@ -37,12 +37,16 @@ public class CommentModel {
 
     public CommentDto toCommentDto(){
         UserDataDto model = getUploader();
+
+        Long versionId = (versionModel != null) ? versionModel.getId() : null;
+        Long chapterId = (chapterModel != null) ? chapterModel.getId() : null;
+
         return CommentDto.builder()
                 .id(id)
                 .uploaderId(model.getId())
                 .text(text)
-                .versionId(versionModel.getId())
-                .chapterId(chapterModel.getId())
+                .versionId(versionId)
+                .chapterId(chapterId)
                 .fName(model.getFName())
                 .lName(model.getLName())
                 .build();

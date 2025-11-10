@@ -36,6 +36,19 @@ public class ChecklistService {
         return optional.get().toChecklistDto();
     }
 
+    public ChecklistDto getChecklistByChapterId(Long id) {
+        Optional<ChecklistModel> optional = repo.findByChapterId(id);
+        if (optional.isEmpty()) {
+            try {
+                ChecklistModel model = generateChecklistFromJson(id);
+                return model.toChecklistDto();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return optional.get().toChecklistDto();
+    }
+
     public void setChecklist(ChecklistDto dto) {
         Optional<ChecklistModel> optional = findChecklistByVersionId(dto.getVersionId());
         if (optional.isPresent()) {
@@ -98,7 +111,9 @@ public class ChecklistService {
 
     public Optional<ChecklistTally> getChecklistTallyByVersion(ChapterVersionModel versionModel) {
         return repo.findByVersionId(versionModel.getId()).map(
-                checklistModel-> new ChecklistTally(checklistModel.getVersionModel().getId(), checklistModel.getChecklistQuestionModels().size(), getPassed(checklistModel.getChecklistQuestionModels())));
+                checklistModel-> new ChecklistTally(checklistModel.getVersionModel().getId(),
+                        checklistModel.getChecklistQuestionModels().size(),
+                        getPassed(checklistModel.getChecklistQuestionModels())));
     }
 
     public List<ChecklistTally> getCheckListByChapter(ChapterModel chapterModel){

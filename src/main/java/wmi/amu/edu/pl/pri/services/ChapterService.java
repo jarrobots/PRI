@@ -52,6 +52,7 @@ public class ChapterService {
         return chapterRepo.findByOwnerId(owner);
     }
 
+
     private boolean isApproved(ChapterModel chapter) {
         return chapter.getApprovalStatus().equals("APPROVED");
     }

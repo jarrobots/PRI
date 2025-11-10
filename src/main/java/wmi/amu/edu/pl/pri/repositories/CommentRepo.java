@@ -11,5 +11,8 @@ import java.util.List;
 public interface CommentRepo extends JpaRepository<CommentModel,Long> {
 
     @Query("SELECT c FROM CommentModel c WHERE c.versionModel.id= :versionId")
-    CommentModel findCommentById(@Param("versionId") Long versionId);
+    CommentModel findCommentByVersionId(@Param("versionId") Long versionId);
+
+    @Query("SELECT c FROM CommentModel c WHERE c.chapterModel.id = :chapterId")
+    CommentModel findCommentByChapterId(@Param("chapterId") Long chapterId);
 }
