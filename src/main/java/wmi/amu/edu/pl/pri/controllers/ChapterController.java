@@ -16,6 +16,7 @@ import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.FileContentModel;
 import wmi.amu.edu.pl.pri.services.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -75,7 +76,10 @@ public class ChapterController {
     }
 
     @RequestMapping(method = POST, path = "/chapter/addVersionWithLink")
-    public ResponseEntity<Long> addVersion(@RequestParam("ids") List<Long> chapterIdList, @RequestBody AddVersionWithLinkCommandDto commandDto) {
+    public ResponseEntity<Long> addVersion(@RequestParam("chapterIds") List<Long> chapterIdList, @RequestBody AddVersionWithLinkCommandDto commandDto) {
+
+        if(chapterIdList.isEmpty()) return ResponseEntity.badRequest().build();
+        ArrayList<ChapterModel> chapters = new ArrayList<>();
 
         return ResponseEntity.ok().body(versionService.saveVersion(chapterIdList, commandDto));
     }

@@ -13,6 +13,7 @@ import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.repositories.ChapterVersionRepo;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -69,7 +70,11 @@ public class VersionService {
     }
 
     public Long saveVersion(List<Long> chapterId, AddVersionWithLinkCommandDto command) {
-        ArrayList<ChapterModel> chapters = new ArrayList<>();
+
+        List<ChapterModel> chapters = chapterId.stream()
+                .map(chapterService::getById)
+                .collect(Collectors.toList());
+
 
         var chapterVersion = ChapterVersionModel.builder()
                 .chapters(chapters)
