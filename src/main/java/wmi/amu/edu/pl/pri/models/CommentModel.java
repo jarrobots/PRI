@@ -20,24 +20,33 @@ public class CommentModel {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uploader", referencedColumnName = "id")
-    private UserDataModel uploader;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chapter", referencedColumnName = "id")
+    private ChapterModel chapterModel;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "version", referencedColumnName = "id")
     private ChapterVersionModel versionModel;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "uploader", referencedColumnName = "id")
+    private UserDataModel uploader;
 
     @Column(columnDefinition = "text")
     private String text;
 
     public CommentDto toCommentDto(){
         UserDataDto model = getUploader();
+
+        Long versionId = (versionModel != null) ? versionModel.getId() : null;
+        Long chapterId = (chapterModel != null) ? chapterModel.getId() : null;
+
         return CommentDto.builder()
                 .id(id)
                 .uploaderId(model.getId())
                 .text(text)
-                .versionId(versionModel.getId())
+                .versionId(versionId)
+                .chapterId(chapterId)
                 .fName(model.getFName())
                 .lName(model.getLName())
                 .build();

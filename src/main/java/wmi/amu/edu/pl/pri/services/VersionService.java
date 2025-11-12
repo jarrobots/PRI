@@ -12,9 +12,8 @@ import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.repositories.ChapterVersionRepo;
 
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +26,6 @@ public class VersionService {
     @Value("${spring.profiles.active:}")
     private String activeProfile;
 
-    @Autowired
-    private StudentService studentService;
 
     @Autowired
     private ChapterVersionRepo chapterVersionRepo;
@@ -43,10 +40,8 @@ public class VersionService {
         return chapterVersionRepo.getChapterVersionModelById(id);
     }
 
-    public ChapterVersionsDto getChapterVersionsByOwnerId(Long studentId) {
-        List<ChapterVersionModel> list = chapterVersionRepo.findByOwnerId(studentId);
-
-        return mapToChapterVersionsDto(list);
+    public ChapterVersionsDto getChapterVersionByChapterId(Long chapterId) {
+        return mapToChapterVersionsDto(chapterVersionRepo.getChapterVersionModelsByChapterId(chapterId));
     }
 
     private ChapterVersionsDto mapToChapterVersionsDto(List<ChapterVersionModel> chapterFileModels) {
@@ -74,16 +69,17 @@ public class VersionService {
         return savedChapters.getId();
     }
 
-    public Long saveVersion(Long chapterId, AddVersionWithLinkCommandDto command) {
+    public Long saveVersion(List<Long> chapterId, AddVersionWithLinkCommandDto command) {
 
-        ChapterModel chapter = chapterService.getById(chapterId);
+        List<ChapterModel> chapters = chapterId.stream()
+                .map(chapterService::getById)
+                .collect(Collectors.toList());
+
 
         var chapterVersion = ChapterVersionModel.builder()
-                .chapter(chapter)
-                .owner(chapter.getOwner())
+                .chapters(chapters)
                 .uploader(userDataService.getUserData(command.getUploaderUserDataId()))
                 .date(new Date())
-                .chapter(chapter)
                 .link(command.getLink())
                 .build();
         chapterVersionRepo.save(chapterVersion);

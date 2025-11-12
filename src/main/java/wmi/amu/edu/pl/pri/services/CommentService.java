@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import wmi.amu.edu.pl.pri.dto.CommentDto;
-import wmi.amu.edu.pl.pri.dto.CommentsDto;
 import wmi.amu.edu.pl.pri.models.CommentModel;
 import wmi.amu.edu.pl.pri.repositories.CommentRepo;
 
@@ -20,21 +19,23 @@ public class CommentService {
     private final UserDataService userService;
     private final VersionService versionService;
 
-    public CommentsDto getComments(Long id){
-        List<CommentModel> models = repo.findCommentById(id);
-        var dtos = models.stream().map(CommentModel::toCommentDto).toList();
-        return new CommentsDto(dtos);
+    public CommentDto getCommentByVersion(Long versionId){
+        CommentModel model = repo.findCommentByVersionId(versionId);
+        return model.toCommentDto();
+
     }
+
+    public CommentDto getCommentByChapter(Long chapterId){
+        CommentModel model = repo.findCommentByChapterId(chapterId);
+        return model.toCommentDto();
+
+    }
+
     public Long addComment(CommentDto dto){
         CommentModel model = new CommentModel();
         model.setUploader(userService.getUserData(dto.getUploaderId()));
         model.setText(dto.getText());
         model.setVersionModel(versionService.getChapterVersionById(dto.getVersionId()));
         return repo.save(model).getId();
-    }
-
-    public Boolean deleteComment(Long id){
-        repo.delete(repo.getReferenceById(id));
-        return true;
     }
 }

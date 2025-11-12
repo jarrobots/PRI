@@ -11,12 +11,11 @@ import java.util.List;
 
 
 public interface ChapterVersionRepo extends JpaRepository<ChapterVersionModel, Long> {
-    List<ChapterVersionModel> findChapterFileModelByUploader(UserDataModel model);
-
-    @Query("SELECT c FROM ChapterVersionModel c WHERE c.owner.id = :ownerId")
-    List<ChapterVersionModel> findByOwnerId(@Param("ownerId") Long ownerId);
 
     @Query("SELECT c FROM ChapterVersionModel c WHERE c.id = :id")
     ChapterVersionModel getChapterVersionModelById(@Param("id") Long id);
+
+    @Query("SELECT c FROM ChapterVersionModel c JOIN c.chapters o WHERE o.id = :chapterId")
+    List<ChapterVersionModel> getChapterVersionModelsByChapterId(@Param("chapterId") Long chapterId);
 
 }

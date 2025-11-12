@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -16,7 +18,7 @@ public class ChapterCoreDto {
     private String description;
     private String descriptionEn;
     private String approvalStatus;
-    private Long userDataId;
+    private Long ownerId;
     private String supervisorComment;
     private Long thesisId;
 }

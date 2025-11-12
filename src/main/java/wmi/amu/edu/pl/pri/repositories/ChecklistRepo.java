@@ -14,5 +14,8 @@ public interface ChecklistRepo extends JpaRepository<ChecklistModel,Long> {
     @Query("SELECT c FROM ChecklistModel c WHERE c.versionModel.id = :versionId")
     Optional<ChecklistModel> findByVersionId(@Param("versionId") Long id);
 
+    @Query("SELECT c FROM ChecklistModel c WHERE c.chapterModel.id = :chapterId")
+    Optional<ChecklistModel> findByChapterId(@Param("chapterId") Long id);
+
 }
 

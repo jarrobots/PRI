@@ -1,6 +1,5 @@
 package wmi.amu.edu.pl.pri.controllers;
 
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -12,11 +11,12 @@ import org.springframework.web.multipart.MultipartFile;
 import wmi.amu.edu.pl.pri.dto.AddVersionWithLinkCommandDto;
 import wmi.amu.edu.pl.pri.dto.ChapterCoreDto;
 import wmi.amu.edu.pl.pri.dto.ChapterVersionsDto;
+import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.FileContentModel;
 import wmi.amu.edu.pl.pri.services.*;
-
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -33,23 +33,25 @@ public class ChapterController {
     private final VersionService versionService;
     private final FileContentService fileService;
     private final UserDataService userDataService;
-    private final StudentService studentService;
     @Autowired
     private final ChapterService chapterService;
     @Autowired
     private final ThesisService thesisService;
 
-    @GetMapping("/view")
+    @GetMapping("/view/version/byOwner/{id}")
     public ResponseEntity<ChapterVersionsDto> getVersionsByStudentId(
-            @RequestParam(value = "id") Long studentId
-    ) {
-        return ResponseEntity.ok().body(versionService.getChapterVersionsByOwnerId(studentId));
-        //return versionService.getChapterVersionsByStudentId(studentId);
+            @PathVariable Long id) {
+        System.out.println("Dostano zapytanie.");
+        Long chapterId = chapterService.findChapterByOwnerId(id).getId();
+        return ResponseEntity.ok().body(versionService.getChapterVersionByChapterId(chapterId));
     }
 
-    @RequestMapping(method = POST, path = "/files")
-    public ResponseEntity<Long> create(@RequestParam("ownerId") Long ownerId, @RequestParam("uploaderId") Long uploaderId, @RequestBody MultipartFile file
+    @RequestMapping(method = POST, path = "/file")
+    public ResponseEntity<Long> create(@RequestParam("ownerId") List<Long> ownerList, @RequestParam("uploaderId") Long uploaderId, @RequestBody MultipartFile file
     ) {
+        List<ChapterModel> userDataModelList = ownerList.stream()
+                .map(chapterService::findChapterByOwnerId)
+                .toList();
 
         ChapterVersionModel chapter = new ChapterVersionModel();
         long id = -1;
@@ -61,13 +63,11 @@ public class ChapterController {
             e.printStackTrace();
         }
         if (id != -1) {
-            var owner = userDataService.getUserData(ownerId);
 
             chapter.setName(file.getOriginalFilename());
             chapter.setFileId(id);
             chapter.setUploader(userDataService.getUserData(uploaderId));
-            chapter.setOwner(owner);
-            chapter.setChapter(chapterService.findChapterByOwnerUserData(owner));
+            chapter.setChapters(userDataModelList);
             chapter.setDate(new Date());
 
             return ResponseEntity.ok().body(versionService.saveFile(chapter));
@@ -76,10 +76,12 @@ public class ChapterController {
         }
     }
 
-    @RequestMapping(method = POST, path = "/chapter/{id}/addVersionWithLink")
-    public ResponseEntity<Long> addVersion(@PathParam("id") Long chapterId, @RequestBody AddVersionWithLinkCommandDto commandDto) {
+    @RequestMapping(method = POST, path = "/chapter/addVersionWithLink")
+    public ResponseEntity<Long> addVersion(@RequestParam("chapterIds") List<Long> chapterIdList, @RequestBody AddVersionWithLinkCommandDto commandDto) {
 
-        return ResponseEntity.ok().body(versionService.saveVersion(chapterId, commandDto));
+        if(chapterIdList.isEmpty()) return ResponseEntity.badRequest().build();
+
+        return ResponseEntity.ok().body(versionService.saveVersion(chapterIdList, commandDto));
     }
 
 

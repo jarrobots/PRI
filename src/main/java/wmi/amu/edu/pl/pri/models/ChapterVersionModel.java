@@ -5,6 +5,7 @@ import lombok.*;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 
 import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,21 +21,21 @@ public class ChapterVersionModel {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uploader", referencedColumnName = "id")
+    @JoinColumn(name = "uploader", referencedColumnName = "id", nullable = false)
     private UserDataModel uploader;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner", referencedColumnName = "id")
-    private UserDataModel owner;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chapter_id", referencedColumnName = "id")
-    private ChapterModel chapter;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "thm_chapter_chapter_version",
+            joinColumns = @JoinColumn(name = "chapter_version_id"),
+            inverseJoinColumns = @JoinColumn(name = "chapter_id")
+    )
+    private List<ChapterModel> chapters;
 
-    @Column(nullable = true, columnDefinition = "TEXT")
+    @Column(columnDefinition = "text")
     private String link;
     //plik na razie zostawiamy bez relacji zdefiniowanej przez Hibernate
 
@@ -56,8 +57,6 @@ public class ChapterVersionModel {
             return getLink();
         }
     }
-
-
 
     public UserDataModel getUploader(){
         if(uploader == null){

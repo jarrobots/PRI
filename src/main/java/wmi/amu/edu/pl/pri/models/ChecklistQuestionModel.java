@@ -15,7 +15,5 @@ public class ChecklistQuestionModel {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String question;
-    private Integer points;
-    private boolean isCritical;
-
+    private boolean isPassed;
 }

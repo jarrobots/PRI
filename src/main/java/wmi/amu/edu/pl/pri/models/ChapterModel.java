@@ -7,6 +7,7 @@ import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "thm_chapter")
@@ -31,23 +32,22 @@ public class ChapterModel {
     @Column(name = "description_en")
     private String descriptionEn;
 
-    //informacja o tym czy rozdzial zostal zaakceptowany podczas formulowania pracy
     @Column(name = "approval_status")
     private String approvalStatus;
 
     @OneToOne
-    @JoinColumn(name = "owner_user_data_id", referencedColumnName = "id", nullable = false, unique = true)
+    @JoinColumn(name = "owner_user_data_id", referencedColumnName = "id", nullable = false)
     private UserDataModel owner;
 
     @Column(name = "supervisor_comment")
     private String supervisorComment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "thesis_id", referencedColumnName = "id")
+    @JoinColumn(name = "thesis_id", referencedColumnName = "id", nullable = false)
     private ThesisModel thesis;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "chapter", cascade = CascadeType.ALL)
-    private List<ChapterVersionModel> versions = new ArrayList<>();
+    @ManyToMany(mappedBy = "chapters")
+    private List<ChapterVersionModel> versions;
 
     public ChapterCoreDto toDto() {
         return ChapterCoreDto.builder()
@@ -57,7 +57,7 @@ public class ChapterModel {
                 .description(this.description)
                 .descriptionEn(this.descriptionEn)
                 .approvalStatus(this.approvalStatus)
-                .userDataId(this.owner.getId()) // later change name in dto and on frontend
+                .ownerId(this.owner.getId()) // later change name in dto and on frontend
                 .supervisorComment(this.supervisorComment)
                 .thesisId(this.thesis != null ? this.thesis.getId() : null)
                 .build();

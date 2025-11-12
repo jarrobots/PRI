@@ -16,6 +16,7 @@ import java.util.List;
 public class UserDataController {
     @Autowired
     private UserDataService userDataService;
+
     @GetMapping("/users")
     public List<UserDataDto> getStudents(
     ) {

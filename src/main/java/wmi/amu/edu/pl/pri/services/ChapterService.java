@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import wmi.amu.edu.pl.pri.dto.ChapterCoreDto;
 import wmi.amu.edu.pl.pri.models.ChapterModel;
-import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 import wmi.amu.edu.pl.pri.repositories.ChapterRepo;
+
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +16,7 @@ public class ChapterService {
 
     @Autowired
     private ChapterRepo chapterRepo;
+
 
     public ChapterCoreDto findById(Long id) {
         return getById(id).toDto();
@@ -47,11 +48,14 @@ public class ChapterService {
 
     }
 
+    public ChapterModel findChapterByOwnerId(Long owner){
+        return chapterRepo.findByOwnerId(owner);
+    }
+
+
     private boolean isApproved(ChapterModel chapter) {
         return chapter.getApprovalStatus().equals("APPROVED");
     }
 
-    public ChapterModel findChapterByOwnerUserData(UserDataModel ownerUserData) {
-        return chapterRepo.findByOwnerId(ownerUserData.getId());
-    }
+
 }

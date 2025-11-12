@@ -11,9 +11,15 @@ import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.models.ThesisModel;
 import wmi.amu.edu.pl.pri.models.pri.ProjectModel;
 import wmi.amu.edu.pl.pri.models.pri.StudentModel;
+import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 import wmi.amu.edu.pl.pri.repositories.ChapterRepo;
 import wmi.amu.edu.pl.pri.repositories.ProjectRepo;
 import wmi.amu.edu.pl.pri.repositories.ThesisRepo;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @Component

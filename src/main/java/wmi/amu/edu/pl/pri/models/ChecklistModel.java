@@ -22,11 +22,13 @@ public class ChecklistModel {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    private boolean isPassed;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "version", referencedColumnName = "id")
     private ChapterVersionModel versionModel;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chapter", referencedColumnName = "id")
+    private ChapterModel chapterModel;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "checklist", referencedColumnName = "id")
@@ -36,11 +38,15 @@ public class ChecklistModel {
     private Date date;
 
     public ChecklistDto toChecklistDto(){
+
+        Long versionId = (versionModel != null) ? versionModel.getId() : null;
+        Long chapterId = (chapterModel != null) ? chapterModel.getId() : null;
+
         return ChecklistDto.builder()
-                .versionId(versionModel.getId())
+                .versionId(versionId)
+                .chapterId(chapterId)
                 .uploadTime(date)
                 .models(checklistQuestionModels)
-                .isPassed(isPassed)
                 .build();
     }
 }

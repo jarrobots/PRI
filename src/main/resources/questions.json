@@ -1,14 +1,11 @@
 [
   {
-    "question": "Student nadał tytuł pracy",
-    "critical": true
+    "question": "Student nadał tytuł pracy"
   },
   {
-    "question": "Student napisał treść pracy",
-    "critical": false
+    "question": "Student napisał treść pracy"
   },
   {
-    "question": "Student napisał podsumowanie pracy",
-    "critical": true
+    "question": "Student napisał podsumowanie pracy"
   }
 ]

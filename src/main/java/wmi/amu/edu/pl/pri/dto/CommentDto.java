@@ -16,5 +16,6 @@ public class CommentDto {
     private Long uploaderId;
     private String fName;
     private String lName;
+    private Long chapterId;
     private Long versionId;
 }
