@@ -41,6 +41,7 @@ public class ChapterController {
     @GetMapping("/view/version/byOwner/{id}")
     public ResponseEntity<ChapterVersionsDto> getVersionsByStudentId(
             @PathVariable Long id) {
+        System.out.println("Dostano zapytanie.");
         Long chapterId = chapterService.findChapterByOwnerId(id).getId();
         return ResponseEntity.ok().body(versionService.getChapterVersionByChapterId(chapterId));
     }
@@ -79,7 +80,6 @@ public class ChapterController {
     public ResponseEntity<Long> addVersion(@RequestParam("chapterIds") List<Long> chapterIdList, @RequestBody AddVersionWithLinkCommandDto commandDto) {
 
         if(chapterIdList.isEmpty()) return ResponseEntity.badRequest().build();
-        ArrayList<ChapterModel> chapters = new ArrayList<>();
 
         return ResponseEntity.ok().body(versionService.saveVersion(chapterIdList, commandDto));
     }

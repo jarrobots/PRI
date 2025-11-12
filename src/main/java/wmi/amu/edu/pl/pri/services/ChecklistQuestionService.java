@@ -16,4 +16,7 @@ public class ChecklistQuestionService {
     public void saveQuestion(ChecklistQuestionModel model){
         repo.save(model);
     }
+    public ChecklistQuestionModel  getQuestion(ChecklistQuestionModel model){
+        return repo.findById(model.getId()).get();
+    }
 }

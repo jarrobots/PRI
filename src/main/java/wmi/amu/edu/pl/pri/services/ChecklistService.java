@@ -55,7 +55,9 @@ public class ChecklistService {
             ChecklistModel model = optional.get();
             model.setDate(new Date());
             model.setChecklistQuestionModels(dto.getModels());
-            for (ChecklistQuestionModel question : model.getChecklistQuestionModels()) {
+            for (ChecklistQuestionModel qModel : model.getChecklistQuestionModels()) {
+                ChecklistQuestionModel question = questionService.getQuestion(qModel);
+                question.setPassed(qModel.isPassed());
                 questionService.saveQuestion(question);
             }
             repo.save(model);
@@ -78,10 +80,12 @@ public class ChecklistService {
                     mapper.getTypeFactory().constructCollectionType(List.class, JSONChecklistObj.class)
             );
 
+
             ChecklistModel model = new ChecklistModel();
             List<ChecklistQuestionModel> list = new ArrayList<>();
             for (JSONChecklistObj o : questions) {
                 ChecklistQuestionModel question = new ChecklistQuestionModel();
+                System.out.println(o.getQuestion());
                 question.setQuestion(o.getQuestion());
                 question.setPassed(false);
                 list.add(question);
