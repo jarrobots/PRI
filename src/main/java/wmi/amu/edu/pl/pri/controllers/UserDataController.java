@@ -2,6 +2,7 @@ package wmi.amu.edu.pl.pri.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,8 +19,7 @@ public class UserDataController {
     private UserDataService userDataService;
 
     @GetMapping("/users")
-    public List<UserDataDto> getStudents(
-    ) {
-        return userDataService.getUsers();
+    public ResponseEntity<List<UserDataDto>> getStudents() {
+        return ResponseEntity.ok().body(userDataService.getUsers());
     }
 }

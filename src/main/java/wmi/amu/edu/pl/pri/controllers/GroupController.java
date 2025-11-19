@@ -18,25 +18,20 @@ public class GroupController {
     private final GroupService groupService;
 
     @GetMapping("/view/group")
-    public GroupDto getGroupByStudentId(
-            @RequestParam(value="studentId") Long studentId
-    ){
-
-        return groupService.getGroupById(studentId);
+    public ResponseEntity<GroupDto> getGroupByStudentId(
+            @RequestParam(value="studentId") Long studentId){
+        return ResponseEntity.ok().body(groupService.getGroupById(studentId));
     }
 
     @GetMapping("/view/groups")
-    public GroupsDto getGroups(
-            @RequestParam(value="id") Long supervisorId
-    ){
-        return groupService.getGetGroupsBySupervisorId(supervisorId);
+    public ResponseEntity<GroupsDto> getGroups(
+            @RequestParam(value="id") Long supervisorId){
+        return ResponseEntity.ok().body(groupService.getGetGroupsBySupervisorId(supervisorId));
     }
 
     @GetMapping("/view/groups/all")
-    public GroupsDto getAll(
-    ){
-
-        return groupService.findAll();
+    public ResponseEntity<GroupsDto> getAll(){
+        return ResponseEntity.ok().body(groupService.findAll());
     }
 
     @PostMapping("/reloadGroups")

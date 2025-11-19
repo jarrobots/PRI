@@ -7,6 +7,7 @@ import wmi.amu.edu.pl.pri.dto.ThesisCoreDto;
 import wmi.amu.edu.pl.pri.models.pri.ProjectModel;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,9 @@ public class ThesisModel {
 
     @Column(name = "supervisor_comment", columnDefinition = "text")
     private String supervisorComment;
+
+    @Column(name = "defence_date")
+    private Date defenceDate;
 
     @OneToMany(mappedBy = "thesis", cascade = CascadeType.ALL)
     private List<ChapterModel> chapters = new ArrayList<>();

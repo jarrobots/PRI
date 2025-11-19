@@ -18,14 +18,6 @@ public class TimelineMapper {
     private final String activeProfile;
     private final List<ChecklistTally> checklistTallies;
 
-    public TimelineMapper(ThesisModel thesis, String currentPort, String activeProfile) {
-        this.thesisModel = thesis;
-        this.currentPort = currentPort;
-        this.checklistTallies = new ArrayList<>();
-        this.activeProfile = activeProfile;
-
-    }
-
     public TimelineMapper(ThesisModel thesis, String currentPort, String activeProfile, List<ChecklistTally> tallies) {
         this.thesisModel = thesis;
         this.currentPort = currentPort;

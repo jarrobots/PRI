@@ -22,16 +22,15 @@ public class ChecklistService {
     private final ChecklistRepo repo;
     private final VersionService versionService;
     private final ChecklistQuestionService questionService;
+    private final UserChecklistTemplateService templateService;
+    private final ChapterService chapterService;
+    private final UserDataService userDataService;
 
-    public ChecklistDto getChecklistByVersionId(Long id) {
+    public ChecklistDto getChecklistByVersionId(Long id, Long userId) {
         Optional<ChecklistModel> optional = repo.findByVersionId(id);
         if (optional.isEmpty()) {
-            try {
-                ChecklistModel model = generateChecklistFromJson(id);
-                return model.toChecklistDto();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            var model = generateChecklistFromDB(userId);
+            return model.toChecklistDto();
         }
         return optional.get().toChecklistDto();
     }
@@ -39,12 +38,10 @@ public class ChecklistService {
     public ChecklistDto getChecklistByChapterId(Long id) {
         Optional<ChecklistModel> optional = repo.findByChapterId(id);
         if (optional.isEmpty()) {
-            try {
-                ChecklistModel model = generateChecklistFromJson(id);
-                return model.toChecklistDto();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Long ownerId = chapterService.getById(id).getOwner().getId();
+            var model = generateChecklistFromDB(ownerId);
+            return model.toChecklistDto();
+
         }
         return optional.get().toChecklistDto();
     }
@@ -69,40 +66,25 @@ public class ChecklistService {
 
     }
 
-    private ChecklistModel generateChecklistFromJson(Long id) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream("questions.json")) {
-            if (is == null) {
-                throw new FileNotFoundException("questions.json not found in resources!");
-            }
-            List<JSONChecklistObj> questions = mapper.readValue(
-                    is,
-                    mapper.getTypeFactory().constructCollectionType(List.class, JSONChecklistObj.class)
-            );
-
-
-            ChecklistModel model = new ChecklistModel();
-            List<ChecklistQuestionModel> list = new ArrayList<>();
-            for (JSONChecklistObj o : questions) {
-                ChecklistQuestionModel question = new ChecklistQuestionModel();
-                System.out.println(o.getQuestion());
-                question.setQuestion(o.getQuestion());
-                question.setPassed(false);
-                list.add(question);
-                questionService.saveQuestion(question);
-            }
-            model.setChecklistQuestionModels(list);
-            ChapterVersionModel version = versionService.getChapterVersionById(id);
-            if (version == null) {
-                throw new IllegalArgumentException("ChapterVersion not found for id: " + id);
-            }
-            model.setVersionModel(version);
-            model.setDate(new Date());
-            repo.save(model);
-
-            return model;
+    private ChecklistModel generateChecklistFromDB(Long userID){
+        var list = templateService.getChecklistTemplates(userID);
+        var questions = new ArrayList<ChecklistQuestionModel>();
+        for(String item : list){
+            ChecklistQuestionModel question = new ChecklistQuestionModel();
+            question.setQuestion(item);
+            question.setPassed(false);
+            questionService.saveQuestion(question);
+            questions.add(question);
         }
+        var model  = new ChecklistModel();
+        model.setChecklistQuestionModels(questions);
 
+        Long id = chapterService.findChapterByOwnerId(userID).getId();
+        model.setVersionModel(versionService.getChapterVersionById(id));
+        model.setDate(new Date());
+        repo.save(model);
+
+        return model;
     }
 
     private int getPassed(List<ChecklistQuestionModel> models){
@@ -136,4 +118,38 @@ public class ChecklistService {
 
         return list;
     }
+/*
+    private ChecklistModel generateChecklistFromJson(Long id) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream("questions.json")) {
+            if (is == null) {
+                throw new FileNotFoundException("questions.json not found in resources!");
+            }
+            List<JSONChecklistObj> questions = mapper.readValue(
+                    is,
+                    mapper.getTypeFactory().constructCollectionType(List.class, JSONChecklistObj.class)
+            );
+            ChecklistModel model = new ChecklistModel();
+            List<ChecklistQuestionModel> list = new ArrayList<>();
+            for (JSONChecklistObj o : questions) {
+                ChecklistQuestionModel question = new ChecklistQuestionModel();
+                System.out.println(o.getQuestion());
+                question.setQuestion(o.getQuestion());
+                question.setPassed(false);
+                list.add(question);
+                questionService.saveQuestion(question);
+            }
+            model.setChecklistQuestionModels(list);
+            ChapterVersionModel version = versionService.getChapterVersionById(id);
+            if (version == null) {
+                throw new IllegalArgumentException("ChapterVersion not found for id: " + id);
+            }
+            model.setVersionModel(version);
+            model.setDate(new Date());
+            repo.save(model);
+
+            return model;
+        }
+    }
+ */
 }
