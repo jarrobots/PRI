@@ -11,5 +11,4 @@ import java.util.List;
 @Data
 public class GroupsDto {
     private List<GroupDto> dtos;
-    //Test WAŻNE!!!
 }
