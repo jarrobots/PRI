@@ -36,6 +36,7 @@ public class TimelineMapper {
         if (thesisModel.getProject().getSupervisor() != null){
             supervisorUserDataId = thesisModel.getProject().getSupervisor().getUserData().getId();
             supervisorId = thesisModel.getProject().getSupervisor().getId();
+
         }
 
         List<TimelineViewChapterDto> chapters = thesisModel.getChapters()
