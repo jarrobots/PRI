@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import wmi.amu.edu.pl.pri.dto.*;
+import wmi.amu.edu.pl.pri.dto.TimelineDefenceDateDto;
 import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.FileContentModel;
@@ -142,12 +143,12 @@ public class ChapterController {
     }
 
     @GetMapping("chapter/getDefence/{chapterId}")
-    public ResponseEntity<DefenseDateDto> getDefenceDate(@PathVariable Long chapterId) {
+    public ResponseEntity<TimelineDefenceDateDto> getDefenceDate(@PathVariable Long chapterId) {
         return ResponseEntity.ok(defenceDateService.getDefenceDateByChapter(chapterId));
     }
 
     @PostMapping("chapter/addDefence")
-    public ResponseEntity<Long> addDefenceDate(@RequestBody DefenseDateDto dto) {
+    public ResponseEntity<Long> addDefenceDate(@RequestBody TimelineDefenceDateDto dto) {
         return ResponseEntity.ok(defenceDateService.saveDefenceDate(dto));
     }
 

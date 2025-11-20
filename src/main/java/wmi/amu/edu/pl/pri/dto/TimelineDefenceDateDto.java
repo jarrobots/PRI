@@ -5,15 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-public class DefenseDateDto {
-    private Long id;
+public class TimelineDefenceDateDto {
     private Long chapterId;
     private Date date;
     private String comment;

@@ -2,7 +2,7 @@ package wmi.amu.edu.pl.pri.models;
 
 import jakarta.persistence.*;
 import lombok.*;
-import wmi.amu.edu.pl.pri.dto.DefenseDateDto;
+import wmi.amu.edu.pl.pri.dto.TimelineDefenceDateDto;
 
 import java.util.Date;
 
@@ -30,9 +30,8 @@ public class DefenceDateModel {
     @Column(name = "comment", columnDefinition = "text")
     private String comment;
 
-    public DefenseDateDto toDto() {
-        return DefenseDateDto.builder()
-                .id(this.getId())
+    public TimelineDefenceDateDto toDto() {
+        return TimelineDefenceDateDto.builder()
                 .chapterId(this.getChapter().getId())
                 .date(this.getDate())
                 .comment(this.getComment())
