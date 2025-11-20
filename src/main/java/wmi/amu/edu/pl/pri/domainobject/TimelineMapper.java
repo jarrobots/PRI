@@ -26,7 +26,6 @@ public class TimelineMapper {
         this.currentPort = currentPort;
         this.checklistTallies = List.copyOf(tallies);
         this.activeProfile = activeProfile;
-
     }
 
     public TimelineViewDto toTimeLineViewDto() {
