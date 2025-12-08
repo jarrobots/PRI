@@ -10,17 +10,18 @@ import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 @Entity
 @Getter
 @Setter
-@Table(name = "thm_user_checklist_templates")
-public class UserChecklistTemplateModel {
+@Table(name = "thm_chapter_checklist_templates")
+public class ChapterChecklistTemplateModel {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private UserDataModel user;
+    @JoinColumn(name = "chapter_id", referencedColumnName = "id", nullable = false)
+    private ChapterModel chapter;
 
     @Column(name = "question")
     private String question;
 
 }
+

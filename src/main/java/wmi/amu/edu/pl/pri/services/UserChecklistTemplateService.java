@@ -26,7 +26,7 @@ public class UserChecklistTemplateService {
     public void addChecklistTemplates(Long userId, List<String> questions){
         var user = userDataService.getUserData(userId);
         for(String item : questions){
-            var model  = new UserChecklistTemplateModel();
+            UserChecklistTemplateModel model  = new UserChecklistTemplateModel();
             model.setQuestion(item);
             model.setUser(user);
             repo.save(model);
