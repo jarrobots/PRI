@@ -18,13 +18,13 @@ services:
     networks:
       - my-network
 
-watchtower:
-  image: containrrr/watchtower:latest
-  container_name: watchtower
-  volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-  restart: always
-  command: --schedule "0 0 4 * * *" --cleanup prib prif  # Sprawdza co 4 rano, czyści stare obrazy, tylko te 2 kontenery
+ watchtower:
+   image: containrrr/watchtower:latest
+   container_name: watchtower
+   volumes:
+     - /var/run/docker.sock:/var/run/docker.sock
+   restart: always
+   command: --schedule "0 0 4 * * *" --cleanup prib prif  # Sprawdza co 4 rano, czyści stare obrazy, tylko te 2 kontenery
 
 networks:
   my-network:
