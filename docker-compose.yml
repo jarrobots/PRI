@@ -4,11 +4,14 @@ services:
     image: ghcr.io/jarrobots/pri_backup:latest
     container_name: prib
     ports:
-      - "8082:8082"
+      - "${PRIB_PORT:-8082}:8082"
     networks:
       - my-network
+    env_file:
+      - config.env
     environment:
       - SPRING_PROFILES_ACTIVE=dev
+
 
   prif:
     image: ghcr.io/jarrobots/pri_frontend:latest
