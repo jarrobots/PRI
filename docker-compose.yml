@@ -1,4 +1,5 @@
 version: "3.8"
+
 services:
   prib:
     image: ghcr.io/jarrobots/pri_backup:latest
@@ -11,24 +12,33 @@ services:
       - config.env
     environment:
       - SPRING_PROFILES_ACTIVE=dev
-
+    restart: unless-stopped
 
   prif:
     image: ghcr.io/jarrobots/pri_frontend:latest
     container_name: prif
     ports:
-      - "3000:3000"
+      - "${PRIF_PORT:-3000}:3000"
     networks:
       - my-network
+    env_file:
+      - config.env
+    depends_on:
+      prib:
+        condition: service_healthy
+    restart: unless-stopped
 
- watchtower:
-   image: containrrr/watchtower:latest
-   container_name: watchtower
-   volumes:
-     - /var/run/docker.sock:/var/run/docker.sock
-   restart: always
-   command: --schedule "0 0 4 * * *" --cleanup prib prif  # Sprawdza co 4 rano, czyści stare obrazy, tylko te 2 kontenery
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    env_file:
+      - config.env
+    restart: always
+    command: --schedule "0 0 4 * * *" --cleanup prib prif
 
 networks:
   my-network:
     driver: bridge
+    name: pri-network
