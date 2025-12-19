@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import wmi.amu.edu.pl.pri.dto.ChecklistDto;
+import wmi.amu.edu.pl.pri.services.ChapterChecklistTemplateService;
 import wmi.amu.edu.pl.pri.services.ChecklistService;
 import wmi.amu.edu.pl.pri.services.UserChecklistTemplateService;
 
@@ -14,11 +15,9 @@ import java.util.List;
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class ChecklistController {
-    @Autowired
     private ChecklistService checklistService;
-
-    @Autowired
     private UserChecklistTemplateService userChecklistTemplateService;
+    private ChapterChecklistTemplateService chapterChecklistTemplateService;
 
     @PostMapping(path = "/post/note")
     public ResponseEntity<Boolean> saveQuestions(
@@ -40,10 +39,15 @@ public class ChecklistController {
         return ResponseEntity.ok().body(checklistService.getChecklistByChapterId(id));
     }
 
-    @PostMapping(path = "/post/checklistTemplate/{userId}")
+    @PostMapping(path = "/post/checklistTemplate/user/{userId}")
     public ResponseEntity<Boolean> saveChecklistTemplate(@PathVariable Long userId, @RequestBody List<String> list){
       userChecklistTemplateService.addChecklistTemplates(userId, list);
       return ResponseEntity.ok(true);
+    }
+    @PostMapping(path = "/post/checklistTemplate/chapter/{chapterId}")
+    public ResponseEntity<Boolean> saveChapterChecklistTemplate(@PathVariable Long chapterId, @RequestBody List<String> list){
+        chapterChecklistTemplateService.addChecklistTemplates(chapterId, list);
+        return ResponseEntity.ok(true);
     }
 
 
