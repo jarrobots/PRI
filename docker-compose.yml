@@ -23,13 +23,15 @@ services:
       - config.env 
     restart: unless-stopped
 
-  watchtower:
+   watchtower:
     image: containrrr/watchtower:latest
     container_name: watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     env_file:
       - config.env
+    environment:  
+      - DOCKER_API_VERSION=1.44 
     restart: always
     command: --schedule "0 0 4 * * *" --cleanup prib prif
 
