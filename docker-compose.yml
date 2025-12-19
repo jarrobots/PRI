@@ -23,7 +23,7 @@ services:
       - config.env 
     restart: unless-stopped
 
-   watchtower:
+  watchtower:
     image: containrrr/watchtower:latest
     container_name: watchtower
     volumes:
