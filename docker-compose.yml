@@ -11,12 +11,6 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=dev
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8082/actuator/health || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
 
   prif:
     image: ghcr.io/b0bpri/pri_front:latest
@@ -26,10 +20,7 @@ services:
     networks:
       - my-network
     env_file:
-      - config.env
-    depends_on:
-      prib:
-        condition: service_healthy  # Teraz możesz użyć healthy
+      - config.env 
     restart: unless-stopped
 
   watchtower:
