@@ -6,8 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import wmi.amu.edu.pl.pri.dto.ChecklistDto;
 import wmi.amu.edu.pl.pri.services.ChecklistService;
+import wmi.amu.edu.pl.pri.services.UserChecklistTemplateService;
 
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -16,22 +17,35 @@ public class ChecklistController {
     @Autowired
     private ChecklistService checklistService;
 
-    @RequestMapping(method=POST, path = "/post/note")
-    public Boolean saveQuestions(
+    @Autowired
+    private UserChecklistTemplateService userChecklistTemplateService;
+
+    @PostMapping(path = "/post/note")
+    public ResponseEntity<Boolean> saveQuestions(
             @RequestBody ChecklistDto dto
     ){
         checklistService.setChecklist(dto);
-        return true;
-    }
-    @RequestMapping( path = "/view/version/{id}/note")
-    public ResponseEntity<ChecklistDto> getQuestionsByVersion(@PathVariable Long id)
-    {
-        return ResponseEntity.ok().body(checklistService.getChecklistByVersionId(id));
+        return ResponseEntity.ok(true);
     }
 
-    @RequestMapping( path = "/view/chapter/{id}/note")
+    @GetMapping( path = "/view/version/{id}/note/{userId}")
+    public ResponseEntity<ChecklistDto> getQuestionsByVersion(@PathVariable Long id,  @PathVariable Long userId)
+    {
+        return ResponseEntity.ok().body(checklistService.getChecklistByVersionId(id, userId));
+    }
+
+    @GetMapping( path = "/view/chapter/{id}/note")
     public ResponseEntity<ChecklistDto> getQuestionsByChapter(@PathVariable Long id)
     {
         return ResponseEntity.ok().body(checklistService.getChecklistByChapterId(id));
     }
+
+    @PostMapping(path = "/post/checklistTemplate/{userId}")
+    public ResponseEntity<Boolean> saveChecklistTemplate(@PathVariable Long userId, @RequestBody List<String> list){
+      userChecklistTemplateService.addChecklistTemplates(userId, list);
+      return ResponseEntity.ok(true);
+    }
+
+
+
 }

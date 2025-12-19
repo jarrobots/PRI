@@ -6,6 +6,7 @@ import wmi.amu.edu.pl.pri.dto.ChapterCoreDto;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,10 +27,10 @@ public class ChapterModel {
     @Column(name = "title_en")
     private String titleEn;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "text")
     private String description;
 
-    @Column(name = "description_en")
+    @Column(name = "description_en", columnDefinition = "text")
     private String descriptionEn;
 
     @Column(name = "approval_status")
@@ -50,6 +51,7 @@ public class ChapterModel {
     private List<ChapterVersionModel> versions;
 
     public ChapterCoreDto toDto() {
+
         return ChapterCoreDto.builder()
                 .id(this.id)
                 .title(this.title)

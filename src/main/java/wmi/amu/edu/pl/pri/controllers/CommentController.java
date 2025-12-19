@@ -26,7 +26,7 @@ public class CommentController {
         return ResponseEntity.ok().body(service.getCommentByChapter(id));
     }
 
-    @RequestMapping(method=POST, path = "/post/comment")
+    @PostMapping( path = "/post/comment")
     public ResponseEntity<Long> addComment(@RequestBody CommentDto dto){
         return ResponseEntity.ok().body(service.addComment(dto));
     }

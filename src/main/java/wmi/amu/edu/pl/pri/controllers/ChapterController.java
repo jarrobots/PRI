@@ -8,21 +8,17 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import wmi.amu.edu.pl.pri.dto.AddVersionWithLinkCommandDto;
-import wmi.amu.edu.pl.pri.dto.ChapterCoreDto;
-import wmi.amu.edu.pl.pri.dto.ChapterVersionsDto;
+import wmi.amu.edu.pl.pri.dto.*;
+import wmi.amu.edu.pl.pri.dto.TimelineDefenceDateDto;
 import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.FileContentModel;
+import wmi.amu.edu.pl.pri.models.FinalGradeModel;
 import wmi.amu.edu.pl.pri.services.*;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -37,6 +33,10 @@ public class ChapterController {
     private final ChapterService chapterService;
     @Autowired
     private final ThesisService thesisService;
+    @Autowired
+    private final FinalGradeService finalGradeService;
+    @Autowired
+    private DefenceDateService defenceDateService;
 
     @GetMapping("/view/version/byOwner/{id}")
     public ResponseEntity<ChapterVersionsDto> getVersionsByStudentId(
@@ -46,7 +46,7 @@ public class ChapterController {
         return ResponseEntity.ok().body(versionService.getChapterVersionByChapterId(chapterId));
     }
 
-    @RequestMapping(method = POST, path = "/file")
+    @PostMapping(path = "/file")
     public ResponseEntity<Long> create(@RequestParam("ownerId") List<Long> ownerList, @RequestParam("uploaderId") Long uploaderId, @RequestBody MultipartFile file
     ) {
         List<ChapterModel> userDataModelList = ownerList.stream()
@@ -63,7 +63,6 @@ public class ChapterController {
             e.printStackTrace();
         }
         if (id != -1) {
-
             chapter.setName(file.getOriginalFilename());
             chapter.setFileId(id);
             chapter.setUploader(userDataService.getUserData(uploaderId));
@@ -76,16 +75,15 @@ public class ChapterController {
         }
     }
 
-    @RequestMapping(method = POST, path = "/chapter/addVersionWithLink")
+    @PostMapping(path = "/chapter/addVersionWithLink")
     public ResponseEntity<Long> addVersion(@RequestParam("chapterIds") List<Long> chapterIdList, @RequestBody AddVersionWithLinkCommandDto commandDto) {
-
         if(chapterIdList.isEmpty()) return ResponseEntity.badRequest().build();
 
         return ResponseEntity.ok().body(versionService.saveVersion(chapterIdList, commandDto));
     }
 
 
-    @RequestMapping(method = GET, path = "/download/{id}")
+    @GetMapping( path = "/download/{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable Long id) {
         Optional<FileContentModel> fileOptional = fileService.getFileById(id);
 
@@ -122,14 +120,37 @@ public class ChapterController {
 
     @GetMapping("/chapter/{projectId}/all")
     public ResponseEntity<List<ChapterCoreDto>> getChaptersByProjectId(@PathVariable Long projectId) {
-
         var chapters = thesisService.findByProjectId(projectId).getChapters();
 
-        if (chapters == null)
-            return ResponseEntity.notFound().build();
-        else
-            return ResponseEntity.ok(chapters);
-
+        if (chapters == null) return ResponseEntity.notFound().build();
+        else return ResponseEntity.ok(chapters);
     }
+
+    @GetMapping("/chapter/getGrade/{chapterId}")
+    public ResponseEntity<FinalGradeDto> getFinalGrade(@PathVariable Long chapterId) {
+        var dto = finalGradeService.getModelByChapterId(chapterId).toDto();
+        return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping("/chapter/addGrade")
+     public ResponseEntity<Long> addFinalGrade(@RequestBody FinalGradeDto dto) {
+        var model = new FinalGradeModel();
+        ChapterModel chapter = chapterService.getById(dto.getChapterId());
+        model.setChapter(chapter);
+        model.setDescription(dto.getText());
+        Long output = finalGradeService.setFinalGrade(model);
+        return ResponseEntity.ok(output);
+    }
+
+    @GetMapping("chapter/getDefence/{chapterId}")
+    public ResponseEntity<TimelineDefenceDateDto> getDefenceDate(@PathVariable Long chapterId) {
+        return ResponseEntity.ok(defenceDateService.getDefenceDateByChapter(chapterId));
+    }
+
+    @PostMapping("chapter/addDefence")
+    public ResponseEntity<Long> addDefenceDate(@RequestBody TimelineDefenceDateDto dto) {
+        return ResponseEntity.ok(defenceDateService.saveDefenceDate(dto));
+    }
+
 }
 

@@ -2,6 +2,7 @@ package wmi.amu.edu.pl.pri.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,12 +21,11 @@ public class StudentController {
     private final StudentService studentService;
 
     @GetMapping("/students")
-    public List<StudentModelDto> getStudents(
-    ) {
-        return studentService.findAllStudents();
+    public ResponseEntity<List<StudentModelDto>> getStudents() {
+        return ResponseEntity.ok().body(studentService.findAllStudents());
     }
     @GetMapping("/view/groups/students")
-    public List<StudentModelDto> getStudentsByGroup(@RequestParam(value="id") Long projectId){
-        return studentService.findStudentsByProjectId(projectId);
+    public ResponseEntity<List<StudentModelDto>> getStudentsByGroup(@RequestParam(value="id") Long projectId){
+        return ResponseEntity.ok().body(studentService.findStudentsByProjectId(projectId));
     }
 }

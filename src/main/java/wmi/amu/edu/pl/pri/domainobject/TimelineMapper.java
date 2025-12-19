@@ -1,13 +1,15 @@
 package wmi.amu.edu.pl.pri.domainobject;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import wmi.amu.edu.pl.pri.dto.TimelineChecklistTallyDto;
+import wmi.amu.edu.pl.pri.dto.TimelineDefenceDateDto;
 import wmi.amu.edu.pl.pri.dto.view.timeline.*;
 import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.ThesisModel;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
+import wmi.amu.edu.pl.pri.services.DefenceDateService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,21 +19,13 @@ public class TimelineMapper {
     private final String currentPort;
     private final String activeProfile;
     private final List<ChecklistTally> checklistTallies;
-
-    public TimelineMapper(ThesisModel thesis, String currentPort, String activeProfile) {
-        this.thesisModel = thesis;
-        this.currentPort = currentPort;
-        this.checklistTallies = new ArrayList<>();
-        this.activeProfile = activeProfile;
-
-    }
+    private DefenceDateService defenceDateService;
 
     public TimelineMapper(ThesisModel thesis, String currentPort, String activeProfile, List<ChecklistTally> tallies) {
         this.thesisModel = thesis;
         this.currentPort = currentPort;
         this.checklistTallies = List.copyOf(tallies);
         this.activeProfile = activeProfile;
-
     }
 
     public TimelineViewDto toTimeLineViewDto() {
@@ -41,6 +35,7 @@ public class TimelineMapper {
         if (thesisModel.getProject().getSupervisor() != null){
             supervisorUserDataId = thesisModel.getProject().getSupervisor().getUserData().getId();
             supervisorId = thesisModel.getProject().getSupervisor().getId();
+
         }
 
         List<TimelineViewChapterDto> chapters = thesisModel.getChapters()
@@ -63,9 +58,12 @@ public class TimelineMapper {
                 .map(this::toTimelineViewVersionDto)
                 .collect(Collectors.toList());
 
+        var date = defenceDateService.getDefenceDateByChapter(chapter.getId());
+
         return TimelineViewChapterDto.builder()
                 .name(chapter.getTitle())
                 .author(author)
+                .defenseDate(date)
                 .versions(versions)
                 .build();
     }
