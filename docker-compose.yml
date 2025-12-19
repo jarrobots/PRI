@@ -15,7 +15,7 @@ services:
     restart: unless-stopped
 
   prif:
-    image: ghcr.io/jarrobots/pri_frontend:latest
+    image: ghcr.io/b0bpri/pri_front:latest
     container_name: prif
     ports:
       - "${PRIF_PORT:-3000}:3000"
