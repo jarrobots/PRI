@@ -1,0 +1,41 @@
+services:
+  prib:
+    image: ghcr.io/jarrobots/pri_backup:latest
+    container_name: prib
+    ports:
+      - "${PRIB_PORT:-8082}:8082"
+    networks:
+      - my-network
+    env_file:
+      - config.env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    restart: unless-stopped
+
+  prif:
+    image: ghcr.io/b0bpri/pri_front:latest
+    container_name: prif
+    ports:
+      - "${PRIF_PORT:-3000}:3000"
+    networks:
+      - my-network
+    env_file:
+      - config.env
+    restart: unless-stopped
+
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    env_file:
+      - config.env
+    environment:
+      - DOCKER_API_VERSION=1.44
+    restart: always
+    command: --schedule "0 0 4 * * *" --cleanup prib prif
+
+networks:
+  my-network:
+    driver: bridge
+    name: pri-network
