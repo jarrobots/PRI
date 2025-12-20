@@ -45,7 +45,7 @@ services:
     environment:
       - DOCKER_API_VERSION=1.44
     restart: always
-    command: --schedule "0 0 4 * * *" --cleanup prib prif
+    command: --interval 3600 --cleanup prib prif
 
 networks:
   pri-network:
