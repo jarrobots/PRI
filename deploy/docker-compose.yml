@@ -1,6 +1,6 @@
 services:
   prib:
-    image: ghcr.io/jarrobots/pri_backup:latest
+    image: ghcr.io/b0bpri/pri_backend:latest
     container_name: prib
     ports:
       - "${PRIB_PORT:-8082}:8082"

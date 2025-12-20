@@ -52,5 +52,5 @@ jobs:
           file: Dockerfile
           push: true
           tags: |
-            ghcr.io/jarrobots/pri_backup:latest
-            ghcr.io/jarrobots/pri_backup:${{ github.sha }}
+            ghcr.io/b0bpri/pri_backend:latest
+            ghcr.io/b0bpri/pri_backend:${{ github.sha }}
