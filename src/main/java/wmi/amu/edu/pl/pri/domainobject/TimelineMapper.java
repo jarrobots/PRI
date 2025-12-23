@@ -10,6 +10,7 @@ import wmi.amu.edu.pl.pri.models.ThesisModel;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 import wmi.amu.edu.pl.pri.services.DefenceDateService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,7 +59,12 @@ public class TimelineMapper {
                 .map(this::toTimelineViewVersionDto)
                 .collect(Collectors.toList());
 
-        var date = defenceDateService.getDefenceDateByChapter(chapter.getId());
+        TimelineDefenceDateDto date;
+        try {
+            date = defenceDateService.getDefenceDateByChapter(chapter.getId());
+        } catch (NullPointerException e){
+            date = null;
+        }
 
         return TimelineViewChapterDto.builder()
                 .name(chapter.getTitle())
