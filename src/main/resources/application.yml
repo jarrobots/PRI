@@ -55,3 +55,9 @@ springdoc:
     url: /v3/api-docs
 thesis-module:
   generate-theses-and-chapters-on-startup: false
+security:
+  jwt:
+    enabled: false
+    secret: 1wqzxgYaZhpyEfRZIRdwSNN4RCpfBwjfpSSpOhc46Ts
+    header: Authorization
+    prefix: "Bearer "
