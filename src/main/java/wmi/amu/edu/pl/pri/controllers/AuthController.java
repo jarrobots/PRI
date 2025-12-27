@@ -8,9 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import wmi.amu.edu.pl.pri.security.JwtTokenProvider;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -39,12 +37,12 @@ public class AuthController {
 
     @GetMapping("/auth/token")
     public String getToken(
-            @RequestParam String username,
-            @RequestParam String roles
+            @RequestParam String username
+//            @RequestParam String roles
     ) {
-        List<String> roleList = Arrays.asList(roles.split(","));
+//        List<String> roleList = Arrays.asList(roles.split(","));
         long validityMillis = 24 * 60 * 60 * 1000; // 24h
-        return jwtTokenProvider.createToken(username, roleList, validityMillis);
+        return jwtTokenProvider.createToken(username, null, validityMillis);
     }
 
 
