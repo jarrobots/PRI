@@ -59,3 +59,6 @@ thesis-module:
 security:
   jwt:
     enabled: true
+pri:
+  ldap:
+    enabled: true

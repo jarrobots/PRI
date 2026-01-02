@@ -71,3 +71,4 @@ security:
 pri:
     ldap:
         domain: labs.wmi.amu.edu.pl
+        enabled: false

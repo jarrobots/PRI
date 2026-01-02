@@ -1,9 +1,12 @@
 package wmi.amu.edu.pl.pri.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,7 +18,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import java.util.Arrays;
 
 @Configuration
@@ -37,17 +39,9 @@ public class SecurityConfig {
         this.entryPoint = new JwtAuthenticationEntryPoint();
     }
 
-    // Provide AD LDAP provider as a bean (LDAP is required for this module)
-    @Bean
-    public ActiveDirectoryLdapAuthenticationProvider ldapAuthenticationProvider(
-            @Value("${pri.ldap.domain}") String domain,
-            @Value("${spring.ldap.urls}") String url,
-            @Value("${spring.ldap.base}") String base
-    ) {
-        ActiveDirectoryLdapAuthenticationProvider provider = new ActiveDirectoryLdapAuthenticationProvider(domain, url, base);
-        provider.setConvertSubErrorCodesToExceptions(true);
-        provider.setUseAuthenticationRequestCredentials(true);
-        return provider;
+    @Autowired
+    public void configure(AuthenticationManagerBuilder auth, ActiveDirectoryLdapAuthenticationProvider ldapProvider) throws Exception {
+        auth.authenticationProvider(ldapProvider);
     }
 
     @Bean

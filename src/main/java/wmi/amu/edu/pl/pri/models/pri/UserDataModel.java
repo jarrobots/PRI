@@ -1,7 +1,10 @@
-    package wmi.amu.edu.pl.pri.models.pri;
+package wmi.amu.edu.pl.pri.models.pri;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,6 +35,14 @@ public class UserDataModel {
     private String indexNumber;
 
     private String lastName;
+
+    @ManyToMany
+    @JoinTable(
+        name = "users_roles",
+        joinColumns = @JoinColumn(name = "user_data_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private java.util.Set<RoleModel> roles = new java.util.HashSet<>();
 
     public UserDataDto toUserDataDto(){
         return UserDataDto.builder()
