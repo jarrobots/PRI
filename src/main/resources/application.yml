@@ -36,6 +36,9 @@ spring:
         format_sql=true:
         default_schema: test25
     defer-datasource-initialization: true
+  ldap:
+    urls: ldaps://dc2-2016.labs.wmi.amu.edu.pl:636/
+    base: dc=labs,dc=wmi,dc=amu,dc=edu,dc=pl
 logging:
   level:
     root: INFO
@@ -55,9 +58,16 @@ springdoc:
     url: /v3/api-docs
 thesis-module:
   generate-theses-and-chapters-on-startup: false
+
+# JWT configuration
 security:
   jwt:
-    enabled: false
+    enabled: true
     secret: 1wqzxgYaZhpyEfRZIRdwSNN4RCpfBwjfpSSpOhc46Ts
     header: Authorization
     prefix: "Bearer "
+
+# LDAP properties (domain kept for reference)
+pri:
+    ldap:
+        domain: labs.wmi.amu.edu.pl
