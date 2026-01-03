@@ -53,8 +53,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http,
                                            @Value("${security.jwt.header:Authorization}") String header,
                                            @Value("${security.jwt.prefix:Bearer }") String prefix,
-                                           @Value("${security.jwt.enabled:true}") boolean jwtEnabled) throws Exception {
-        JwtAuthenticationFilter jwtFilter = new JwtAuthenticationFilter(tokenProvider, header, prefix);
+                                           @Value("${security.jwt.enabled:true}") boolean jwtEnabled,
+                                           @Value("${pri.app.jwtCookieName:access_token}") String cookieName) throws Exception {
+        JwtAuthenticationFilter jwtFilter = new JwtAuthenticationFilter(tokenProvider, header, prefix, cookieName);
         http
             .cors().and()
             .csrf().disable()

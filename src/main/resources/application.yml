@@ -62,13 +62,18 @@ thesis-module:
 # JWT configuration
 security:
   jwt:
-    enabled: true
+    enabled: false
     secret: 1wqzxgYaZhpyEfRZIRdwSNN4RCpfBwjfpSSpOhc46Ts
     header: Authorization
     prefix: "Bearer "
 
 # LDAP properties (domain kept for reference)
 pri:
-    ldap:
-        domain: labs.wmi.amu.edu.pl
-        enabled: false
+  ldap:
+    domain: labs.wmi.amu.edu.pl
+    enabled: false
+  # JWT properties compatible with main module
+  app:
+    jwtCookieName: accessToken
+    jwtSecret: 1wqzxgYaZhpyEfRZIRdwSNN4RCpfBwjfpSSpOhc46Ts
+    jwtExpirationMs: 86400000

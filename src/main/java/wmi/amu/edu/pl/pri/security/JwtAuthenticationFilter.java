@@ -14,13 +14,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider tokenProvider;
     private final String headerName;
     private final String prefix;
+    private final String cookieName;
 
     public JwtAuthenticationFilter(JwtTokenProvider tokenProvider,
                                    @Value("${security.jwt.header:Authorization}") String headerName,
-                                   @Value("${security.jwt.prefix:Bearer }") String prefix) {
+                                   @Value("${security.jwt.prefix:Bearer }") String prefix,
+                                   @Value("${security.jwt.cookie:access_token}") String cookieName) {
         this.tokenProvider = tokenProvider;
         this.headerName = headerName;
         this.prefix = prefix;
+        this.cookieName = cookieName;
     }
 
     @Override
@@ -32,12 +35,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (header != null && header.startsWith(prefix)) {
             token = header.substring(prefix.length());
         }
-        // If no Authorization header, try to read token from cookie named 'access_token'
+        // If no Authorization header, try to read token from configured cookie name
         if (token == null) {
             Cookie[] cookies = request.getCookies();
             if (cookies != null) {
                 for (Cookie c : cookies) {
-                    if ("access_token".equals(c.getName())) {
+                    if (cookieName.equals(c.getName())) {
                         token = c.getValue();
                         break;
                     }

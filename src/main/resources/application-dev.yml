@@ -62,3 +62,7 @@ security:
 pri:
   ldap:
     enabled: true
+  app:
+    jwtCookieName: accessToken
+    jwtSecret: 1wqzxgYaZhpyEfRZIRdwSNN4RCpfBwjfpSSpOhc46Ts
+    jwtExpirationMs: 86400000
