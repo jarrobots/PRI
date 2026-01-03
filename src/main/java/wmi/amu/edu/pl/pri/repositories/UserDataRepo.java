@@ -12,4 +12,7 @@ public interface UserDataRepo extends JpaRepository<UserDataModel, Long> {
 
     @Query("SELECT u FROM UserDataModel u WHERE u.id = :id")
     Optional<UserDataModel> getUserDataModelById(@Param("id") Long id);
+
+    // find by index number (indexNumber column mapped in UserDataModel)
+    Optional<UserDataModel> findByIndexNumber(String indexNumber);
 }
