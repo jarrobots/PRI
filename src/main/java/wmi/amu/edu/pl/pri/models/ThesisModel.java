@@ -50,7 +50,11 @@ public class ThesisModel {
     @JoinColumn(name = "project_id", referencedColumnName = "id", nullable = false, unique = true)
     private ProjectModel project;
 
+    @Column(name = "review", columnDefinition = "text")
+    private String review;
+
     public ThesisCompleteDto toCompleteDto(){
+        //review field is omitted because buisness requirement specify it to be not available for students
         return ThesisCompleteDto.builder()
                 .id(this.id)
                 .title(this.title)
