@@ -7,12 +7,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Subselect;
+import org.springframework.stereotype.Controller;
 import wmi.amu.edu.pl.pri.dto.GroupDto;
 import wmi.amu.edu.pl.pri.models.ThesisModel;
 
 import java.util.List;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

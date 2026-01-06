@@ -10,9 +10,10 @@ import org.hibernate.annotations.Subselect;
 import wmi.amu.edu.pl.pri.dto.modeldto.StudentModelDto;
 
 
-@NoArgsConstructor
+
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Immutable

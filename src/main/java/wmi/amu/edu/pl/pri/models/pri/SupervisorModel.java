@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Subselect;
 import wmi.amu.edu.pl.pri.dto.modeldto.SupervisorModelDto;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Immutable
@@ -26,7 +28,7 @@ public class SupervisorModel {
 
     public SupervisorModelDto toSupervisorModelDto(){
         return SupervisorModelDto.builder()
-                .id(userData.getId()) //ktore id ma tu byc?
+                .id(userData.getId())
                 .email(userData.getEmail())
                 .fName(userData.getFirstName())
                 .lName(userData.getLastName())
