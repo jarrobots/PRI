@@ -49,6 +49,16 @@ public class ChecklistController {
         return ResponseEntity.ok(true);
     }
 
+    @GetMapping(path = "/view/checklistTemplates/thesis/")
+    public ResponseEntity<List<String>> getChecklistTemplates(){
+        return ResponseEntity.ok().body(thesisChecklistTemplateService.getChecklistTemplates());
+    }
+
+    @GetMapping(path = "/view/checklistTemplates/chapter/")
+    public ResponseEntity<List<String>> getChapterChecklistTemplates(){
+        return ResponseEntity.ok().body(chapterChecklistTemplateService.getChecklistTemplates());
+    }
+
 
 
 }
