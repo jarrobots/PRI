@@ -17,26 +17,27 @@ public class ChecklistService {
     private final ChecklistRepo repo;
     private final VersionService versionService;
     private final ChecklistQuestionService questionService;
-    private final UserChecklistTemplateService userTemplateService;
+    private final ThesisChecklistTemplateService thesisTemplateService;
     private final ChapterChecklistTemplateService chapterTemplateService;
     private final ChapterService chapterService;
+    private final ThesisService thesisService;
 
-    public ChecklistDto getChecklistByVersionId(Long id, Long userId) {
+    public ChecklistDto getChecklistByVersionId(Long id) {
         Optional<ChecklistModel> optional = repo.findByVersionId(id);
         if (optional.isEmpty()) {
-            var list = userTemplateService.getChecklistTemplates(userId);
-            var model = generateVersionChecklistFromDB(list, userId);
+            var list = chapterTemplateService.getChecklistTemplates();
+            var model = generateVersionChecklistFromDB(list, id);
             return model.toChecklistDto();
         }
         return optional.get().toChecklistDto();
     }
 
-    public ChecklistDto getChecklistByChapterId(Long chapterId) {
-        Optional<ChecklistModel> optional = repo.findByChapterId(chapterId);
+    public ChecklistDto getChecklistByThesisId(Long thesisId) {
+        Optional<ChecklistModel> optional = repo.findByThesisId(thesisId);
         if (optional.isEmpty()) {
-            Long ownerId = chapterService.getById(chapterId).getOwner().getId();
-            var list = chapterTemplateService.getChecklistTemplates(chapterId);
-            var model = generateChapterChecklistFromDB(list, ownerId);
+            Long ownerId = chapterService.getById(thesisId).getOwner().getId();
+            var list = thesisTemplateService.getChecklistTemplates();
+            var model = generateThesisChecklistFromDB(list, ownerId);
             return model.toChecklistDto();
 
         }
@@ -58,24 +59,23 @@ public class ChecklistService {
         }
     }
 
-    private ChecklistModel generateVersionChecklistFromDB(List<String> list, Long userId) {
+    private ChecklistModel generateVersionChecklistFromDB(List<String> list, Long versionId) {
         var questions = generateQuestions(list);
         var model  = new ChecklistModel();
         model.setChecklistQuestionModels(questions);
-
-        Long id = chapterService.findChapterByOwnerId(userId).getId();
-        model.setVersionModel(versionService.getChapterVersionById(id));
+        model.setVersionModel(versionService.getChapterVersionById(versionId));
         model.setDate(new Date());
         repo.save(model);
 
         return model;
     }
 
-    private ChecklistModel generateChapterChecklistFromDB(List<String> list, Long chapterId) {
+    private ChecklistModel generateThesisChecklistFromDB(List<String> list, Long thesisId) {
+        var thesisModel = thesisService.findById(thesisId).get();
         var questions = generateQuestions(list);
         var model  = new ChecklistModel();
         model.setChecklistQuestionModels(questions);
-        model.setChapterModel(chapterService.getById(chapterId));
+        model.setThesisModel(thesisModel);
         model.setDate(new Date());
         repo.save(model);
 

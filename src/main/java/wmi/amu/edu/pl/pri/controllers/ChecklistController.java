@@ -1,13 +1,12 @@
 package wmi.amu.edu.pl.pri.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import wmi.amu.edu.pl.pri.dto.ChecklistDto;
 import wmi.amu.edu.pl.pri.services.ChapterChecklistTemplateService;
 import wmi.amu.edu.pl.pri.services.ChecklistService;
-import wmi.amu.edu.pl.pri.services.UserChecklistTemplateService;
+import wmi.amu.edu.pl.pri.services.ThesisChecklistTemplateService;
 
 import java.util.List;
 
@@ -15,9 +14,9 @@ import java.util.List;
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class ChecklistController {
-    private ChecklistService checklistService;
-    private UserChecklistTemplateService userChecklistTemplateService;
-    private ChapterChecklistTemplateService chapterChecklistTemplateService;
+    private final ChecklistService checklistService;
+    private final ThesisChecklistTemplateService thesisChecklistTemplateService;
+    private final ChapterChecklistTemplateService chapterChecklistTemplateService;
 
     @PostMapping(path = "/post/note")
     public ResponseEntity<Boolean> saveQuestions(
@@ -27,26 +26,26 @@ public class ChecklistController {
         return ResponseEntity.ok(true);
     }
 
-    @GetMapping( path = "/view/version/{id}/note/{userId}")
-    public ResponseEntity<ChecklistDto> getQuestionsByVersion(@PathVariable Long id,  @PathVariable Long userId)
+    @GetMapping( path = "/view/thesis/{id}/note/")
+    public ResponseEntity<ChecklistDto> getQuestionsByVersion(@PathVariable Long id)
     {
-        return ResponseEntity.ok().body(checklistService.getChecklistByVersionId(id, userId));
+        return ResponseEntity.ok().body(checklistService.getChecklistByThesisId(id));
     }
 
-    @GetMapping( path = "/view/chapter/{id}/note")
+    @GetMapping( path = "/view/version/{id}/note/")
     public ResponseEntity<ChecklistDto> getQuestionsByChapter(@PathVariable Long id)
     {
-        return ResponseEntity.ok().body(checklistService.getChecklistByChapterId(id));
+        return ResponseEntity.ok().body(checklistService.getChecklistByVersionId(id));
     }
 
-    @PostMapping(path = "/post/checklistTemplate/user/{userId}")
-    public ResponseEntity<Boolean> saveChecklistTemplate(@PathVariable Long userId, @RequestBody List<String> list){
-      userChecklistTemplateService.addChecklistTemplates(userId, list);
+    @PostMapping(path = "/post/thesisChecklistTemplate/")
+    public ResponseEntity<Boolean> saveChecklistTemplate(@RequestBody List<String> list){
+      thesisChecklistTemplateService.addChecklistTemplates(list);
       return ResponseEntity.ok(true);
     }
-    @PostMapping(path = "/post/checklistTemplate/chapter/{chapterId}")
-    public ResponseEntity<Boolean> saveChapterChecklistTemplate(@PathVariable Long chapterId, @RequestBody List<String> list){
-        chapterChecklistTemplateService.addChecklistTemplates(chapterId, list);
+    @PostMapping(path = "/post/chapterChecklistTemplate/")
+    public ResponseEntity<Boolean> saveChapterChecklistTemplate( @RequestBody List<String> list){
+        chapterChecklistTemplateService.addChecklistTemplates(list);
         return ResponseEntity.ok(true);
     }
 

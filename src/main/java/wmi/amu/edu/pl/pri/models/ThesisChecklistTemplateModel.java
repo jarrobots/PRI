@@ -11,14 +11,10 @@ import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 @Getter
 @Setter
 @Table(name = "thm_user_checklist_templates")
-public class UserChecklistTemplateModel {
+public class ThesisChecklistTemplateModel {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private UserDataModel user;
 
     @Column(name = "question")
     private String question;

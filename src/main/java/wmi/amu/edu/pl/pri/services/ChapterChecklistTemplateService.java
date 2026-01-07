@@ -16,19 +16,17 @@ public class ChapterChecklistTemplateService {
     private final ChapterChecklistTemplateRepo repo;
     private final ChapterService chapterService;
 
-    public List<String> getChecklistTemplates(Long chapterId){
-        List<ChapterChecklistTemplateModel> list = repo.findByChapterId(chapterId);
+    public List<String> getChecklistTemplates(){
+        List<ChapterChecklistTemplateModel> list = repo.findAll();
         return list.stream()
                 .map(ChapterChecklistTemplateModel::getQuestion)
                 .collect(Collectors.toList());
     }
 
-    public void addChecklistTemplates(Long chapterId, List<String> questions){
-        var chapter = chapterService.getById(chapterId);
+    public void addChecklistTemplates(List<String> questions){
         for(String item : questions){
             ChapterChecklistTemplateModel model = new ChapterChecklistTemplateModel();
             model.setQuestion(item);
-            model.setChapter(chapter);
            repo.save(model);
         }
     }

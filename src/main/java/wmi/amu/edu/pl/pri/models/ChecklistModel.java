@@ -27,8 +27,8 @@ public class ChecklistModel {
     private ChapterVersionModel versionModel;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chapter", referencedColumnName = "id")
-    private ChapterModel chapterModel;
+    @JoinColumn(name = "thesis", referencedColumnName = "id")
+    private ThesisModel thesisModel;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "checklist", referencedColumnName = "id")
@@ -40,11 +40,11 @@ public class ChecklistModel {
     public ChecklistDto toChecklistDto(){
 
         Long versionId = (versionModel != null) ? versionModel.getId() : null;
-        Long chapterId = (chapterModel != null) ? chapterModel.getId() : null;
+        Long thesisId = (thesisModel != null) ? thesisModel.getId() : null;
 
         return ChecklistDto.builder()
                 .versionId(versionId)
-                .chapterId(chapterId)
+                .chapterId(thesisId)
                 .uploadTime(date)
                 .models(checklistQuestionModels)
                 .build();

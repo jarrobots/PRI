@@ -16,10 +16,6 @@ public class ChapterChecklistTemplateModel {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "chapter_id", referencedColumnName = "id", nullable = false)
-    private ChapterModel chapter;
-
     @Column(name = "question")
     private String question;
 
