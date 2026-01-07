@@ -24,6 +24,7 @@ public class ChapterChecklistTemplateService {
     }
 
     public void addChecklistTemplates(List<String> questions){
+        repo.deleteAll();
         for(String item : questions){
             ChapterChecklistTemplateModel model = new ChapterChecklistTemplateModel();
             model.setQuestion(item);

@@ -19,7 +19,6 @@ public class ChecklistService {
     private final ChecklistQuestionService questionService;
     private final ThesisChecklistTemplateService thesisTemplateService;
     private final ChapterChecklistTemplateService chapterTemplateService;
-    private final ChapterService chapterService;
     private final ThesisService thesisService;
 
     public ChecklistDto getChecklistByVersionId(Long id) {
@@ -45,7 +44,7 @@ public class ChecklistService {
     }
 
     public void setChecklist(ChecklistDto dto) {
-        ChecklistModel model = null;
+        ChecklistModel model;
 
         if (dto.getId() != null) {
             Optional<ChecklistModel> byId = repo.findById(dto.getId());

@@ -23,7 +23,8 @@ public class ThesisChecklistTemplateService {
                .collect(Collectors.toList());
     }
 
-    public void addChecklistTemplates(List<String> questions){;
+    public void addChecklistTemplates(List<String> questions){
+        repo.deleteAll();
         for(String item : questions){
             ThesisChecklistTemplateModel model  = new ThesisChecklistTemplateModel();
             model.setQuestion(item);
