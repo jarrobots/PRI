@@ -43,6 +43,7 @@ public class ChecklistController {
       thesisChecklistTemplateService.addChecklistTemplates(list);
       return ResponseEntity.ok(true);
     }
+
     @PostMapping(path = "/post/chapterChecklistTemplate/")
     public ResponseEntity<Boolean> saveChapterChecklistTemplate( @RequestBody List<String> list){
         chapterChecklistTemplateService.addChecklistTemplates(list);

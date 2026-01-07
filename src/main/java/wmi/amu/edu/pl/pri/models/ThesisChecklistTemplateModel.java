@@ -10,7 +10,7 @@ import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 @Entity
 @Getter
 @Setter
-@Table(name = "thm_user_checklist_templates")
+@Table(name = "thm_thesis_checklist_templates")
 public class ThesisChecklistTemplateModel {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

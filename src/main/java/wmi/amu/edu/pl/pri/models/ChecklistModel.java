@@ -44,7 +44,7 @@ public class ChecklistModel {
 
         return ChecklistDto.builder()
                 .versionId(versionId)
-                .chapterId(thesisId)
+                .thesisId(thesisId)
                 .uploadTime(date)
                 .models(checklistQuestionModels)
                 .build();

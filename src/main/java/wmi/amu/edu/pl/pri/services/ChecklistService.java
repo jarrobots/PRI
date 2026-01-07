@@ -36,9 +36,8 @@ public class ChecklistService {
     public ChecklistDto getChecklistByThesisId(Long thesisId) {
         Optional<ChecklistModel> optional = repo.findByThesisId(thesisId);
         if (optional.isEmpty()) {
-            Long ownerId = chapterService.getById(thesisId).getOwner().getId();
             var list = thesisTemplateService.getChecklistTemplates();
-            var model = generateThesisChecklistFromDB(list, ownerId);
+            var model = generateThesisChecklistFromDB(list, thesisId);
             return model.toChecklistDto();
 
         }
@@ -46,18 +45,28 @@ public class ChecklistService {
     }
 
     public void setChecklist(ChecklistDto dto) {
-        Optional<ChecklistModel> optional = repo.findByVersionId(dto.getVersionId());
-        if (optional.isPresent()) {
-            ChecklistModel model = optional.get();
-            model.setDate(new Date());
-            model.setChecklistQuestionModels(dto.getModels());
-            for (ChecklistQuestionModel qModel : model.getChecklistQuestionModels()) {
-                ChecklistQuestionModel question = questionService.getQuestion(qModel);
-                question.setPassed(qModel.isPassed());
-                questionService.saveQuestion(question);
-            }
-            repo.save(model);
+        ChecklistModel model;
+        if (repo.findByThesisId(dto.getThesisId()).isPresent()) {
+            model = repo.findByThesisId(dto.getThesisId()).orElse(null);
+            saveChcecklist(model, dto);
         }
+        else if(repo.findByVersionId(dto.getVersionId()).isPresent()) {
+            model = repo.findByVersionId(dto.getVersionId()).orElse(null);
+            saveChcecklist(model, dto);
+        }
+        else throw new RuntimeException("Checklist not defined properly");
+
+    }
+
+    private void saveChcecklist(ChecklistModel model, ChecklistDto dto) {
+        model.setDate(new Date());
+        model.setChecklistQuestionModels(dto.getModels());
+        for (ChecklistQuestionModel qModel : model.getChecklistQuestionModels()) {
+            ChecklistQuestionModel question = questionService.getQuestion(qModel);
+            question.setPassed(qModel.isPassed());
+            questionService.saveQuestion(question);
+        }
+        repo.save(model);
     }
 
     private ChecklistModel generateVersionChecklistFromDB(List<String> list, Long versionId) {
