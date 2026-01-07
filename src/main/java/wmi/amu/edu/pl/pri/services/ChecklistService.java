@@ -45,17 +45,30 @@ public class ChecklistService {
     }
 
     public void setChecklist(ChecklistDto dto) {
-        ChecklistModel model;
-        if (repo.findByThesisId(dto.getThesisId()).isPresent()) {
+        ChecklistModel model = null;
+
+        if (dto.getId() != null) {
+            Optional<ChecklistModel> byId = repo.findById(dto.getId());
+            if (byId.isPresent()) {
+                model = byId.get();
+                saveChcecklist(model, dto);
+                return;
+            }
+        }
+
+        if (dto.getThesisId() != null && repo.findByThesisId(dto.getThesisId()).isPresent()) {
             model = repo.findByThesisId(dto.getThesisId()).orElse(null);
             saveChcecklist(model, dto);
+            return;
         }
-        else if(repo.findByVersionId(dto.getVersionId()).isPresent()) {
+
+        if (dto.getVersionId() != null && repo.findByVersionId(dto.getVersionId()).isPresent()) {
             model = repo.findByVersionId(dto.getVersionId()).orElse(null);
             saveChcecklist(model, dto);
+            return;
         }
-        else throw new RuntimeException("Checklist not defined properly");
 
+        throw new RuntimeException("Checklist not defined properly");
     }
 
     private void saveChcecklist(ChecklistModel model, ChecklistDto dto) {

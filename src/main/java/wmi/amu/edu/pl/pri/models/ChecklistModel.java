@@ -43,6 +43,7 @@ public class ChecklistModel {
         Long thesisId = (thesisModel != null) ? thesisModel.getId() : null;
 
         return ChecklistDto.builder()
+                .id(id)
                 .versionId(versionId)
                 .thesisId(thesisId)
                 .uploadTime(date)
