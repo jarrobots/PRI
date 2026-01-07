@@ -32,6 +32,7 @@ public class ChecklistService {
         return optional.get().toChecklistDto();
     }
 
+
     public ChecklistDto getChecklistByThesisId(Long thesisId) {
         Optional<ChecklistModel> optional = repo.findByThesisId(thesisId);
         if (optional.isEmpty()) {
