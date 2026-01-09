@@ -33,6 +33,11 @@ public class ServicesTest {
     private static SupervisorRepo supervisorRepo;
     private static ProjectRepo projectRepo;
     private static ThesisRepo thesisRepo;
+    private static ChapterRepo chapterRepo;
+    private static ChapterVersionRepo versionRepo;
+    private static ChecklistRepo checklistRepo;
+    private static CommentRepo commentRepo;
+    private static FileContentRepo fileRepo;
 
     private static GroupService groupService;
     private static ThesisService thesisService;
@@ -42,7 +47,7 @@ public class ServicesTest {
     private static CommentService commentService;
     private static ChecklistService checklistService;
 
-    private static Long student1Id, student2Id, student3Id, supervisorId, s1Id, s2Id, s3Id, suId, proj, fileId, versionId;
+    private static Long student1Id, student2Id, student3Id, supervisorId, s1Id, s2Id, s3Id, suId, proj, fileId, versionId, commentId, checklistId;
 
     @BeforeAll
     static void setUp() {
@@ -165,40 +170,31 @@ public class ServicesTest {
 
     }
 
-/*
+
     @AfterAll
     static void cleanUp() {
 
-
-        // Czyszczenie z testów (nowe)
         if (versionId != null) {
-            checklistService.deleteChecklistByVersion(versionId); // usuń checklist
-            commentService.deleteCommentsByVersion(versionId);    // usuń komentarze
-            versionService.deleteFile(versionId);                 // usuń version
-            fileService.deleteFile(fileId);                       // usuń plik
+            long checklistId = checklistService.getChecklistByVersionId(versionId, student1Id).getId();
+            long commentId = commentService.getCommentByVersion(versionId).getId();
+
+            checklistRepo.deleteById(checklistId);
+            commentRepo.deleteById(commentId);
+            versionRepo.deleteById(versionId);
+            fileRepo.deleteById(fileId);
         }
 
-        // Czyszczenie chapter + thesis (z createAndConfirmThesisAndChaptersTest)
         if (proj != null) {
             var thesis = thesisService.findByProjectId(proj);
             if (thesis != null) {
-                thesis.getChapters().forEach(chapter -> chapterService.delete(chapter.getId()));
-                thesisService.delete(thesis.getId());
+                thesis.getChapters().forEach(chapter -> chapterRepo.deleteById(chapter.getId()));
+                thesisRepo.deleteById(thesis.getId());
             }
         }
 
-
-        userDataRepo.deleteAllById(List.of(student1Id, student2Id, student3Id, supervisorId));
-        studentRepo.deleteAllById(List.of(s1Id, s2Id, s3Id));
-        supervisorRepo.deleteById(suId);
         projectRepo.deleteById(proj);
-
-
-
-
+        supervisorRepo.deleteById(suId);
+        studentRepo.deleteAllById(List.of(s1Id, s2Id, s3Id));
+        userDataRepo.deleteAllById(List.of(student1Id, student2Id, student3Id, supervisorId));
     }
-
- */
-
-
 }
