@@ -23,6 +23,7 @@ public class ThesisService {
     }
 
     public Optional<ThesisModel> findById(Long id){
+
         return thesisRepo.findById(id);
     }
     public ThesisCompleteDto findByProjectId(Long id) {

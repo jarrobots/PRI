@@ -1,0 +1,4 @@
+Przykładowa zawartość małego pliku testowego.
+To jest tekst do MultipartFile w Spring Boot.
+Rozmiar: ~80 bajtów. Nazwa: example.txt
+MIME: text/plain
