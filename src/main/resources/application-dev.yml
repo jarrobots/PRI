@@ -70,7 +70,7 @@ security:
 pri:
   ldap:
     domain: labs.wmi.amu.edu.pl
-    enabled: true
+    enabled: false
   # JWT properties compatible with main module
   app:
     jwtCookieName: accessToken
