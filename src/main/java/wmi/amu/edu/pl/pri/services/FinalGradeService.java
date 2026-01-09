@@ -17,6 +17,10 @@ public class FinalGradeService {
         return repo.findByChapterId(chapterId).orElse(null);
     }
     public Long setFinalGrade(FinalGradeModel finalGradeModel){
+        if (finalGradeModel.getId() != null && repo.findById(finalGradeModel.getId()).isPresent()) {
+            repo.deleteById(finalGradeModel.getId());
+            finalGradeModel.setId(null);
+        }
         return repo.save(finalGradeModel).getId();
     }
 }
