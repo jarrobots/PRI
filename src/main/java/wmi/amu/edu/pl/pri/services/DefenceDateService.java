@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import wmi.amu.edu.pl.pri.dto.TimelineDefenceDateDto;
+import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.models.DefenceDateModel;
 import wmi.amu.edu.pl.pri.repositories.DefenceDateRepo;
 
@@ -21,9 +22,12 @@ public class DefenceDateService {
     }
 
     public Long saveDefenceDate(TimelineDefenceDateDto dto) {
-        var model = repo.findByChapterId(dto.getChapterId()).get();
+        ChapterModel chapter = chapterService.getById(dto.getChapterId());
+        var model = repo.findByChapterId(chapter.getId()).orElse(new DefenceDateModel());
+
         model.setDate(dto.getDate());
         model.setComment(dto.getComment());
+        model.setChapter(chapter);
         return repo.save(model).getId();
     }
 
