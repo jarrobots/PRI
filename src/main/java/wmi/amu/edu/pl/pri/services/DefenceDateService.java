@@ -21,10 +21,9 @@ public class DefenceDateService {
     }
 
     public Long saveDefenceDate(TimelineDefenceDateDto dto) {
-        var model = new DefenceDateModel();
+        var model = repo.findByChapterId(dto.getChapterId()).get();
         model.setDate(dto.getDate());
         model.setComment(dto.getComment());
-        model.setChapter(chapterService.getById(dto.getChapterId()));
         return repo.save(model).getId();
     }
 
