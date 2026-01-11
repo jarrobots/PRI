@@ -139,6 +139,7 @@ public class ChapterController {
         List<ChapterModel> chapterModels = chapterService.getByThesisId(thesisId);
         for(var chapterModel : chapterModels) {
             var model = new FinalGradeModel();
+            System.out.println(chapterModel.getId());
             ChapterModel chapter = chapterService.getById(chapterModel.getId());
             model.setChapter(chapter);
             model.setDescription(dto.getText());
