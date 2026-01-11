@@ -148,7 +148,7 @@ public class ChapterController {
     }
 
     @PostMapping("chapter/addDefence")
-    public ResponseEntity<Long> addDefenceDate(@RequestBody TimelineDefenceDateDto dto) {
+    public ResponseEntity<Boolean> addDefenceDate(@RequestBody TimelineDefenceDateDto dto) {
         return ResponseEntity.ok(defenceDateService.saveDefenceDate(dto));
     }
 
