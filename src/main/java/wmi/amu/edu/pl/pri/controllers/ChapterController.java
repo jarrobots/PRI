@@ -126,20 +126,25 @@ public class ChapterController {
         else return ResponseEntity.ok(chapters);
     }
 
-    @GetMapping("/chapter/getGrade/{chapterId}")
-    public ResponseEntity<FinalGradeDto> getFinalGrade(@PathVariable Long chapterId) {
+    @GetMapping("/chapter/getGrade/{thesisId}")
+    public ResponseEntity<FinalGradeDto> getFinalGrade(@PathVariable Long thesisId) {
+        long chapterId = chapterService.getByThesisId(thesisId).getFirst().getId();
         var dto = finalGradeService.getModelByChapterId(chapterId).toDto();
         return ResponseEntity.ok(dto);
     }
 
     @PostMapping("/chapter/addGrade")
      public ResponseEntity<Long> addFinalGrade(@RequestBody FinalGradeDto dto) {
-        var model = new FinalGradeModel();
-        ChapterModel chapter = chapterService.getById(dto.getChapterId());
-        model.setChapter(chapter);
-        model.setDescription(dto.getText());
-        Long output = finalGradeService.setFinalGrade(model);
-        return ResponseEntity.ok(output);
+        long thesisId = dto.getId();
+        List<ChapterModel> chapterModels = chapterService.getByThesisId(thesisId);
+        for(var chapterModel : chapterModels) {
+            var model = new FinalGradeModel();
+            ChapterModel chapter = chapterService.getById(chapterModel.getId());
+            model.setChapter(chapter);
+            model.setDescription(dto.getText());
+            finalGradeService.setFinalGrade(model);
+        }
+        return ResponseEntity.ok(thesisId);
     }
 
     @GetMapping("chapter/getDefence/{chapterId}")

@@ -9,6 +9,7 @@ import wmi.amu.edu.pl.pri.dto.ChapterCoreDto;
 import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.repositories.ChapterRepo;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -27,6 +28,10 @@ public class ChapterService {
     public ChapterModel getById(Long id) {
         return chapterRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Chapter not found with ID: " + id));
+    }
+
+    public List<ChapterModel> getByThesisId(Long thesisId) {
+        return chapterRepo.findByThesisId(thesisId);
     }
 
     public ChapterCoreDto update(Long id, ChapterCoreDto chapterDto) {
