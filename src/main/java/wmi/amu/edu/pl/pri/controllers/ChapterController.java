@@ -128,9 +128,8 @@ public class ChapterController {
         else return ResponseEntity.ok(chapters);
     }
 
-    @GetMapping("/chapter/getGrade/{thesisId}")
-    public ResponseEntity<FinalGradeDto> getFinalGrade(@PathVariable Long thesisId) {
-        long chapterId = chapterService.getByThesisId(thesisId).get(0).getId();
+    @GetMapping("/chapter/getGrade/{chapterId}")
+    public ResponseEntity<FinalGradeDto> getFinalGrade(@PathVariable Long chapterId) {
         var dto = finalGradeService.getModelByChapterId(chapterId).toDto();
         return ResponseEntity.ok(dto);
     }
