@@ -137,28 +137,28 @@ public class ChapterController {
 
     @PostMapping("/chapter/addGrade")
      public ResponseEntity<Long> addFinalGrade(@RequestBody FinalGradeDto dto) {
-        long thesisId = dto.getId();
-        List<ChapterModel> chapterModels = chapterService.getByThesisId(thesisId);
-        for(var chapterModel : chapterModels) {
-            var model = new FinalGradeModel();
-            log.warn(String.valueOf(chapterModel.getId()));
-
-            ChapterModel chapter = chapterService.getById(chapterModel.getId());
-            model.setChapter(chapter);
-            model.setDescription(dto.getText());
-            finalGradeService.setFinalGrade(model);
-        }
-        return ResponseEntity.ok(thesisId);
+        var model = new FinalGradeModel();
+        ChapterModel chapter = chapterService.getById(dto.getChapterId());
+        model.setChapter(chapter);
+        model.setDescription(dto.getText());
+        return ResponseEntity.ok(finalGradeService.setFinalGrade(model));
     }
 
-    @GetMapping("chapter/getDefence/{chapterId}")
-    public ResponseEntity<TimelineDefenceDateDto> getDefenceDate(@PathVariable Long chapterId) {
+    @GetMapping("chapter/getDefence/{thesisId}")
+    public ResponseEntity<TimelineDefenceDateDto> getDefenceDate(@PathVariable Long thesisId) {
+        long chapterId = chapterService.getByThesisId(thesisId).get(0).getId();
         return ResponseEntity.ok(defenceDateService.getDefenceDateByChapter(chapterId));
     }
 
     @PostMapping("chapter/addDefence")
-    public ResponseEntity<Boolean> addDefenceDate(@RequestBody TimelineDefenceDateDto dto) {
-        return ResponseEntity.ok(defenceDateService.saveDefenceDate(dto));
+    public ResponseEntity<Long> addDefenceDate(@RequestBody TimelineDefenceDateDto dto) {
+        long thesisId = dto.getChapterId();
+        var chapters = chapterService.getByThesisId(thesisId);
+        for(var chapter : chapters) {
+            dto.setChapterId(chapter.getId());
+            defenceDateService.saveDefenceDate(dto);
+        }
+        return ResponseEntity.ok(thesisId);
     }
 
 }
