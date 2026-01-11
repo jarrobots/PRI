@@ -1,6 +1,7 @@
 package wmi.amu.edu.pl.pri.controllers;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
@@ -139,7 +141,8 @@ public class ChapterController {
         List<ChapterModel> chapterModels = chapterService.getByThesisId(thesisId);
         for(var chapterModel : chapterModels) {
             var model = new FinalGradeModel();
-            System.out.println(chapterModel.getId());
+            log.info(String.valueOf(chapterModel.getId()));
+
             ChapterModel chapter = chapterService.getById(chapterModel.getId());
             model.setChapter(chapter);
             model.setDescription(dto.getText());
