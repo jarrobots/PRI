@@ -50,8 +50,8 @@ public class ChapterModel {
     @ManyToMany(mappedBy = "chapters")
     private List<ChapterVersionModel> versions;
 
-    @OneToOne
-    @JoinColumn(name = "defence_date_id", referencedColumnName = "id", unique = true)
+    @OneToOne(optional = true)
+    @JoinColumn(name = "defence_date_id", referencedColumnName = "id", unique = true, nullable = true)
     private DefenceDateModel defenceDate;
 
     public ChapterCoreDto toDto() {
@@ -69,7 +69,7 @@ public class ChapterModel {
                 .build();
     }
 
-    public void applyDataFrom(ChapterCoreDto dto){
+    public void applyDataFrom(ChapterCoreDto dto) {
         setTitle(dto.getTitle());
         setTitleEn(dto.getTitleEn());
         setDescription(dto.getDescription());

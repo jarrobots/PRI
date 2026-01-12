@@ -5,11 +5,13 @@ import wmi.amu.edu.pl.pri.dto.TimelineDefenceDateDto;
 import wmi.amu.edu.pl.pri.dto.view.timeline.*;
 import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
+import wmi.amu.edu.pl.pri.models.DefenceDateModel;
 import wmi.amu.edu.pl.pri.models.ThesisModel;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 import wmi.amu.edu.pl.pri.services.VersionService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TimelineMapper {
@@ -32,7 +34,7 @@ public class TimelineMapper {
 
         Long supervisorUserDataId = null;
         Long supervisorId = null;
-        if (thesisModel.getProject().getSupervisor() != null){
+        if (thesisModel.getProject().getSupervisor() != null) {
             supervisorUserDataId = thesisModel.getProject().getSupervisor().getUserData().getId();
             supervisorId = thesisModel.getProject().getSupervisor().getId();
 
@@ -52,14 +54,15 @@ public class TimelineMapper {
 
     private TimelineViewChapterDto toTimelineViewChapterDto(ChapterModel chapter) {
 
-        TimelineViewAuthorDto author = toTimelineViewAuthorDto(chapter.getOwner()); 
+        TimelineViewAuthorDto author = toTimelineViewAuthorDto(chapter.getOwner());
         List<TimelineViewVersionDto> versions = chapter.getVersions()
                 .stream()
                 .map(this::toTimelineViewVersionDto)
                 .collect(Collectors.toList());
 
-        TimelineDefenceDateDto date  = chapter.getDefenceDate().toDto();
-
+        TimelineDefenceDateDto date = Optional.ofNullable(chapter.getDefenceDate())
+                .map(DefenceDateModel::toDto)
+                .orElse(null);
         return TimelineViewChapterDto.builder()
                 .name(chapter.getTitle())
                 .author(author)
@@ -115,7 +118,7 @@ public class TimelineMapper {
                 .build();
     }
 
-    public void addChecklistTally(ChecklistTally checklistTally){
+    public void addChecklistTally(ChecklistTally checklistTally) {
         checklistTallies.add(checklistTally);
     }
 }
