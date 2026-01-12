@@ -1,6 +1,5 @@
 package wmi.amu.edu.pl.pri.domainobject;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import wmi.amu.edu.pl.pri.dto.TimelineChecklistTallyDto;
 import wmi.amu.edu.pl.pri.dto.TimelineDefenceDateDto;
 import wmi.amu.edu.pl.pri.dto.view.timeline.*;
@@ -8,10 +7,8 @@ import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.ThesisModel;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
-import wmi.amu.edu.pl.pri.services.DefenceDateService;
 import wmi.amu.edu.pl.pri.services.VersionService;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +18,6 @@ public class TimelineMapper {
     private final String currentPort;
     private final String activeProfile;
     private final List<ChecklistTally> checklistTallies;
-    private DefenceDateService defenceDateService;
     private VersionService versionService;
 
     public TimelineMapper(ThesisModel thesis, String currentPort, String activeProfile, List<ChecklistTally> tallies) {
@@ -62,12 +58,7 @@ public class TimelineMapper {
                 .map(this::toTimelineViewVersionDto)
                 .collect(Collectors.toList());
 
-        TimelineDefenceDateDto date;
-        try {
-            date = defenceDateService.getDefenceDateByChapter(chapter.getId());
-        } catch (NullPointerException e){
-            date = null;
-        }
+        TimelineDefenceDateDto date  = chapter.getDefenceDate().toDto();
 
         return TimelineViewChapterDto.builder()
                 .name(chapter.getTitle())
@@ -93,7 +84,7 @@ public class TimelineMapper {
     private TimelineViewVersionDto toTimelineViewVersionDto(ChapterVersionModel version) {
 
         TimelineViewUploaderDto uploader = toTimelineViewUploaderDto(version.getUploader());
-        String fileLink = versionService.getFormattedLink(currentPort, activeProfile, version);
+//        String fileLink = versionService.getFormattedLink(currentPort, activeProfile, version);
 
         return TimelineViewVersionDto.builder()
                 .id(version.getId())
@@ -108,7 +99,7 @@ public class TimelineMapper {
                                 .resolved(0)
                                 .build()))
                 .supervisorComment("n/a")
-                .fileLink(fileLink)
+                .fileLink("fixme")//todo
                 .build();
     }
 

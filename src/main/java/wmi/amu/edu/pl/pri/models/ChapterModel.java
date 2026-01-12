@@ -1,14 +1,14 @@
 package wmi.amu.edu.pl.pri.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import wmi.amu.edu.pl.pri.dto.ChapterCoreDto;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "thm_chapter")
@@ -49,6 +49,10 @@ public class ChapterModel {
 
     @ManyToMany(mappedBy = "chapters")
     private List<ChapterVersionModel> versions;
+
+    @OneToOne
+    @JoinColumn(name = "defence_date_id", referencedColumnName = "id", unique = true)
+    private DefenceDateModel defenceDate;
 
     public ChapterCoreDto toDto() {
 
