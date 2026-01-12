@@ -69,3 +69,7 @@ thesis-module:
 mvn test                    # Unit
 mvn test -Pintegration-test # Testcontainers
 ```  
+
+## Architecture
+
+![Diagram PRI](diagram.jpg)
