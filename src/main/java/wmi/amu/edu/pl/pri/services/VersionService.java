@@ -1,5 +1,6 @@
 package wmi.amu.edu.pl.pri.services;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import wmi.amu.edu.pl.pri.repositories.ChapterVersionRepo;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static io.swagger.v3.core.util.AnnotationsUtils.getLink;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -25,6 +28,9 @@ public class VersionService {
 
     @Value("${spring.profiles.active:}")
     private String activeProfile;
+
+    @Value("${DEV_BASE_URL:http://150.254.78.134:8082/api/v1/download/}")
+    private String devBaseUrl;
 
 
     @Autowired
@@ -49,7 +55,7 @@ public class VersionService {
         var dtos = chapterFileModels.stream()
                 .map(chapterFileModel -> ChapterVersionDto.builder()
                         .id(chapterFileModel.getId())
-                        .link(chapterFileModel.getFormattedLink(currentPort, activeProfile))
+                        .link(getFormattedLink(currentPort, activeProfile, chapterFileModel))
                         .uploaderId(chapterFileModel.getUploader().getId())
                         .uploaderFName(chapterFileModel.getUploader().getFirstName())
                         .uploaderLName(chapterFileModel.getUploader().getLastName())
@@ -67,6 +73,22 @@ public class VersionService {
 
         System.out.println("File with id:" + chapters.getId() + " saved successfully");
         return savedChapters.getId();
+    }
+
+    public String getFormattedLink(String port, String activeProfile, ChapterVersionModel model) {
+        if (model.getLink() == null || model.getLink().equals("NO_LINK")){
+            String baseUrl;
+
+            if ("dev".equals(activeProfile)) {
+                baseUrl = devBaseUrl;
+            } else {
+                baseUrl = "http://localhost:%s/api/v1/download/";
+            }
+            return baseUrl.formatted(port) + model.getFileId();
+        }
+        else {
+            return model.getLink();
+        }
     }
 
     public Long saveVersion(List<Long> chapterId, AddVersionWithLinkCommandDto command) {

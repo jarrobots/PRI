@@ -1,5 +1,6 @@
 package wmi.amu.edu.pl.pri.models;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.core.env.Environment;
@@ -46,20 +47,6 @@ public class ChapterVersionModel {
 
     private String name;
 
-    public String getFormattedLink(String port, String activeProfile){
-        if (getLink() == null || getLink().equals("NO_LINK")){
-            String baseUrl;
-            if ("dev".equals(activeProfile)) {
-                baseUrl = environment.getProperty("DEV_BASE_URL", "http://150.254.78.134:%s/api/v1/download/");
-            } else {
-                baseUrl = "http://localhost:%s/api/v1/download/";
-            }
-            return baseUrl.formatted(port) + getFileId();
-        }
-        else {
-            return getLink();
-        }
-    }
 
     public UserDataModel getUploader(){
         if(uploader == null){

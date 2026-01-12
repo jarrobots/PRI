@@ -9,6 +9,7 @@ import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.ThesisModel;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 import wmi.amu.edu.pl.pri.services.DefenceDateService;
+import wmi.amu.edu.pl.pri.services.VersionService;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,6 +22,7 @@ public class TimelineMapper {
     private final String activeProfile;
     private final List<ChecklistTally> checklistTallies;
     private DefenceDateService defenceDateService;
+    private VersionService versionService;
 
     public TimelineMapper(ThesisModel thesis, String currentPort, String activeProfile, List<ChecklistTally> tallies) {
         this.thesisModel = thesis;
@@ -90,7 +92,7 @@ public class TimelineMapper {
     private TimelineViewVersionDto toTimelineViewVersionDto(ChapterVersionModel version) {
 
         TimelineViewUploaderDto uploader = toTimelineViewUploaderDto(version.getUploader());
-        String fileLink = version.getFormattedLink(currentPort, activeProfile);
+        String fileLink = versionService.getFormattedLink(currentPort, activeProfile, version);
 
         return TimelineViewVersionDto.builder()
                 .id(version.getId())
