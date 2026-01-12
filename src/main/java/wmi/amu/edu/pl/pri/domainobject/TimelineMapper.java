@@ -1,34 +1,28 @@
 package wmi.amu.edu.pl.pri.domainobject;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import wmi.amu.edu.pl.pri.dto.TimelineChecklistTallyDto;
 import wmi.amu.edu.pl.pri.dto.TimelineDefenceDateDto;
 import wmi.amu.edu.pl.pri.dto.view.timeline.*;
 import wmi.amu.edu.pl.pri.models.ChapterModel;
 import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
+import wmi.amu.edu.pl.pri.models.DefenceDateModel;
 import wmi.amu.edu.pl.pri.models.ThesisModel;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
-import wmi.amu.edu.pl.pri.services.DefenceDateService;
-import wmi.amu.edu.pl.pri.services.VersionService;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TimelineMapper {
 
     private final ThesisModel thesisModel;
-    private final String currentPort;
-    private final String activeProfile;
+    private final String baseUrlToFile;
     private final List<ChecklistTally> checklistTallies;
-    private DefenceDateService defenceDateService;
-    private VersionService versionService;
 
-    public TimelineMapper(ThesisModel thesis, String currentPort, String activeProfile, List<ChecklistTally> tallies) {
+    public TimelineMapper(ThesisModel thesis, String baseUrlToFile, List<ChecklistTally> tallies) {
         this.thesisModel = thesis;
-        this.currentPort = currentPort;
+        this.baseUrlToFile = baseUrlToFile;
         this.checklistTallies = List.copyOf(tallies);
-        this.activeProfile = activeProfile;
     }
 
 
@@ -36,7 +30,7 @@ public class TimelineMapper {
 
         Long supervisorUserDataId = null;
         Long supervisorId = null;
-        if (thesisModel.getProject().getSupervisor() != null){
+        if (thesisModel.getProject().getSupervisor() != null) {
             supervisorUserDataId = thesisModel.getProject().getSupervisor().getUserData().getId();
             supervisorId = thesisModel.getProject().getSupervisor().getId();
 
@@ -56,19 +50,15 @@ public class TimelineMapper {
 
     private TimelineViewChapterDto toTimelineViewChapterDto(ChapterModel chapter) {
 
-        TimelineViewAuthorDto author = toTimelineViewAuthorDto(chapter.getOwner()); 
+        TimelineViewAuthorDto author = toTimelineViewAuthorDto(chapter.getOwner());
         List<TimelineViewVersionDto> versions = chapter.getVersions()
                 .stream()
                 .map(this::toTimelineViewVersionDto)
                 .collect(Collectors.toList());
 
-        TimelineDefenceDateDto date;
-        try {
-            date = defenceDateService.getDefenceDateByChapter(chapter.getId());
-        } catch (NullPointerException e){
-            date = null;
-        }
-
+        TimelineDefenceDateDto date = Optional.ofNullable(chapter.getDefenceDate())
+                .map(DefenceDateModel::toDto)
+                .orElse(null);
         return TimelineViewChapterDto.builder()
                 .name(chapter.getTitle())
                 .author(author)
@@ -93,7 +83,7 @@ public class TimelineMapper {
     private TimelineViewVersionDto toTimelineViewVersionDto(ChapterVersionModel version) {
 
         TimelineViewUploaderDto uploader = toTimelineViewUploaderDto(version.getUploader());
-        String fileLink = versionService.getFormattedLink(currentPort, activeProfile, version);
+        String fileLink = version.getFormattedLink(baseUrlToFile);
 
         return TimelineViewVersionDto.builder()
                 .id(version.getId())
@@ -124,7 +114,7 @@ public class TimelineMapper {
                 .build();
     }
 
-    public void addChecklistTally(ChecklistTally checklistTally){
+    public void addChecklistTally(ChecklistTally checklistTally) {
         checklistTallies.add(checklistTally);
     }
 }

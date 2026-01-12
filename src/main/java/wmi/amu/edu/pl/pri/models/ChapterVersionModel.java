@@ -1,9 +1,7 @@
 package wmi.amu.edu.pl.pri.models;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.core.env.Environment;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 
 import java.util.Date;
@@ -17,9 +15,6 @@ import java.util.List;
 @Builder
 @Table(name = "thm_chapter_version")
 public class ChapterVersionModel {
-
-    @Transient  // Nie zapisuje w DB
-    private transient Environment environment;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -47,9 +42,16 @@ public class ChapterVersionModel {
 
     private String name;
 
+    public String getFormattedLink(String baseUrl) {
+        if (getLink() == null || getLink().equals("NO_LINK")) {
+            return baseUrl + getFileId();
+        } else {
+            return getLink();
+        }
+    }
 
-    public UserDataModel getUploader(){
-        if(uploader == null){
+    public UserDataModel getUploader() {
+        if (uploader == null) {
             uploader = new UserDataModel();
             uploader.setId((long) -1);
             uploader.setIndexNumber("");
