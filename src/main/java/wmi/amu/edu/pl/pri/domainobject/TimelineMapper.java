@@ -8,7 +8,6 @@ import wmi.amu.edu.pl.pri.models.ChapterVersionModel;
 import wmi.amu.edu.pl.pri.models.DefenceDateModel;
 import wmi.amu.edu.pl.pri.models.ThesisModel;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
-import wmi.amu.edu.pl.pri.services.VersionService;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,16 +16,13 @@ import java.util.stream.Collectors;
 public class TimelineMapper {
 
     private final ThesisModel thesisModel;
-    private final String currentPort;
-    private final String activeProfile;
+    private final String baseUrlToFile;
     private final List<ChecklistTally> checklistTallies;
-    private VersionService versionService;
 
-    public TimelineMapper(ThesisModel thesis, String currentPort, String activeProfile, List<ChecklistTally> tallies) {
+    public TimelineMapper(ThesisModel thesis, String baseUrlToFile, List<ChecklistTally> tallies) {
         this.thesisModel = thesis;
-        this.currentPort = currentPort;
+        this.baseUrlToFile = baseUrlToFile;
         this.checklistTallies = List.copyOf(tallies);
-        this.activeProfile = activeProfile;
     }
 
 
@@ -87,7 +83,7 @@ public class TimelineMapper {
     private TimelineViewVersionDto toTimelineViewVersionDto(ChapterVersionModel version) {
 
         TimelineViewUploaderDto uploader = toTimelineViewUploaderDto(version.getUploader());
-//        String fileLink = versionService.getFormattedLink(currentPort, activeProfile, version);
+        String fileLink = version.getFormattedLink(baseUrlToFile);
 
         return TimelineViewVersionDto.builder()
                 .id(version.getId())
@@ -102,7 +98,7 @@ public class TimelineMapper {
                                 .resolved(0)
                                 .build()))
                 .supervisorComment("n/a")
-                .fileLink("fixme")//todo
+                .fileLink(fileLink)
                 .build();
     }
 
