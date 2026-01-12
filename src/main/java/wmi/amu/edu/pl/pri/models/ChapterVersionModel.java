@@ -2,6 +2,7 @@ package wmi.amu.edu.pl.pri.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.core.env.Environment;
 import wmi.amu.edu.pl.pri.models.pri.UserDataModel;
 
 import java.util.Date;
@@ -15,6 +16,9 @@ import java.util.List;
 @Builder
 @Table(name = "thm_chapter_version")
 public class ChapterVersionModel {
+
+    @Transient  // Nie zapisuje w DB
+    private transient Environment environment;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -37,7 +41,6 @@ public class ChapterVersionModel {
 
     @Column(columnDefinition = "text")
     private String link;
-    //plik na razie zostawiamy bez relacji zdefiniowanej przez Hibernate
 
     private Long fileId;
 
@@ -47,7 +50,7 @@ public class ChapterVersionModel {
         if (getLink() == null || getLink().equals("NO_LINK")){
             String baseUrl;
             if ("dev".equals(activeProfile)) {
-                baseUrl = "http://150.254.78.134:%s/api/v1/download/";
+                baseUrl = environment.getProperty("DEV_BASE_URL", "http://150.254.78.134:%s/api/v1/download/");
             } else {
                 baseUrl = "http://localhost:%s/api/v1/download/";
             }

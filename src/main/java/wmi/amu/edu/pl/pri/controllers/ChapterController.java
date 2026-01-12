@@ -43,7 +43,6 @@ public class ChapterController {
     @GetMapping("/view/version/byOwner/{id}")
     public ResponseEntity<ChapterVersionsDto> getVersionsByStudentId(
             @PathVariable Long id) {
-        System.out.println("Dostano zapytanie.");
         Long chapterId = chapterService.findChapterByOwnerId(id).getId();
         return ResponseEntity.ok().body(versionService.getChapterVersionByChapterId(chapterId));
     }
