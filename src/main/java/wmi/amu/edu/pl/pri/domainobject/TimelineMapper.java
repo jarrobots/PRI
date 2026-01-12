@@ -31,6 +31,7 @@ public class TimelineMapper {
         this.activeProfile = activeProfile;
     }
 
+
     public TimelineViewDto toTimeLineViewDto() {
 
         Long supervisorUserDataId = null;
