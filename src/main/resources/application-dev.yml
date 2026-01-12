@@ -71,7 +71,7 @@ pri:
   ldap:
     domain: labs.wmi.amu.edu.pl
     enabled: false
-  # JWT properties compatible with main module
+  # JWT properties compatible with main module (not sure if needed...)
   app:
     jwtCookieName: accessToken
     jwtSecret: 1wqzxgYaZhpyEfRZIRdwSNN4RCpfBwjfpSSpOhc46Ts
