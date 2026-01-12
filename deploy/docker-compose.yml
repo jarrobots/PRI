@@ -39,17 +39,18 @@ services:
       retries: 3
       start_period: 60s
 
-  watchtower:
-    image: containrrr/watchtower:latest
-    container_name: watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    env_file:
-      - config.env
-    environment:
-      - DOCKER_API_VERSION=1.44
-    restart: always
-    command: --interval 3600 --cleanup prib prif
+watchtower:
+  image: containrrr/watchtower:latest
+  container_name: watchtower
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+  env_file:
+    - config.env
+  environment:
+    - DOCKER_API_VERSION=1.44
+    - WATCHTOWER_CLEANUP=true           
+  restart: always
+  command: --schedule "0 4 * * *" prib prif
 
 networks:
   pri-network:
