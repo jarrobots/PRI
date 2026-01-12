@@ -10,6 +10,7 @@ import wmi.amu.edu.pl.pri.repositories.CommentRepo;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +33,8 @@ public class CommentService {
     }
 
     public Long addComment(CommentDto dto){
-        CommentModel model = new CommentModel();
+        Optional<CommentModel> optional = repo.findCommentByVersionIdOrChapterId(dto.getVersionId(), dto.getChapterId());
+        CommentModel model = optional.orElse(new CommentModel());
         model.setUploader(userService.getUserData(dto.getUploaderId()));
         model.setText(dto.getText());
         model.setVersionModel(versionService.getChapterVersionById(dto.getVersionId()));
