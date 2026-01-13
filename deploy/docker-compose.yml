@@ -48,10 +48,9 @@ services:
       - config.env
     environment:
       - DOCKER_API_VERSION=1.44
-      - WATCHTOWER_CLEANUP=true           
-      - WATCHTOWER_INCLUDE_STOPPED=true   # ✅ Restartuje zatrzymane
+      - WATCHTOWER_CLEANUP=true    
     restart: unless-stopped              # ✅ Lepsze niż always
-    command: --schedule "0 4 * * *" prib prif  # 04:00 update prib+prif
+    command: --interval 3600 prib prif 
 
 networks:
   pri-network:
