@@ -13,10 +13,13 @@ import wmi.amu.edu.pl.pri.repositories.ChecklistQuestionRepo;
 public class ChecklistQuestionService {
     private final ChecklistQuestionRepo repo;
 
-    public void saveQuestion(ChecklistQuestionModel model){
-        repo.save(model);
+    public ChecklistQuestionModel saveQuestion(ChecklistQuestionModel model){
+        return repo.save(model);
     }
     public ChecklistQuestionModel  getQuestion(ChecklistQuestionModel model){
         return repo.findById(model.getId()).get();
+    }
+    public void  deleteQuestion(Long id){
+        repo.deleteById(id);
     }
 }

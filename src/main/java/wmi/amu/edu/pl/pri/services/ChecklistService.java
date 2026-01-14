@@ -9,6 +9,9 @@ import wmi.amu.edu.pl.pri.models.*;
 import wmi.amu.edu.pl.pri.repositories.ChecklistRepo;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -28,20 +31,73 @@ public class ChecklistService {
             var model = generateVersionChecklistFromDB(list, id);
             return model.toChecklistDto();
         }
-        return optional.get().toChecklistDto();
+        var model = optional.get();
+        return model.toChecklistDto();
+
     }
 
 
     public ChecklistDto getChecklistByThesisId(Long thesisId) {
-        Optional<ChecklistModel> optional = repo.findByThesisId(thesisId);
-        if (optional.isEmpty()) {
-            var list = thesisTemplateService.getChecklistTemplates();
-            var model = generateThesisChecklistFromDB(list, thesisId);
-            return model.toChecklistDto();
+        // ✅ ZMIANA 1: uprość orElseGet
+        ChecklistModel model = repo.findByThesisId(thesisId)
+                .orElseGet(() -> generateThesisChecklistFromDB(thesisTemplateService.getChecklistTemplates(), thesisId));
 
+        var existingQuestions = new ArrayList<>(model.getChecklistQuestionModels());
+
+        // Znajdź różnice (bez zmian)
+        var currentQuestions = existingQuestions.stream()
+                .map(ChecklistQuestionModel::getQuestion).collect(toList());
+        var templateQuestions = thesisTemplateService.getChecklistTemplates();
+
+        var addList = findDifferenceInLists(templateQuestions, currentQuestions);
+        var delList = findDifferenceInLists(currentQuestions, templateQuestions);
+
+        if (!addList.isEmpty() || !delList.isEmpty()) {
+            // ✅ ZMIANA 2: USUŃ Z MODELU (NPE fix!)
+            model.getChecklistQuestionModels().removeIf(q ->
+                    delList.stream().anyMatch(dl -> dl.getQuestion().equals(q.getQuestion())));
+
+            // 1. USUŃ stare (bez zmian)
+            deleteQuestions(delList, model);
+            System.out.println(delList.size() + " questions were deleted");
+
+            // 2. DODAJ nowe (bez zmian)
+            addList = saveQuestions(addList);
+            existingQuestions.addAll(addList);
+
+            // 3. Zapisz (uprość)
+            model.getChecklistQuestionModels().clear();
+            model.getChecklistQuestionModels().addAll(existingQuestions);
+            repo.save(model);  // ✅ ZMIANA 3: usuń saveChcecklist()
+
+            return model.toChecklistDto();
         }
-        return optional.get().toChecklistDto();
+
+        return model.toChecklistDto();
     }
+    private List<ChecklistQuestionModel> saveQuestions(List<ChecklistQuestionModel> questions) {
+        return questions.stream()
+                .map(questionService::saveQuestion)
+                .toList();
+    }
+    private List<ChecklistQuestionModel> findDifferenceInLists(List<String> list1, List<String> list2) {
+        Set<String> set2 = new HashSet<>(list2);
+        return list1.stream()
+                .filter(item -> !set2.contains(item))
+                .map(question -> new ChecklistQuestionModel(null, question, false))
+                .toList();
+    }
+
+    private void deleteQuestions(List<ChecklistQuestionModel> list, ChecklistModel model) {
+        Set<String> questionsToDelete = list.stream()
+                .map(ChecklistQuestionModel::getQuestion)
+                .collect(Collectors.toSet());
+
+        model.getChecklistQuestionModels().stream()
+                .filter(q -> questionsToDelete.contains(q.getQuestion()))
+                .forEach(q -> questionService.deleteQuestion(q.getId()));
+    }
+
 
     public void setChecklist(ChecklistDto dto) {
         ChecklistModel model;
@@ -56,13 +112,13 @@ public class ChecklistService {
         }
 
         if (dto.getThesisId() != null && repo.findByThesisId(dto.getThesisId()).isPresent()) {
-            model = repo.findByThesisId(dto.getThesisId()).orElse(null);
+            model = repo.findByThesisId(dto.getThesisId()).get();
             saveChcecklist(model, dto);
             return;
         }
 
         if (dto.getVersionId() != null && repo.findByVersionId(dto.getVersionId()).isPresent()) {
-            model = repo.findByVersionId(dto.getVersionId()).orElse(null);
+            model = repo.findByVersionId(dto.getVersionId()).get();
             saveChcecklist(model, dto);
             return;
         }
@@ -74,9 +130,17 @@ public class ChecklistService {
         model.setDate(new Date());
         model.setChecklistQuestionModels(dto.getModels());
         for (ChecklistQuestionModel qModel : model.getChecklistQuestionModels()) {
-            ChecklistQuestionModel question = questionService.getQuestion(qModel);
-            question.setPassed(qModel.isPassed());
-            questionService.saveQuestion(question);
+            if(qModel.getId()==null){
+                qModel.setId(questionService.saveQuestion(qModel).getId());
+            }
+            try {
+                ChecklistQuestionModel question = questionService.getQuestion(qModel);
+                question.setPassed(qModel.isPassed());
+                questionService.saveQuestion(question);
+            }
+            catch(NoSuchElementException e){
+                log.warn("brak question");
+            }
         }
         repo.save(model);
     }
