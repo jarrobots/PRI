@@ -72,4 +72,4 @@ mvn test -Pintegration-test # Testcontainers
 
 ## Architecture
 
-![Diagram PRI](diagram.jpg)
+![Diagram PRI](diagram-new.png)
