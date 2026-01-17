@@ -48,9 +48,9 @@ thesis-module:
 
 ```  
 spring:
-  datasource: postgresql://localhost:5432/pri
+  datasource: <<database address>>
   ldap:
-    urls: ldaps://dc2-2016.labs.wmi.amu.edu.pl:636
+    urls: <<ldap address>>
 server:
   port: 8080
 thesis-module:
@@ -58,10 +58,10 @@ thesis-module:
 ```  
 
 ## Deployment
-
-1. Build: mvn package -DskipTests
-2. Copy JAR → deploy/
-3. docker-compose up -d (w folderze deploy/)
+``` 
+cd PRI/deploy/
+docker compose up 
+``` 
 
 ## Testing
 
