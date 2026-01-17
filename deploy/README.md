@@ -10,14 +10,14 @@ https://github.com/System-PRI/deploy
 -----------------
 **Check if user_data, students, supervisors, projects, roles contains usable data - this project creates own tables from those data** 
 
-### 2. LDAP CERTIFICATE (REQUIRED for UAM LDAP authentication)  
+### 2. LDAP CERTIFICATE (REQUIRED for LDAP authentication)  
 ----------------------------------------------------
 **Download DC2 cert**  
-`openssl s_client -connect dc2-2016.labs.wmi.amu.edu.pl:636 \
-  -showcerts </dev/null 2>/dev/null | openssl x509 -outform PEM > dc2-2016.pem`
+`openssl s_client -connect <<server dns address>> \
+  -showcerts </dev/null 2>/dev/null | openssl x509 -outform PEM > dc-cert.pem`
 
 **Import to truststore**  
-`keytool -importcert -alias dc2-2016-ldaps -file dc2-2016.pem \
+`keytool -importcert -alias dc2-2016-ldaps -file dc-cert.pem \
   -keystore ldap-truststore.jks -storepass changeit -noprompt`
 
 **Copy to deploy dir**  
